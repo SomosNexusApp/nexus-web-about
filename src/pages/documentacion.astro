@@ -2,7 +2,10 @@
 import DocLayout from "../layouts/DocLayout.astro";
 ---
 
-<DocLayout title="Documentación | Nexus App">
+<DocLayout 
+  title="Documentación Técnica | Nexus App - Arquitectura y Requisitos"
+  description="Consulta la documentación oficial de Nexus App. Detalles sobre el plan de proyecto, análisis de requisitos, arquitectura del sistema y guías de implementación."
+>
   <!-- ══════════════════════════════════════════════════════════
 	     DOCUMENTO GENERAL
 	══════════════════════════════════════════════════════════════ -->
@@ -3291,7 +3294,7 @@ import DocLayout from "../layouts/DocLayout.astro";
 </style>
 
 <script>
-  function loadFigma(containerId, figmaUrl) {
+  function loadFigma(containerId: string, figmaUrl: string) {
     // Unload all others (mutual exclusivity)
     document.querySelectorAll('.figma-embed-container').forEach(c => {
       if (c.id !== containerId) unloadFigma(c.id);
@@ -3300,7 +3303,7 @@ import DocLayout from "../layouts/DocLayout.astro";
     const container = document.getElementById(containerId);
     if (!container || container.querySelector('iframe')) return;
 
-    const loadButton = container.querySelector('.load-figma-button');
+    const loadButton = container.querySelector('.load-figma-button') as HTMLElement | null;
     const loader = container.querySelector('.figma-loading-spinner');
     
     if (loadButton) loadButton.style.display = 'none';
@@ -3325,14 +3328,14 @@ import DocLayout from "../layouts/DocLayout.astro";
     container.appendChild(iframe);
   }
 
-  function unloadFigma(containerId) {
+  function unloadFigma(containerId: string) {
     const container = document.getElementById(containerId);
     if (!container) return;
 
     const iframe = container.querySelector('iframe');
     if (iframe) iframe.remove();
 
-    const loadButton = container.querySelector('.load-figma-button');
+    const loadButton = container.querySelector('.load-figma-button') as HTMLElement | null;
     if (loadButton) loadButton.style.display = 'flex';
     
     const loader = container.querySelector('.figma-loading-spinner');
@@ -3355,9 +3358,11 @@ import DocLayout from "../layouts/DocLayout.astro";
 
     containers.forEach(container => {
       observer.observe(container);
-      const btn = container.querySelector('.load-figma-button');
+      const btn = container.querySelector('.load-figma-button') as HTMLElement | null;
       const url = container.id === 'figma-container-1' ? url1 : url2;
-      if (btn) btn.onclick = () => loadFigma(container.id, url);
+      if (btn) {
+        btn.onclick = () => loadFigma(container.id, url);
+      }
     });
   });
 </script>

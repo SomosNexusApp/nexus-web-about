@@ -1,10 +1,18 @@
 ---
+import BaseHead from '../components/BaseHead.astro';
+
+
 interface Props {
 	title: string;
 	description?: string;
+	image?: string;
 }
 
-const { title, description = "Aplicación que unifica la búsqueda de ofertas de productos nuevos y artículos de segunda mano." } = Astro.props;
+const { 
+	title, 
+	description = "Nexus App: La aplicación definitiva para comparar precios de productos nuevos y de segunda mano en una sola búsqueda.",
+	image = "/assets/identidad/logotipo.webp"
+} = Astro.props;
 
 const currentYear = new Date().getFullYear();
 const apiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:8080';
@@ -13,12 +21,7 @@ const apiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:8080';
 <!doctype html>
 <html lang="es">
 	<head>
-		<meta charset="UTF-8" />
-		<meta name="description" content={description} />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/x-icon" href="/favicon.ico" />
-		<meta name="generator" content={Astro.generator} />
-		<title>{title}</title>
+		<BaseHead title={title} description={description} image={image} />
 		<link
 			href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Caveat:wght@700&display=swap"
 			rel="stylesheet"
@@ -258,8 +261,8 @@ const apiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:8080';
 			const closeSettingsBtn = document.getElementById('close-cookie-settings');
 			const saveSettingsBtn = document.getElementById('save-cookie-settings');
 			
-			const analyticsToggle = document.getElementById('cookie-analytics');
-			const marketingToggle = document.getElementById('cookie-marketing');
+			const analyticsToggle = document.getElementById('cookie-analytics') as HTMLInputElement | null;
+			const marketingToggle = document.getElementById('cookie-marketing') as HTMLInputElement | null;
 
 			let bannerTriggered = false;
 
@@ -267,16 +270,16 @@ const apiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:8080';
 			window.addEventListener('scroll', () => {
 				if (!bannerTriggered && window.scrollY > 300 && !localStorage.getItem('cookies-accepted')) {
 					bannerTriggered = true;
-					cookieBanner.classList.add('show');
+					if (cookieBanner) cookieBanner.classList.add('show');
 				}
 			});
 
 			const hideBanner = () => {
-				cookieBanner.classList.remove('show');
+				if (cookieBanner) cookieBanner.classList.remove('show');
 				localStorage.setItem('cookies-accepted', 'true');
 			};
 
-			const savePreferences = (analytics, marketing) => {
+			const savePreferences = (analytics: boolean, marketing: boolean) => {
 				const prefs = {
 					analytics: analytics,
 					marketing: marketing,
@@ -284,7 +287,7 @@ const apiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:8080';
 				};
 				localStorage.setItem('cookie-preferences', JSON.stringify(prefs));
 				hideBanner();
-				cookieModal.classList.remove('show');
+				if (cookieModal) cookieModal.classList.remove('show');
 				
 				// Here you would typically initialize scripts based on prefs
 				if (analytics) console.log('Analytics initialized');
@@ -297,26 +300,26 @@ const apiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:8080';
 
 			if (openSettingsBtn) {
 				openSettingsBtn.addEventListener('click', () => {
-					cookieModal.classList.add('show');
+					if (cookieModal) cookieModal.classList.add('show');
 				});
 			}
 
 			if (closeSettingsBtn) {
 				closeSettingsBtn.addEventListener('click', () => {
-					cookieModal.classList.remove('show');
+					if (cookieModal) cookieModal.classList.remove('show');
 				});
 			}
 
 			if (saveSettingsBtn) {
 				saveSettingsBtn.addEventListener('click', () => {
-					savePreferences(analyticsToggle.checked, marketingToggle.checked);
+					savePreferences(!!analyticsToggle?.checked, !!marketingToggle?.checked);
 				});
 			}
 
 			// Close modal on click outside
 			window.addEventListener('click', (e) => {
 				if (e.target === cookieModal) {
-					cookieModal.classList.remove('show');
+					if (cookieModal) cookieModal.classList.remove('show');
 				}
 			});
 		</script>

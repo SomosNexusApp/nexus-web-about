@@ -1,0 +1,84 @@
+---
+/**
+ * Componente BaseHead para manejar todo el SEO de la web Nexus App.
+ * Incluye meta etiquetas básicas, Open Graph, Twitter Cards y JSON-LD.
+ */
+
+interface Props {
+    title: string;
+    description: string;
+    image?: string;
+    canonicalURL?: URL;
+    type?: 'website' | 'article';
+}
+
+const {
+    title,
+    description,
+    image = '/assets/identidad/logotipo.webp', // Imagen por defecto
+    canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://nexus-app.es'),
+    type = 'website'
+} = Astro.props;
+
+const siteName = "Nexus App";
+---
+
+<!-- Global Metadata -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link rel="icon" type="image/x-icon" href="/favicon.ico" />
+<meta name="generator" content={Astro.generator} />
+
+<!-- Canonical URL -->
+<link rel="canonical" href={canonicalURL} />
+
+<!-- Primary Meta Tags -->
+<title>{title} | {siteName}</title>
+<meta name="title" content={`${title} | ${siteName}`} />
+<meta name="description" content={description} />
+<meta name="author" content="Ecentia Marketing" />
+<meta name="keywords" content="comparador de ofertas, segunda mano, productos nuevos, ahorro, ofertas online, nexus app" />
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content={type} />
+<meta property="og:url" content={Astro.url} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={new URL(image, Astro.url)} />
+<meta property="og:site_name" content={siteName} />
+<meta property="og:locale" content="es_ES" />
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image" />
+<meta property="twitter:url" content={Astro.url} />
+<meta property="twitter:title" content={title} />
+<meta property="twitter:description" content={description} />
+<meta property="twitter:image" content={new URL(image, Astro.url)} />
+<meta property="twitter:site" content="@somosnexusapp" />
+
+<!-- Robots -->
+<meta name="robots" content="index, follow" />
+<meta name="googlebot" content="index, follow" />
+
+<!-- Theme Color -->
+<meta name="theme-color" content="#dab0ff" />
+
+<!-- JSON-LD Structured Data -->
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Nexus App",
+    "alternateName": "Nexus",
+    "url": "https://nexus-app.es",
+    "description": "Aplicación que unifica la búsqueda de ofertas de productos nuevos y artículos de segunda mano.",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Ecentia Marketing",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://nexus-app.es/assets/identidad/logotipo.webp"
+      }
+    }
+  }
+</script>
