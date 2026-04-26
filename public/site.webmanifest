@@ -1,0 +1,21 @@
+{
+  "name": "Nexus App",
+  "short_name": "Nexus",
+  "description": "El comparador de ofertas definitivo de productos nuevos y segunda mano.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#dab0ff",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "32x32",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/logo.webp",
+      "sizes": "512x512",
+      "type": "image/webp"
+    }
+  ]
+}
