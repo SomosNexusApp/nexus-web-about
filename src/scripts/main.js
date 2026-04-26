@@ -107,8 +107,8 @@ document.addEventListener("DOMContentLoaded", () => {
       if (target) {
         // close mobile menu if open
         const nav = document.querySelector('nav.site-nav');
-        if (nav && nav.classList.contains('nav-open')) {
-          nav.classList.remove('nav-open');
+        if (nav && nav.classList.contains('is-menu-open')) {
+          nav.classList.remove('is-menu-open');
         }
         target.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
@@ -127,11 +127,5 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Hamburger Menu
-  const hamburger = document.querySelector('.hamburger');
-  if (hamburger && nav) {
-    hamburger.addEventListener('click', () => {
-      nav.classList.toggle('nav-open');
-    });
-  }
+  // Hamburger Menu removed from here - handled in Layout.astro for better control
 });

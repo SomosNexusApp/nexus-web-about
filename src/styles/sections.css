@@ -152,6 +152,83 @@
   border: 2px solid var(--bg-primary); font-size: 14px;
 }
 
+@media (max-width: 1023px) {
+  .brutalist-hero {
+    padding: 120px 0 60px;
+    height: auto;
+    min-height: auto;
+  }
+
+  .hero-container {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    text-align: center;
+  }
+
+  .hero-left-col {
+    order: 2;
+    align-items: center;
+    height: auto;
+  }
+
+  .small-title {
+    margin-bottom: 20px;
+    max-width: none;
+  }
+
+  .bottom-arrow-container {
+    display: none; /* Hide decorative arrows on mobile to save space */
+  }
+
+  .hero-center-col {
+    order: 1;
+  }
+
+  .massive-text {
+    font-size: clamp(40px, 12vw, 70px);
+    white-space: normal;
+  }
+
+  .second-line {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .neon-star {
+    width: 40px;
+    height: 40px;
+  }
+
+  .hero-desc {
+    margin-top: 20px;
+    font-size: 14px;
+  }
+
+  .hero-right-col {
+    order: 3;
+    height: auto;
+    align-items: center;
+  }
+
+  .stats-list {
+    display: none;
+  }
+
+  .stat-item {
+    border-bottom: none;
+    border: 1px solid var(--border-card);
+    padding: 8px 12px;
+    border-radius: var(--radius-sm);
+  }
+
+  .customer-faces {
+    margin-top: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
 /* =========================
    TOOLS STRIP SECTION
    ========================= */

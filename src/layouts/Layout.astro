@@ -70,13 +70,62 @@ const apiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:8080';
 				</a>
 			</div>
 
-			<div class="nav-links header-inline-nav">
+			<button class="hamburger" id="menu-toggle" aria-label="Menu">
+				<span class="hamburger-line"></span>
+				<span class="hamburger-line"></span>
+				<span class="hamburger-line"></span>
+			</button>
+
+			<div class="nav-links header-inline-nav" id="nav-links">
 				<a href="/#hero">Inicio</a>
 				<a href="/documentacion">Documentación</a>
 				<a href="/tecnologias">Tecnologías</a>
 				<a href="/blog">Blog</a>
 			</div>
 		</nav>
+
+		<script is:inline>
+			function initMenu() {
+				const menuToggle = document.getElementById('menu-toggle');
+				const navLinks = document.getElementById('nav-links');
+				const siteNav = document.querySelector('.site-nav');
+
+				if (!menuToggle || !navLinks || !siteNav) return;
+
+				// Limpiar listeners previos si existen (evita duplicados en Astro)
+				const toggleMenu = (e) => {
+					if (e) e.preventDefault();
+					const isOpen = siteNav.classList.toggle('is-menu-open');
+					menuToggle.classList.toggle('active');
+					document.body.style.overflow = isOpen ? 'hidden' : '';
+				};
+
+				const closeMenu = () => {
+					siteNav.classList.remove('is-menu-open');
+					menuToggle.classList.remove('active');
+					document.body.style.overflow = '';
+				};
+
+				// Usamos onclick para asegurar que solo haya un listener si se llama varias veces
+				menuToggle.onclick = toggleMenu;
+
+				// Cerrar al hacer click en los enlaces
+				const links = navLinks.querySelectorAll('a');
+				links.forEach(link => {
+					link.onclick = closeMenu;
+				});
+			}
+
+			// Inicializar
+			if (document.readyState === 'loading') {
+				document.addEventListener('DOMContentLoaded', initMenu);
+			} else {
+				initMenu();
+			}
+
+			// Compatibilidad con transiciones de Astro si se activan
+			document.addEventListener('astro:after-swap', initMenu);
+		</script>
 
 		<slot />
 

@@ -214,39 +214,91 @@ nav.site-nav {
   background: none;
   border: none;
   cursor: pointer;
-  padding: 8px;
+  padding: 10px;
+  position: relative;
+  z-index: 2000;
 }
 
 .hamburger-line {
   display: block;
-  width: 24px;
-  height: 2px;
-  background-color: #ffffff;
+  width: 28px;
+  height: 3px;
+  background-color: var(--text-primary);
   margin: 5px 0;
-  transition: 0.3s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 2px;
+}
+
+.site-nav.scrolled .hamburger-line {
+  background-color: #000000;
 }
 
 @media (max-width: 1023px) {
-  .nav-links, .nav-ctas {
+  .nav-contact, .nav-socials {
     display: none;
   }
+  
+  .nav-brand {
+    border-right: none;
+    padding: 16px var(--container-pad);
+  }
+
+  .header-inline-nav {
+    display: none;
+    border-left: none;
+  }
+
   .hamburger {
     display: block;
+    margin-right: 20px;
   }
-  
-  nav.site-nav.nav-open .nav-links {
+
+  .is-menu-open .header-inline-nav {
     display: flex;
     flex-direction: column;
-    position: absolute;
-    top: 100%;
+    position: fixed;
+    top: 0;
     left: 0;
     width: 100%;
-    background: rgba(20, 20, 20, 0.65);
-    backdrop-filter: saturate(180%) blur(40px);
-    -webkit-backdrop-filter: saturate(180%) blur(40px);
-    padding: var(--space-md) var(--container-pad);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    gap: 20px;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 120px var(--container-pad);
+    gap: 30px;
+    z-index: 1500;
+    align-items: center;
+    justify-content: flex-start;
+    animation: fadeIn 0.3s ease forwards;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .is-menu-open .header-inline-nav a {
+    font-size: 28px;
+    font-weight: 700;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    transition: color 0.3s ease;
+  }
+
+  .is-menu-open .header-inline-nav a:hover {
+    color: var(--accent);
+  }
+
+  /* Hamburger Active Animation */
+  .hamburger.active .hamburger-line:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+  }
+  .hamburger.active .hamburger-line:nth-child(2) {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+  .hamburger.active .hamburger-line:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
   }
 }
 
