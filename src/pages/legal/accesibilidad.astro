@@ -1,0 +1,329 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const currentYear = new Date().getFullYear();
+---
+
+<Layout title="Declaración de Accesibilidad - Nexus App" description="Declaración de accesibilidad de Nexus App (Astro & Angular). Compromiso con la inclusión digital.">
+	<main class="accessibility-container">
+		<header class="accessibility-header">
+			<div class="container">
+				<span class="eyebrow">INCLUSIÓN DIGITAL</span>
+				<h1>Declaración de <span class="accent">Accesibilidad</span></h1>
+				<p class="last-updated">Última actualización: 25 de abril, {currentYear}</p>
+				<div class="project-badge">
+					<span>Propiedad de <strong>Ecentia</strong></span>
+					<span class="separator">|</span>
+					<span>Proyecto Final de <strong>DAM</strong></span>
+				</div>
+			</div>
+		</header>
+
+		<section class="accessibility-content">
+			<div class="container narrow">
+				<div class="content-wrapper">
+					<h2>1. Nuestro Compromiso</h2>
+					<p>
+						En <strong>Nexus App</strong> y <strong>Ecentia</strong>, estamos comprometidos a garantizar la accesibilidad digital para todas las personas, independientemente de sus capacidades físicas, cognitivas o tecnológicas. Creemos firmemente que la web debe ser un espacio inclusivo y trabajamos continuamente para mejorar la experiencia de usuario para todos.
+					</p>
+					<p>
+						Esta declaración se aplica tanto a este sitio web (desarrollado en Astro) como a la plataforma principal de gestión de productos (desarrollada en Angular), conformando el ecosistema unificado de Nexus.
+					</p>
+
+					<h2>2. Estándares de Cumplimiento</h2>
+					<p>
+						Nos esforzamos por cumplir con las Pautas de Accesibilidad para el Contenido Web (WCAG) 2.1 en su nivel AA. Estas pautas explican cómo hacer que el contenido web sea más accesible para personas con una amplia gama de discapacidades, incluyendo deficiencias visuales, auditivas, físicas, cognitivas y neurológicas.
+					</p>
+
+					<h2>3. Medidas Adoptadas</h2>
+					<p>
+						Para lograr nuestros objetivos de accesibilidad, hemos implementado las siguientes medidas técnicas en nuestras plataformas:
+					</p>
+					<ul>
+						<li><strong>Navegación por Teclado:</strong> Todas las funcionalidades críticas son accesibles mediante el uso del teclado, asegurando un orden de tabulación lógico.</li>
+						<li><strong>Contraste de Color:</strong> Hemos seleccionado paletas de colores que cumplen con los ratios de contraste mínimos para asegurar la legibilidad del texto.</li>
+						<li><strong>Etiquetado ARIA:</strong> Utilizamos atributos ARIA (Accessible Rich Internet Applications) para proporcionar contexto adicional a los lectores de pantalla en elementos dinámicos.</li>
+						<li><strong>Estructura Semántica:</strong> Empleo de etiquetas HTML5 semánticas (header, nav, main, section, footer, h1-h6) para facilitar la navegación asistida.</li>
+						<li><strong>Diseño Responsivo:</strong> Adaptabilidad total a diferentes tamaños de pantalla y niveles de zoom sin pérdida de funcionalidad ni superposición de contenido.</li>
+					</ul>
+
+					<h2>4. Situación de Cumplimiento</h2>
+					<p>
+						Dada la naturaleza de Nexus App como un <strong>Proyecto Final de DAM</strong>, reconocemos que algunas áreas pueden estar en proceso de optimización. Actualmente, estamos trabajando en:
+					</p>
+					<ul>
+						<li>Mejorar las descripciones de texto alternativo (alt text) en todas las imágenes generadas por usuarios.</li>
+						<li>Optimizar el foco visual en componentes personalizados complejos dentro de la aplicación Angular.</li>
+						<li>Asegurar que todos los formularios incluyan etiquetas de error descriptivas vinculadas correctamente.</li>
+					</ul>
+
+					<h2>5. Tecnologías Compatibles</h2>
+					<p>
+						La accesibilidad de Nexus App depende de las siguientes tecnologías para funcionar con la combinación particular de navegador web y cualquier tecnología de asistencia o complementos instalados en su computadora:
+					</p>
+					<ul>
+						<li>HTML</li>
+						<li>WAI-ARIA</li>
+						<li>CSS</li>
+						<li>JavaScript</li>
+					</ul>
+
+					<h2>6. Feedback y Contacto</h2>
+					<p>
+						Agradecemos sus comentarios sobre la accesibilidad de Nexus App. Si encuentra barreras de accesibilidad o tiene sugerencias para mejorar la inclusión en nuestra plataforma Astro o Angular, por favor háganoslo saber:
+					</p>
+					<div class="contact-box">
+						<p><strong>Equipo de Accesibilidad - Nexus / Ecentia</strong></p>
+						<p>Email: <a href="mailto:somosnexusapp@gmail.com">somosnexusapp@gmail.com</a></p>
+						<p>Osuna, Sevilla (España)</p>
+					</div>
+
+					<h2>7. Preparación de esta Declaración</h2>
+					<p>
+						Esta declaración fue preparada el 25 de abril de {currentYear} mediante una autoevaluación realizada por el equipo de desarrollo, utilizando herramientas de auditoría como Lighthouse y Axe DevTools, tanto en el entorno de aterrizaje como en la aplicación de gestión.
+					</p>
+
+					<p class="disclaimer-footer">
+						<em>Como parte de un proyecto de formación profesional, la accesibilidad es un pilar fundamental en nuestro aprendizaje. Agradecemos su comprensión mientras seguimos puliendo cada detalle.</em>
+					</p>
+				</div>
+			</div>
+		</section>
+	</main>
+</Layout>
+
+<style>
+	:root {
+		--bg-primary-light: #ffffff;
+		--bg-secondary-light: #f9f9f9;
+		--text-primary-light: #111111;
+		--text-secondary-light: #444444;
+		--border-color-light: #eeeeee;
+	}
+
+	.accessibility-container {
+		padding-top: 100px;
+		background-color: var(--bg-primary-light);
+		min-height: 100vh;
+		color: var(--text-primary-light);
+	}
+
+	.accessibility-header {
+		padding: 80px 0 60px;
+		background: linear-gradient(to bottom, #fcfcfc, #ffffff);
+		text-align: center;
+		border-bottom: 1px solid var(--border-color-light);
+	}
+
+	.eyebrow {
+		display: block;
+		font-weight: 800;
+		font-size: 14px;
+		letter-spacing: 0.2em;
+		color: #9d5ae5;
+		margin-bottom: 15px;
+		text-transform: uppercase;
+	}
+
+	h1 {
+		font-size: clamp(2.5rem, 8vw, 4.5rem);
+		font-weight: 900;
+		margin-bottom: 20px;
+		letter-spacing: -0.03em;
+		line-height: 1.1;
+		color: #000000;
+	}
+
+	.accent {
+		color: #9d5ae5;
+	}
+
+	.last-updated {
+		color: var(--text-secondary-light);
+		font-size: 16px;
+		font-weight: 500;
+		margin-bottom: 20px;
+	}
+
+	.project-badge {
+		display: inline-flex;
+		align-items: center;
+		gap: 15px;
+		padding: 10px 25px;
+		background: #f0f0f0;
+		border-radius: 50px;
+		font-size: 14px;
+		color: #555;
+		font-weight: 500;
+	}
+
+	.project-badge .separator {
+		color: #ccc;
+	}
+
+	.project-badge strong {
+		color: #000;
+	}
+
+	.accessibility-content {
+		padding: 80px 0;
+	}
+
+	.container {
+		width: 100%;
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 0 20px;
+	}
+
+	.container.narrow {
+		max-width: 800px;
+	}
+
+	.content-wrapper {
+		background: #ffffff;
+		padding: 60px;
+		border-radius: 24px;
+		border: 1px solid var(--border-color-light);
+		box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+	}
+
+	h2 {
+		font-size: 1.8rem;
+		font-weight: 800;
+		margin: 45px 0 20px;
+		color: #000000;
+		letter-spacing: -0.01em;
+	}
+
+	h2:first-child {
+		margin-top: 0;
+	}
+
+	p {
+		font-size: 1.1rem;
+		line-height: 1.8;
+		color: var(--text-secondary-light);
+		margin-bottom: 20px;
+	}
+
+	ul {
+		margin-bottom: 25px;
+		padding-left: 20px;
+	}
+
+	li {
+		font-size: 1.1rem;
+		line-height: 1.7;
+		color: var(--text-secondary-light);
+		margin-bottom: 12px;
+		list-style-type: none;
+		position: relative;
+	}
+
+	li::before {
+		content: "•";
+		position: absolute;
+		left: -20px;
+		color: #9d5ae5;
+		font-weight: bold;
+	}
+
+	strong {
+		color: #000000;
+		font-weight: 700;
+	}
+
+	a {
+		color: #9d5ae5;
+		text-decoration: none;
+		transition: all 0.3s ease;
+		font-weight: 600;
+		border-bottom: 1px solid transparent;
+	}
+
+	a:hover {
+		border-bottom-color: #9d5ae5;
+	}
+
+	.contact-box {
+		margin-top: 40px;
+		padding: 30px;
+		background: #f9f9f9;
+		border-radius: 16px;
+		border-left: 4px solid #9d5ae5;
+	}
+
+	.contact-box p {
+		margin-bottom: 5px;
+		color: var(--text-secondary-light);
+	}
+
+	.disclaimer-footer {
+		margin-top: 100px;
+		padding-top: 30px;
+		border-top: 1px solid #eee;
+		font-size: 0.85rem !important;
+		color: #aaa !important;
+		text-align: center;
+		line-height: 1.6;
+	}
+
+	/* Ajustes para visibilidad del header en fondo blanco */
+	:global(.site-nav) {
+		border-bottom-color: #eee !important;
+	}
+
+	:global(.nav-brand) {
+		border-right-color: #eee !important;
+	}
+
+	:global(.nav-contact span) {
+		color: #111 !important;
+	}
+
+	:global(.nav-contact .nav-line) {
+		background-color: #ddd !important;
+	}
+
+	:global(.social-icon) {
+		background: #f0f0f0 !important;
+		color: #111 !important;
+	}
+
+	:global(.social-icon:hover) {
+		background: #e0e0e0 !important;
+	}
+
+	:global(.header-inline-nav) {
+		border-left-color: #eee !important;
+	}
+
+	:global(.header-inline-nav a) {
+		color: #111 !important;
+	}
+
+	:global(.header-inline-nav a:hover) {
+		color: #9d5ae5 !important;
+	}
+
+	@media (max-width: 768px) {
+		.content-wrapper {
+			padding: 40px 25px;
+		}
+
+		h1 {
+			font-size: 3rem;
+		}
+
+		.project-badge {
+			flex-direction: column;
+			gap: 5px;
+			border-radius: 15px;
+		}
+
+		.project-badge .separator {
+			display: none;
+		}
+	}
+</style>

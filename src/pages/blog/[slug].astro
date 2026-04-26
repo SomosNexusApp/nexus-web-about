@@ -1,0 +1,518 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  const posts = [
+    {
+        id: "1",
+        title: "La arquitectura de Nexus: De Spring Boot a Astro",
+        content: `
+            <p class="lead">En el desarrollo de Nexus, nos enfrentamos al reto de combinar un sistema de gestión de datos masivo con una experiencia de usuario web instantánea. La solución: una arquitectura híbrida que aprovecha lo mejor de dos mundos.</p>
+            
+            <h2>El Corazón: Spring Boot</h2>
+            <p>Para el backend, elegimos Java con Spring Boot por su robustez inigualable. Nuestro servidor se encarga de:</p>
+            <ul>
+                <li>Gestión de la lógica de negocio compleja.</li>
+                <li>Integración segura con pasarelas de pago (Stripe).</li>
+                <li>Procesamiento de imágenes mediante Cloudinary.</li>
+                <li>Seguridad mediante JWT y filtros avanzados.</li>
+            </ul>
+
+            <div class="article-quote">
+                "La estabilidad de Java nos permitió escalar de 0 a 1.000 usuarios sin un solo segundo de inactividad."
+            </div>
+
+            <h2>La Cara: Astro y Angular</h2>
+            <p>Mientras que la aplicación principal utiliza Angular por su capacidad para manejar estados complejos en una Single Page Application (SPA), decidimos usar Astro para este portal de información y marketing.</p>
+            <p>Astro nos proporciona:</p>
+            <ul>
+                <li><strong>Rendimiento extremo:</strong> Al generar HTML estático, los tiempos de carga son casi nulos.</li>
+                <li><strong>SEO optimizado:</strong> Fundamental para que las ofertas de Nexus sean encontradas por buscadores.</li>
+                <li><strong>Experiencia de Desarrollador:</strong> La facilidad para integrar componentes de diferentes frameworks.</li>
+            </ul>
+
+            <h2>Conclusión</h2>
+            <p>Esta arquitectura nos permite ofrecer una plataforma que es a la vez potente y ligera. Nexus está preparado para crecer, integrando nuevas APIs y servicios sin comprometer la velocidad que nuestros usuarios exigen.</p>
+        `,
+        date: "24 Abr 2026",
+        readTime: "5 min",
+        category: "Arquitectura",
+        image: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=1200&q=80",
+        author: "Equipo de Ingeniería Nexus"
+    },
+    {
+        id: "2",
+        title: "Diseñando para el ahorro: El sistema de diseño de Nexus",
+        content: `
+            <p class="lead">El diseño en Nexus no es solo estética; es una herramienta de eficiencia. Hemos creado un sistema visual que permite al usuario encontrar lo que busca en menos de tres clics.</p>
+            
+            <h2>La Paleta de la Confianza</h2>
+            <p>Elegimos el morado Nexus (#9d5ae5) como color principal por su asociación con la innovación y la exclusividad. Combinado con una interfaz limpia en blanco y negro, logramos un equilibrio entre modernidad y seriedad corporativa.</p>
+            
+            <ul>
+                <li><strong>Morado Primario:</strong> Representa la tecnología y la conexión entre plataformas.</li>
+                <li><strong>Gris Antracita:</strong> Utilizado para una lectura descansada y profesional.</li>
+                <li><strong>Espaciado Generoso:</strong> Para evitar la fatiga visual durante la búsqueda de ofertas.</li>
+            </ul>
+
+            <div class="article-quote">
+                "Un buen diseño es aquel que desaparece y deja que el usuario complete su tarea sin fricción."
+            </div>
+
+            <h2>Componentes Atómicos</h2>
+            <p>Utilizamos una metodología de diseño atómico, permitiéndonos reutilizar componentes desde la aplicación web hasta la versión móvil con Ionic. Esto asegura que la experiencia de usuario sea idéntica, sin importar el dispositivo.</p>
+            
+            <h2>Accesibilidad ante todo</h2>
+            <p>Cada contraste de color y cada tamaño de fuente ha sido probado para cumplir con los estándares WCAG, garantizando que Nexus sea una herramienta útil para todas las personas.</p>
+        `,
+        date: "20 Abr 2026",
+        readTime: "4 min",
+        category: "Diseño UX/UI",
+        image: "https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&w=1200&q=80",
+        author: "Departamento de Diseño Nexus"
+    },
+    {
+        id: "3",
+        title: "Integración de IA en soporte: El futuro de Nexus",
+        content: `
+            <p class="lead">La inteligencia artificial ya no es ciencia ficción; en Nexus, es el pilar que sostiene nuestra nueva experiencia de atención al cliente. Mediante la combinación de Groq y Gemini, hemos creado un asistente que no solo responde, sino que entiende.</p>
+            
+            <h2>Groq: Velocidad de Respuesta Instantánea</h2>
+            <p>Para lograr que la interacción se sienta natural, la velocidad es clave. Implementamos Groq por su capacidad de procesar modelos de lenguaje a una velocidad asombrosa, permitiendo que el chat de soporte de Nexus responda en milisegundos.</p>
+            
+            <div class="article-quote">
+                "La IA en Nexus no busca reemplazar a las personas, sino darles superpoderes para resolver dudas complejas al instante."
+            </div>
+
+            <h2>Gemini: El Cerebro Analítico</h2>
+            <p>Mientras que Groq nos da velocidad, Google Gemini nos proporciona la profundidad analítica. Este modelo es capaz de analizar el contexto de las ofertas de productos, comparar precios históricos y sugerir al usuario si es el mejor momento para comprar o si debería esperar.</p>
+
+            <h2>Seguridad y Privacidad</h2>
+            <p>Todo nuestro sistema de IA está diseñado bajo el principio de 'Privacy by Design'. Los datos de los usuarios se anonimizan antes de ser procesados, garantizando que tu información personal nunca salga de nuestro ecosistema seguro.</p>
+
+            <h2>El Futuro: Soporte Predictivo</h2>
+            <p>Estamos trabajando en que Nexus sea capaz de avisarte de una oferta antes incluso de que tú la busques, aprendiendo de tus preferencias y patrones de ahorro.</p>
+        `,
+        date: "15 Abr 2026",
+        readTime: "6 min",
+        category: "IA",
+        image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=1200&q=80",
+        author: "IA Research Team"
+    },
+    {
+        id: "4",
+        title: "Despliegue escalable con Docker y Render",
+        content: `
+            <p class="lead">La disponibilidad es nuestra prioridad número uno. En Nexus, utilizamos una infraestructura moderna basada en contenedores para garantizar que el servicio nunca se detenga.</p>
+            
+            <h2>Dockerización del Ecosistema</h2>
+            <p>Tanto nuestro backend en Spring Boot como nuestras bases de datos PostgreSQL están completamente dockerizados. Esto nos permite:</p>
+            <ul>
+                <li><strong>Entornos Idénticos:</strong> Eliminar el clásico problema de "en mi máquina funciona".</li>
+                <li><strong>Escalado Rápido:</strong> Levantar nuevas instancias del servidor en segundos ante picos de tráfico.</li>
+                <li><strong>Aislamiento:</strong> Garantizar que cada servicio tenga sus propios recursos dedicados.</li>
+            </ul>
+
+            <div class="article-quote">
+                "Docker nos ha permitido reducir el tiempo de despliegue de 15 minutos a menos de 60 segundos."
+            </div>
+
+            <h2>Render: Despliegue Continuo (CI/CD)</h2>
+            <p>Elegimos Render para el hosting por su integración perfecta con GitHub. Cada vez que realizamos un 'push' a nuestra rama principal, Render detecta el cambio, construye la nueva imagen de Docker y la despliega automáticamente sin tiempo de inactividad.</p>
+
+            <h2>Monitorización Constante</h2>
+            <p>Utilizamos sistemas de health-check que verifican la salud de la aplicación cada minuto. Si algo falla, el sistema reinicia automáticamente el contenedor afectado, manteniendo una disponibilidad del 99.9%.</p>
+        `,
+        date: "10 Abr 2026",
+        readTime: "7 min",
+        category: "DevOps",
+        image: "https://images.unsplash.com/photo-1607799279861-4dd421887fb3?auto=format&fit=crop&w=1200&q=80",
+        author: "DevOps Nexus"
+    },
+    {
+        id: "5",
+        title: "Lanzamiento de Nexus Beta: Primeros resultados",
+        content: `
+            <p class="lead">Un mes después del lanzamiento de nuestra beta privada, los resultados superan nuestras expectativas más optimistas. Nexus no es solo una idea; es una comunidad en crecimiento.</p>
+            
+            <h2>Cifras Impactantes</h2>
+            <p>Durante los primeros 30 días, hemos alcanzado hitos significativos:</p>
+            <ul>
+                <li><strong>+1.000 Usuarios Activos:</strong> Que han explorado miles de ofertas diarias.</li>
+                <li><strong>+50.000 Búsquedas:</strong> Realizadas con éxito a través de nuestra arquitectura escalable.</li>
+                <li><strong>Ahorro Estimado:</strong> Nuestros usuarios han ahorrado una media del 15% en sus compras habituales.</li>
+            </ul>
+
+            <div class="article-quote">
+                "La beta nos ha demostrado que la gente buscaba una herramienta que simplificara el caos de las ofertas online."
+            </div>
+
+            <h2>Feedback de la Comunidad</h2>
+            <p>Lo más valioso ha sido el feedback directo. Gracias a vuestras sugerencias, hemos optimizado los filtros de búsqueda y mejorado la velocidad de carga de las imágenes en un 40%.</p>
+
+            <h2>Próximos Pasos</h2>
+            <p>Estamos preparando el lanzamiento de la versión móvil nativa en la App Store y Google Play, integrando pagos directos y alertas personalizadas de stock.</p>
+        `,
+        date: "05 Abr 2026",
+        readTime: "3 min",
+        category: "Comunidad",
+        image: "/assets/CEOs/foto_ceos_oficina.png",
+        author: "Nexus Founders"
+    }
+  ];
+
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+---
+
+<Layout title={`${post.title} | Nexus Blog`}>
+	<div class="page-force-white">
+		<article class="full-post">
+			<header class="post-header">
+				<div class="container-narrow">
+					<a href="/blog" class="back-link">&larr; Volver al Blog</a>
+					<div class="post-meta">
+						<span class="category-tag">{post.category}</span>
+						<span>{post.date}</span>
+						<span class="dot">•</span>
+						<span>{post.readTime} lectura</span>
+					</div>
+					<h1>{post.title}</h1>
+					<div class="post-author">
+						<div class="author-avatar">N</div>
+						<div class="author-info">
+							<span class="author-name">{post.author}</span>
+							<span class="author-role">Desarrollo Core</span>
+						</div>
+					</div>
+				</div>
+			</header>
+
+			<div class="post-hero-image">
+				<div class="container">
+					<img src={post.image} alt={post.title} />
+				</div>
+			</div>
+
+			<div class="container-narrow post-body">
+				<div set:html={post.content} />
+			</div>
+
+			<footer class="post-footer">
+				<div class="container-narrow">
+					<div class="share-box">
+						<p>¿Te ha gustado el artículo? Compártelo:</p>
+						<div class="share-links">
+							<a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(Astro.url.href)}`} target="_blank" class="share-btn">Twitter</a>
+							<a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(Astro.url.href)}`} target="_blank" class="share-btn">LinkedIn</a>
+							<button id="copy-link" class="share-btn">Copia enlace</button>
+						</div>
+					</div>
+				</div>
+			</footer>
+            <div id="copy-toast" class="toast">¡Enlace copiado al portapapeles!</div>
+		</article>
+	</div>
+</Layout>
+
+<style is:global>
+	/* Forzar fondo blanco */
+	.page-force-white {
+		background-color: #ffffff !important;
+		min-height: 100vh;
+		width: 100%;
+		position: relative;
+		z-index: 1;
+	}
+	
+	body:has(.page-force-white) {
+		background-color: #ffffff !important;
+	}
+
+	/* Header Blanco Adaptado */
+	.site-nav {
+		background-color: rgba(255, 255, 255, 0.8) !important;
+		backdrop-filter: blur(10px) !important;
+		border-bottom: 1px solid #eee !important;
+	}
+
+	.site-nav a, 
+	.site-nav span,
+	.site-nav .nav-contact span {
+		color: #1a1a1a !important;
+	}
+
+	.site-nav .nav-line {
+		background-color: #eee !important;
+	}
+
+	.site-nav .social-icon {
+		background: #f0f0f0 !important;
+		color: #111 !important;
+	}
+
+	.site-nav .social-icon:hover {
+		background: #e0e0e0 !important;
+	}
+
+	.site-nav .social-icon svg {
+		stroke: #1a1a1a !important;
+	}
+
+	/* Post Styles */
+	.full-post {
+		color: #1a1a1a;
+		padding-top: 140px;
+		padding-bottom: 120px;
+	}
+
+	.container-narrow {
+		max-width: 800px;
+		margin: 0 auto;
+		padding: 0 20px;
+	}
+
+	.back-link {
+		display: inline-block;
+		text-decoration: none;
+		color: #9d5ae5;
+		font-weight: 700;
+		margin-bottom: 40px;
+		transition: transform 0.3s;
+	}
+
+	.back-link:hover {
+		transform: translateX(-5px);
+	}
+
+	.post-header h1 {
+		font-size: clamp(2.5rem, 6vw, 4rem);
+		font-weight: 900;
+		line-height: 1;
+		letter-spacing: -2px;
+		margin-bottom: 40px;
+		color: #000000;
+	}
+
+	.post-meta {
+		display: flex;
+		align-items: center;
+		gap: 15px;
+		font-size: 14px;
+		color: #888;
+		margin-bottom: 20px;
+		font-weight: 500;
+	}
+
+	.category-tag {
+		background: #000;
+		color: #fff;
+		padding: 4px 12px;
+		border-radius: 100px;
+		font-weight: 700;
+		font-size: 12px;
+	}
+
+	.post-author {
+		display: flex;
+		align-items: center;
+		gap: 15px;
+		margin-bottom: 60px;
+	}
+
+	.author-avatar {
+		width: 50px;
+		height: 50px;
+		background: #9d5ae5;
+		color: #fff;
+		border-radius: 50%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-weight: 800;
+		font-size: 20px;
+	}
+
+	.author-name {
+		display: block;
+		font-weight: 700;
+		font-size: 16px;
+	}
+
+	.author-role {
+		display: block;
+		font-size: 14px;
+		color: #888;
+	}
+
+	.post-hero-image {
+		margin-bottom: 80px;
+	}
+
+	.post-hero-image img {
+		width: 100%;
+		height: 450px;
+		object-fit: cover;
+		border-radius: 40px;
+	}
+
+	.post-body {
+		font-size: 20px;
+		line-height: 1.8;
+		color: #333;
+	}
+
+	.post-body h2 {
+		font-size: 32px;
+		font-weight: 800;
+		margin: 60px 0 20px;
+		letter-spacing: -1px;
+		color: #000;
+	}
+
+	.post-body p {
+		margin-bottom: 30px;
+	}
+
+	.post-body .lead {
+		font-size: 24px;
+		font-weight: 500;
+		color: #666;
+		line-height: 1.6;
+	}
+
+	.post-body ul {
+		margin-bottom: 40px;
+		padding-left: 20px;
+	}
+
+	.post-body li {
+		margin-bottom: 15px;
+	}
+
+	.article-quote {
+		background: #f9f9f9;
+		border-left: 5px solid #9d5ae5;
+		padding: 40px;
+		font-size: 26px;
+		font-style: italic;
+		font-weight: 600;
+		margin: 60px 0;
+		color: #000;
+	}
+
+	.post-footer {
+		margin-top: 100px;
+		padding-top: 60px;
+		border-top: 1px solid #eee;
+	}
+
+	.share-box {
+		text-align: center;
+	}
+
+	.share-box p {
+		font-weight: 700;
+		margin-bottom: 20px;
+	}
+
+	.share-links {
+		display: flex;
+		justify-content: center;
+		gap: 30px;
+	}
+
+    .share-btn {
+        background: none;
+        border: none;
+        color: #9d5ae5;
+		font-weight: 600;
+		cursor: pointer;
+        font-size: 16px;
+        text-decoration: none;
+        transition: opacity 0.3s;
+    }
+
+    .share-btn:hover {
+        opacity: 0.7;
+    }
+
+    .toast {
+        position: fixed;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%) translateY(100px);
+        background: #000;
+        color: #fff;
+        padding: 12px 24px;
+        border-radius: 100px;
+        font-size: 14px;
+        font-weight: 600;
+        transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        z-index: 2000;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    .toast.show {
+        transform: translateX(-50%) translateY(0);
+    }
+
+	@media (max-width: 768px) {
+		.post-hero-image img {
+			height: 350px;
+			border-radius: 20px;
+		}
+		.post-header h1 {
+			font-size: 2.5rem;
+		}
+		.post-body {
+			font-size: 18px;
+		}
+	}
+</style>
+
+<script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+<script is:inline>
+	document.addEventListener('DOMContentLoaded', () => {
+		if (typeof gsap !== 'undefined') {
+			gsap.registerPlugin(ScrollTrigger);
+
+			gsap.from('.post-header > *', {
+				y: 30,
+				opacity: 0,
+				duration: 1,
+				stagger: 0.2,
+				ease: 'power3.out'
+			});
+
+			gsap.from('.post-hero-image', {
+				scale: 0.9,
+				opacity: 0,
+				duration: 1.2,
+				ease: 'power2.out',
+				delay: 0.5
+			});
+		}
+
+		// Copy Link Functionality
+		const copyBtn = document.getElementById('copy-link');
+		const toast = document.getElementById('copy-toast');
+		
+		if (copyBtn && toast) {
+			copyBtn.addEventListener('click', () => {
+				navigator.clipboard.writeText(window.location.href);
+				toast.classList.add('show');
+				setTimeout(() => {
+					toast.classList.remove('show');
+				}, 3000);
+			});
+		}
+	});
+</script>

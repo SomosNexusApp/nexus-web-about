@@ -1,0 +1,260 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="404 | Página no encontrada">
+  <div class="page-force-white">
+    <main class="error-page">
+      <div class="container">
+        <div class="error-content">
+          <div class="error-code-wrap">
+            <h1 class="error-code">404</h1>
+            <div class="error-shapes">
+              <div class="shape s1"></div>
+              <div class="shape s2"></div>
+              <div class="shape s3"></div>
+            </div>
+          </div>
+          <h2 class="error-title">Parece que te has <span>perdido</span></h2>
+          <p class="error-text">
+            La página que buscas no existe o ha sido movida a otra dimensión. No
+            te preocupes, Nexus siempre tiene una salida.
+          </p>
+          <div class="error-actions">
+            <a href="/" class="btn-primary">Volver al inicio</a>
+            <a href="/blog" class="btn-secondary">Ir al blog</a>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</Layout>
+
+<style is:global>
+  /* Header Adaptado para fondo blanco */
+  .site-nav {
+    background-color: rgba(255, 255, 255, 0.8) !important;
+    backdrop-filter: blur(10px) !important;
+    border-bottom: 1px solid #eee !important;
+  }
+
+  .site-nav a,
+  .site-nav span,
+  .site-nav .nav-contact span {
+    color: #000000 !important;
+  }
+
+  .site-nav .nav-line {
+    background-color: #ddd !important;
+  }
+
+  .site-nav .social-icon svg {
+    stroke: #000000 !important;
+  }
+
+  /* Footer Adaptado */
+  .site-footer {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+  }
+
+  .site-footer a,
+  .site-footer p,
+  .site-footer span,
+  .site-footer h4,
+  .site-footer h2 {
+    color: #ffffff !important;
+  }
+
+  /* Page Force White */
+  .page-force-white {
+    background-color: #ffffff !important;
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  body:has(.page-force-white) {
+    background-color: #ffffff !important;
+  }
+
+  .error-page {
+    padding: 100px 0;
+    text-align: center;
+    color: #000;
+  }
+
+  .error-content {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .error-code-wrap {
+    position: relative;
+    margin-bottom: 40px;
+  }
+
+  .error-code {
+    font-size: clamp(8rem, 25vw, 15rem);
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -10px;
+    background: linear-gradient(135deg, #000 30%, #9d5ae5 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    z-index: 2;
+    position: relative;
+  }
+
+  .error-shapes {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+  }
+
+  .shape {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(40px);
+    opacity: 0.15;
+    background: #9d5ae5;
+  }
+
+  .s1 {
+    width: 300px;
+    height: 300px;
+    top: -50px;
+    left: -50px;
+    background: #9d5ae5;
+  }
+  .s2 {
+    width: 250px;
+    height: 250px;
+    bottom: -30px;
+    right: -20px;
+    background: #00c6ff;
+  }
+  .s3 {
+    width: 150px;
+    height: 150px;
+    top: 20px;
+    right: 100px;
+    background: #ff00ea;
+  }
+
+  .error-title {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 800;
+    margin-bottom: 24px;
+    letter-spacing: -2px;
+    background: linear-gradient(135deg, #333 0%, #111 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .error-title span {
+    background: linear-gradient(135deg, #9d5ae5 0%, #662d91 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .error-text {
+    font-size: 1.2rem;
+    color: #666;
+    max-width: 500px;
+    margin: 0 auto 40px;
+    line-height: 1.6;
+  }
+
+  .error-actions {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+  }
+
+  .btn-primary {
+    background: #000;
+    color: #ffffff; /* Este es blanco sobre negro, es legible */
+    padding: 16px 32px;
+    border-radius: 100px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.3s;
+  }
+
+  .btn-primary:hover {
+    background: #9d5ae5;
+    color: #fff;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(157, 90, 229, 0.2);
+  }
+
+  .btn-secondary {
+    background: #9d5ae5;
+    color: #ffffff !important;
+    padding: 16px 32px;
+    border-radius: 100px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.3s;
+    border: none;
+  }
+
+  .btn-secondary:hover {
+    background: #8236d3;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(130, 54, 211, 0.2);
+  }
+
+  @media (max-width: 768px) {
+    .error-code {
+      letter-spacing: -5px;
+    }
+    .error-actions {
+      flex-direction: column;
+    }
+  }
+</style>
+
+<script
+  is:inline
+  src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+<script is:inline>
+  document.addEventListener("DOMContentLoaded", () => {
+    if (typeof gsap !== "undefined") {
+      gsap.from(".error-code", {
+        scale: 0.8,
+        opacity: 0,
+        duration: 1.5,
+        ease: "elastic.out(1, 0.5)",
+      });
+
+      gsap.from(".error-title, .error-text, .error-actions", {
+        y: 40,
+        opacity: 0,
+        duration: 1,
+        stagger: 0.2,
+        ease: "power3.out",
+        delay: 0.5,
+      });
+
+      // Animación de las formas de fondo
+      gsap.to(".shape", {
+        x: "random(-50, 50)",
+        y: "random(-50, 50)",
+        duration: "random(3, 5)",
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+        stagger: 0.1,
+      });
+    }
+  });
+</script>

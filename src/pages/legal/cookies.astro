@@ -1,0 +1,338 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const currentYear = new Date().getFullYear();
+---
+
+<Layout title="Política de Cookies - Nexus App" description="Política de Cookies detallada de Nexus App, propiedad de Ecentia. Proyecto Final DAM.">
+	<main class="cookies-container">
+		<header class="cookies-header">
+			<div class="container">
+				<span class="eyebrow">TRANSPARENCIA</span>
+				<h1>Política de <span class="accent">Cookies</span></h1>
+				<p class="last-updated">Última actualización: 25 de abril, {currentYear}</p>
+				<div class="project-badge">
+					<span>Propiedad de <strong>Ecentia</strong></span>
+					<span class="separator">|</span>
+					<span>Proyecto Final de <strong>DAM</strong></span>
+				</div>
+			</div>
+		</header>
+
+		<section class="cookies-content">
+			<div class="container narrow">
+				<div class="content-wrapper">
+					<h2>1. ¿Qué son las cookies?</h2>
+					<p>
+						Las cookies son pequeños archivos de texto que los sitios web almacenan en su navegador o dispositivo cuando usted los visita. Estos archivos permiten que el sitio web "recuerde" sus acciones o preferencias a lo largo del tiempo, facilitando su próxima visita y haciendo que el sitio le resulte más útil.
+					</p>
+
+					<h2>2. ¿Cómo utiliza Nexus App las cookies?</h2>
+					<p>
+						En <strong>Nexus App</strong>, utilizamos cookies para mejorar la funcionalidad de la plataforma, analizar el tráfico y personalizar su experiencia. Al ser un proyecto final de DAM bajo la propiedad de <strong>Ecentia</strong>, estas herramientas nos ayudan a validar el rendimiento técnico y la usabilidad de la aplicación.
+					</p>
+
+					<h2>3. Tipos de cookies que utilizamos</h2>
+					
+					<h3>3.1. Cookies Técnicas (Necesarias)</h3>
+					<p>
+						Son esenciales para el funcionamiento de la aplicación. Permiten funciones básicas como la navegación por las páginas, el acceso a áreas seguras (como su perfil de usuario) y la gestión de transacciones. Sin estas cookies, la web no puede funcionar correctamente.
+					</p>
+
+					<h3>3.2. Cookies de Personalización</h3>
+					<p>
+						Permiten a la plataforma recordar información que cambia el aspecto o el comportamiento del sitio, como su idioma preferido o la región en la que se encuentra.
+					</p>
+
+					<h3>3.3. Cookies de Análisis (Estadísticas)</h3>
+					<p>
+						Utilizamos cookies de terceros (como Google Analytics) para entender cómo interactúan los usuarios con la Aplicación. Esto nos proporciona información sobre el número de visitantes, las páginas más vistas y la eficacia de nuestras funcionalidades de búsqueda. Estos datos son agregados y anónimos.
+					</p>
+
+					<h2>4. Cookies de Terceros</h2>
+					<p>
+						Debido a las integraciones necesarias para el proyecto (pasarelas de pago como Stripe/PayPal, mapas, o servicios de autenticación), es posible que estos terceros instalen cookies en su dispositivo para procesar la información de forma segura. Ecentia no tiene control directo sobre estas cookies una vez instaladas por los servicios externos.
+					</p>
+
+					<h2>5. Control y Gestión de Cookies</h2>
+					<p>
+						Usted puede controlar y/o eliminar las cookies en cualquier momento. La mayoría de los navegadores le permiten:
+					</p>
+					<ul>
+						<li>Ver qué cookies tiene y eliminarlas de forma individual.</li>
+						<li>Bloquear cookies de terceros.</li>
+						<li>Bloquear las cookies de sitios web específicos.</li>
+						<li>Bloquear todas las cookies.</li>
+						<li>Eliminar todas las cookies al cerrar el navegador.</li>
+					</ul>
+					<p>
+						Tenga en cuenta que, si decide bloquear las cookies técnicas, algunas funcionalidades de Nexus App podrían no estar disponibles o no funcionar de manera óptima.
+					</p>
+
+					<h2>6. Consentimiento</h2>
+					<p>
+						Al navegar por nuestro sitio por primera vez, se le mostrará un aviso de consentimiento. Al aceptar, usted autoriza el uso de las cookies descritas en esta política. Puede cambiar de opinión eliminando las cookies de su navegador.
+					</p>
+
+					<h2>7. Actualizaciones de la Política</h2>
+					<p>
+						Podemos actualizar esta Política de Cookies en función de nuevas exigencias legislativas o técnicas del proyecto DAM. Le recomendamos revisarla periódicamente.
+					</p>
+
+					<div class="contact-box">
+						<p><strong>Nexus App - Soporte Técnico</strong></p>
+						<p>Proyecto Final DAM | Ecentia</p>
+						<p>Email: <a href="mailto:somosnexusapp@gmail.com">somosnexusapp@gmail.com</a></p>
+					</div>
+
+					<p class="disclaimer-footer">
+						<em>Nexus App es un entorno académico. El uso de cookies está destinado a la mejora del aprendizaje y la optimización del software para el proyecto final de DAM.</em>
+					</p>
+				</div>
+			</div>
+		</section>
+	</main>
+</Layout>
+
+<style>
+	:root {
+		--bg-primary-light: #ffffff;
+		--bg-secondary-light: #f9f9f9;
+		--text-primary-light: #111111;
+		--text-secondary-light: #444444;
+		--border-color-light: #eeeeee;
+	}
+
+	.cookies-container {
+		padding-top: 100px;
+		background-color: var(--bg-primary-light);
+		min-height: 100vh;
+		color: var(--text-primary-light);
+	}
+
+	.cookies-header {
+		padding: 80px 0 60px;
+		background: linear-gradient(to bottom, #fcfcfc, #ffffff);
+		text-align: center;
+		border-bottom: 1px solid var(--border-color-light);
+	}
+
+	.eyebrow {
+		display: block;
+		font-weight: 800;
+		font-size: 14px;
+		letter-spacing: 0.2em;
+		color: #9d5ae5;
+		margin-bottom: 15px;
+		text-transform: uppercase;
+	}
+
+	h1 {
+		font-size: clamp(2.5rem, 8vw, 4.5rem);
+		font-weight: 900;
+		margin-bottom: 20px;
+		letter-spacing: -0.03em;
+		line-height: 1.1;
+		color: #000000;
+	}
+
+	.accent {
+		color: #9d5ae5;
+	}
+
+	.last-updated {
+		color: var(--text-secondary-light);
+		font-size: 16px;
+		font-weight: 500;
+		margin-bottom: 20px;
+	}
+
+	.project-badge {
+		display: inline-flex;
+		align-items: center;
+		gap: 15px;
+		padding: 10px 25px;
+		background: #f0f0f0;
+		border-radius: 50px;
+		font-size: 14px;
+		color: #555;
+		font-weight: 500;
+	}
+
+	.project-badge .separator {
+		color: #ccc;
+	}
+
+	.project-badge strong {
+		color: #000;
+	}
+
+	.cookies-content {
+		padding: 80px 0;
+	}
+
+	.container {
+		width: 100%;
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 0 20px;
+	}
+
+	.container.narrow {
+		max-width: 800px;
+	}
+
+	.content-wrapper {
+		background: #ffffff;
+		padding: 60px;
+		border-radius: 24px;
+		border: 1px solid var(--border-color-light);
+		box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+	}
+
+	h2 {
+		font-size: 1.8rem;
+		font-weight: 800;
+		margin: 45px 0 20px;
+		color: #000000;
+		letter-spacing: -0.01em;
+	}
+
+	h2:first-child {
+		margin-top: 0;
+	}
+
+	h3 {
+		font-size: 1.3rem;
+		font-weight: 700;
+		margin: 30px 0 15px;
+		color: #000000;
+	}
+
+	p {
+		font-size: 1.1rem;
+		line-height: 1.8;
+		color: var(--text-secondary-light);
+		margin-bottom: 20px;
+	}
+
+	ul {
+		margin-bottom: 25px;
+		padding-left: 20px;
+	}
+
+	li {
+		font-size: 1.1rem;
+		line-height: 1.7;
+		color: var(--text-secondary-light);
+		margin-bottom: 12px;
+		list-style-type: none;
+		position: relative;
+	}
+
+	li::before {
+		content: "•";
+		position: absolute;
+		left: -20px;
+		color: #9d5ae5;
+		font-weight: bold;
+	}
+
+	strong {
+		color: #000000;
+		font-weight: 700;
+	}
+
+	a {
+		color: #9d5ae5;
+		text-decoration: none;
+		transition: all 0.3s ease;
+		font-weight: 600;
+		border-bottom: 1px solid transparent;
+	}
+
+	a:hover {
+		border-bottom-color: #9d5ae5;
+	}
+
+	.contact-box {
+		margin-top: 40px;
+		padding: 30px;
+		background: #f9f9f9;
+		border-radius: 16px;
+		border-left: 4px solid #9d5ae5;
+	}
+
+	.contact-box p {
+		margin-bottom: 5px;
+		color: var(--text-secondary-light);
+	}
+
+	.disclaimer-footer {
+		margin-top: 100px;
+		padding-top: 30px;
+		border-top: 1px solid #eee;
+		font-size: 0.85rem !important;
+		color: #aaa !important;
+		text-align: center;
+		line-height: 1.6;
+	}
+
+	/* Ajustes para visibilidad del header en fondo blanco */
+	:global(.site-nav) {
+		border-bottom-color: #eee !important;
+	}
+
+	:global(.nav-brand) {
+		border-right-color: #eee !important;
+	}
+
+	:global(.nav-contact span) {
+		color: #111 !important;
+	}
+
+	:global(.nav-contact .nav-line) {
+		background-color: #ddd !important;
+	}
+
+	:global(.social-icon) {
+		background: #f0f0f0 !important;
+		color: #111 !important;
+	}
+
+	:global(.social-icon:hover) {
+		background: #e0e0e0 !important;
+	}
+
+	:global(.header-inline-nav) {
+		border-left-color: #eee !important;
+	}
+
+	:global(.header-inline-nav a) {
+		color: #111 !important;
+	}
+
+	:global(.header-inline-nav a:hover) {
+		color: #9d5ae5 !important;
+	}
+
+	@media (max-width: 768px) {
+		.content-wrapper {
+			padding: 40px 25px;
+		}
+
+		h1 {
+			font-size: 3rem;
+		}
+
+		.project-badge {
+			flex-direction: column;
+			gap: 5px;
+			border-radius: 15px;
+		}
+
+		.project-badge .separator {
+			display: none;
+		}
+	}
+</style>

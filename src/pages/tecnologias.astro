@@ -1,0 +1,340 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const techCategories = [
+    {
+        title: "Arquitectura Core",
+        description: "El motor principal que impulsa Nexus, combinando potencia en el backend y elegancia en el frontend.",
+        techs: [
+            { name: "Java", desc: "Lenguaje de programación robusto donde está escrito el backend.", logo: "/assets/herramientas/java.png" },
+            { name: "Spring", desc: "Framework principal para el desarrollo de la lógica de negocio y APIs.", logo: "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/spring.svg" },
+            { name: "HTML, CSS, TS", desc: "Lenguajes base del frontend para una web moderna y tipada.", logo: "/assets/herramientas/typescript.png" },
+            { name: "Angular", desc: "Framework utilizado en Nexus App y Administración.", logo: "/assets/herramientas/angular.png" },
+            { name: "Astro", desc: "Framework para esta web de documentación y marketing.", logo: "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/astro.svg" }
+        ]
+    },
+    {
+        title: "Ecosistema de Datos",
+        description: "Gestión de información y activos multimedia a gran escala.",
+        techs: [
+            { name: "PostgreSQL", desc: "Base de datos relacional principal del sistema.", logo: "/assets/herramientas/postgresql.png" },
+            { name: "Cloudinary", desc: "Gestión de imágenes de usuarios y mensajes.", logo: "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/cloudinary.svg" }
+        ]
+    },
+    {
+        title: "Servicios e Integración",
+        description: "Capacidades extendidas mediante APIs de terceros líderes en la industria.",
+        techs: [
+            { name: "Ionic + Capacitor", desc: "Compilación multiplataforma para iOS y Android.", logo: "/assets/herramientas/capacitor.png" },
+            { name: "Stripe", desc: "Pasarela de pagos segura y global.", logo: "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/stripe.svg", customClass: "stripe-purple" },
+            { name: "OpenStreetMaps", desc: "Mapas y localización geográfica.", logo: "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/openstreetmap.svg" },
+            { name: "reCaptcha", desc: "Protección contra bots y spam.", logo: "/assets/herramientas/recaptcha.png" },
+            { name: "Google APIs", desc: "Servicios de autenticación y mapas de Google.", logo: "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/google.svg" },
+            { name: "Correos", desc: "Sistema de gestión de envíos logísticos.", logo: "/assets/herramientas/correos.png" }
+        ]
+    },
+    {
+        title: "Inteligencia Artificial",
+        description: "Soporte inteligente mediante modelos de lenguaje de última generación.",
+        techs: [
+            { name: "Groq", desc: "Inferencia ultra-rápida para el soporte de ayuda.", logo: "/assets/herramientas/groq.png" },
+            { name: "Claude", desc: "Modelo de IA avanzado de Anthropic para asistencia inteligente.", logo: "/assets/herramientas/claude.png" },
+            { name: "Gemini", desc: "Modelo multimodal de Google para potenciar las capacidades de Nexus.", logo: "/assets/herramientas/gemini.png" }
+        ]
+    },
+    {
+        title: "Infraestructura y Herramientas",
+        description: "Herramientas de desarrollo y entornos de despliegue profesional.",
+        techs: [
+            { name: "Docker", desc: "Contenerización de servicios backend.", logo: "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/docker.svg", customClass: "docker-blue" },
+            { name: "Vercel", desc: "Despliegue y hosting de aplicaciones frontend.", logo: "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/vercel.svg" },
+            { name: "Render", desc: "Despliegue de base de datos y backend.", logo: "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/render.svg" },
+            { name: "VS Code", desc: "IDE principal para desarrollo frontend.", logo: "/assets/herramientas/vscode.png" },
+            { name: "Eclipse IDE", desc: "IDE especializado en desarrollo con Spring.", logo: "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/eclipseide.svg", customClass: "eclipse-colors" },
+            { name: "Postman", desc: "Testing y documentación de APIs.", logo: "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/postman.svg", customClass: "postman-orange" },
+            { name: "Antigravity", desc: "Entorno de desarrollo de nueva generación potenciado con IA.", logo: "/assets/herramientas/antigravity.png" },
+            { name: "Cursor", desc: "IDE inteligente diseñado para programar con asistencia de IA.", logo: "/assets/herramientas/cursor.png" }
+        ]
+    }
+];
+---
+
+<Layout title="Tecnologías | Nexus App">
+	<div class="page-force-white">
+		<main class="tech-page">
+			<div class="tech-hero">
+				<div class="container">
+					<h1 class="tech-title">Stack de <span>Tecnologías</span></h1>
+					<p class="tech-lead">
+						Un arsenal tecnológico de primer nivel seleccionado para garantizar la máxima velocidad, seguridad y escalabilidad en cada rincón de Nexus.
+					</p>
+				</div>
+			</div>
+
+			<div class="container tech-body">
+				{techCategories.map((category) => (
+					<section class="tech-group">
+						<header class="group-header">
+							<h2>{category.title}</h2>
+							<p>{category.description}</p>
+						</header>
+						<div class="tech-list">
+							{category.techs.map((tech) => (
+								<div class="tech-item">
+									<div class="tech-logo-wrap">
+										<img 
+                                            src={tech.logo} 
+                                            alt={tech.name} 
+                                            class={tech.customClass || ''}
+                                            onerror="this.src='https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/simpleicons.svg'" 
+                                        />
+									</div>
+									<div class="tech-info">
+										<h3>{tech.name}</h3>
+										<p>{tech.desc}</p>
+									</div>
+								</div>
+							))}
+						</div>
+					</section>
+				))}
+			</div>
+		</main>
+	</div>
+</Layout>
+
+<style is:global>
+	/* Header Blanco Adaptado */
+	.site-nav {
+		background-color: rgba(255, 255, 255, 0.8) !important;
+		backdrop-filter: blur(10px) !important;
+		border-bottom: 1px solid #eee !important;
+	}
+
+	.site-nav a, 
+	.site-nav span,
+	.site-nav .nav-contact span {
+		color: #000000 !important;
+	}
+
+	.site-nav .nav-line {
+		background-color: #ddd !important;
+	}
+
+	.site-nav .social-icon {
+		background: #f0f0f0 !important;
+		color: #111 !important;
+	}
+
+	.site-nav .social-icon:hover {
+		background: #e0e0e0 !important;
+	}
+
+	.site-nav .social-icon svg {
+		stroke: #111 !important;
+	}
+
+	/* Forzar fondo blanco en toda la página */
+	.page-force-white {
+		background-color: #ffffff !important;
+		min-height: 100vh;
+		width: 100%;
+		position: relative;
+		z-index: 1;
+	}
+	
+	body:has(.page-force-white) {
+		background-color: #ffffff !important;
+	}
+
+	.tech-page {
+		color: #1a1a1a;
+		padding-top: 140px;
+		padding-bottom: 120px;
+	}
+
+	.tech-hero {
+		margin-bottom: 100px;
+	}
+
+	.tech-tag {
+		display: inline-block;
+		padding: 6px 16px;
+		background: rgba(157, 90, 229, 0.1);
+		color: #9d5ae5;
+		border-radius: 100px;
+		font-size: 12px;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 2px;
+		margin-bottom: 24px;
+	}
+
+	.tech-title {
+		font-size: clamp(3rem, 10vw, 5.5rem);
+		font-weight: 900;
+		line-height: 0.9;
+		letter-spacing: -4px;
+		margin-bottom: 30px;
+		color: #000000;
+	}
+
+	.tech-title span {
+		color: #9d5ae5;
+		display: block;
+	}
+
+	.tech-lead {
+		max-width: 700px;
+		font-size: 20px;
+		color: #666;
+		line-height: 1.6;
+	}
+
+	.tech-body {
+		display: flex;
+		flex-direction: column;
+		gap: 120px;
+	}
+
+	.tech-group {
+		display: grid;
+		grid-template-columns: 320px 1fr;
+		gap: 60px;
+	}
+
+	.group-header h2 {
+		font-size: 32px;
+		font-weight: 800;
+		margin-bottom: 16px;
+		letter-spacing: -1px;
+	}
+
+	.group-header p {
+		color: #888;
+		font-size: 16px;
+		line-height: 1.5;
+	}
+
+	.tech-list {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+		gap: 20px;
+	}
+
+	.tech-item {
+		display: flex;
+		align-items: flex-start;
+		gap: 20px;
+		padding: 24px;
+		background: #fcfcfc;
+		border: 1px solid #eee;
+		border-radius: 16px;
+		transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+	}
+
+	.tech-item:hover {
+		background: #ffffff;
+		border-color: #9d5ae5;
+		transform: translateY(-5px);
+		box-shadow: 0 20px 40px rgba(0,0,0,0.06);
+	}
+
+	.tech-logo-wrap {
+		width: 48px;
+		height: 48px;
+		background: #fff;
+		border: 1px solid #eee;
+		border-radius: 12px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 8px;
+		flex-shrink: 0;
+		box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+	}
+
+	.tech-logo-wrap img {
+		max-width: 100%;
+		max-height: 100%;
+		object-fit: contain;
+	}
+
+    /* Spring Logo - Verde */
+    img[alt="Spring"] {
+        filter: invert(47%) sepia(93%) saturate(350%) hue-rotate(90deg) brightness(95%) contrast(85%);
+    }
+
+    /* Stripe Purple Filter */
+    .stripe-purple {
+        filter: invert(36%) sepia(84%) saturate(1500%) hue-rotate(225deg) brightness(95%) contrast(100%);
+    }
+
+    /* Postman Orange */
+    .postman-orange {
+        filter: invert(47%) sepia(93%) saturate(1500%) hue-rotate(340deg) brightness(95%) contrast(100%);
+    }
+
+    /* Eclipse Colors */
+    .eclipse-colors {
+        filter: invert(13%) sepia(93%) saturate(4000%) hue-rotate(260deg) brightness(80%) contrast(100%);
+    }
+
+    /* Docker Blue */
+    .docker-blue {
+        filter: invert(47%) sepia(93%) saturate(1500%) hue-rotate(180deg) brightness(95%) contrast(100%);
+    }
+
+	.tech-info h3 {
+		font-size: 18px;
+		font-weight: 700;
+		margin-bottom: 6px;
+		color: #111;
+	}
+
+	.tech-info p {
+		font-size: 14px;
+		color: #666;
+		line-height: 1.5;
+	}
+
+	@media (max-width: 1024px) {
+		.tech-group {
+			grid-template-columns: 1fr;
+			gap: 30px;
+		}
+	}
+</style>
+
+<script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+<script is:inline>
+	document.addEventListener('DOMContentLoaded', () => {
+		if (typeof gsap !== 'undefined') {
+			gsap.registerPlugin(ScrollTrigger);
+
+			gsap.from('.tech-hero > *', {
+				y: 40,
+				opacity: 0,
+				duration: 1,
+				stagger: 0.2,
+				ease: 'power4.out'
+			});
+
+			const groups = document.querySelectorAll('.tech-group');
+			groups.forEach(group => {
+				gsap.from(group, {
+					scrollTrigger: {
+						trigger: group,
+						start: 'top 85%'
+					},
+					y: 50,
+					opacity: 0,
+					duration: 0.8,
+					ease: 'power3.out'
+				});
+			});
+		}
+	});
+</script>

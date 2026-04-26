@@ -1,0 +1,46 @@
+:root {
+  /* Fondos Brutalistas */
+  --bg-primary:       #111111; /* Off-black main */
+  --bg-secondary:     #0A0A0A; /* Deepest black */
+  --bg-tertiary:      #1A1A1A; /* Charcoal */
+  --bg-card:          #181818;
+
+  /* Texto */
+  --text-primary:     #FFFFFF;
+  --text-secondary:   #A0A0A0;
+  --text-muted:       #666666;
+
+  /* Acento Neón/Logo */
+  --accent:           #DAB0FF; /* Soft Neon Purple from Logo */
+  --accent-hover:     #EDD6FF;
+  --accent-light:     rgba(218, 176, 255, 0.1);
+
+  /* Bordes y Divisiones */
+  --border-light:     rgba(255, 255, 255, 0.1);
+  --border-card:      rgba(255, 255, 255, 0.05);
+
+  /* Sombras */
+  --shadow-card:      none;
+  --shadow-card-hover:0 10px 40px rgba(228, 255, 0, 0.1);
+
+  /* Tipografía Masiva */
+  --font-main:        'Inter', -apple-system, sans-serif;
+  --font-mono:        'JetBrains Mono', monospace;
+
+  /* Formas duras */
+  --radius-sm:        2px;
+  --radius-md:        4px;
+  --radius-lg:        8px;
+  --radius-pill:      100px;
+
+  /* Espaciados */
+  --space-xs:  0.5rem;
+  --space-sm:  1rem;
+  --space-md:  2rem;
+  --space-lg:  4rem;
+  --space-xl:  8rem;
+
+  /* Contenedores anchos */
+  --container-max:    1800px; /* Extremely wide for asymmetric spread layout */
+  --container-pad:    clamp(2rem, 8vw, 6rem);
+}

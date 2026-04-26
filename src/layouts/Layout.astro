@@ -1,0 +1,701 @@
+---
+interface Props {
+	title: string;
+	description?: string;
+}
+
+const { title, description = "Aplicación que unifica la búsqueda de ofertas de productos nuevos y artículos de segunda mano." } = Astro.props;
+
+const currentYear = new Date().getFullYear();
+const apiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:8080';
+---
+
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content={description} />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/x-icon" href="/favicon.ico" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Caveat:wght@700&display=swap"
+			rel="stylesheet"
+		/>
+	</head>
+	<body>
+		<!-- NAVEGACIÓN BRUTALISTA -->
+		<nav class="site-nav">
+			<div class="nav-brand">
+				<a href="/">
+					<img src="/assets/identidad/logotipo.webp" alt="Nexus Logo" class="brand-logo" style="height: 48px; width: auto;" />
+				</a>
+			</div>
+
+			<div class="nav-contact">
+				<span style="font-weight: 700; font-size: 14px;">Contáctanos</span>
+				<span class="nav-line"></span>
+				<span style="color: var(--text-secondary); font-size: 14px;">somosnexusapp@gmail.com</span>
+			</div>
+
+			<div class="nav-socials">
+				<a href="https://www.instagram.com/nexusapp_es/" target="_blank" class="social-icon" aria-label="Instagram">
+					<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+						<rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+						<path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+						<line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+					</svg>
+				</a>
+				<a href="https://x.com/somosnexusapp" target="_blank" class="social-icon" aria-label="X (Twitter)">
+					<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<path d="M4 4l11.733 16h4.267l-11.733 -16z"></path>
+						<path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"></path>
+					</svg>
+				</a>
+				<a href="https://www.linkedin.com/company/ecentia-marketing/" target="_blank" class="social-icon" aria-label="LinkedIn">
+					<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+						<path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+						<rect x="2" y="9" width="4" height="12"></rect>
+						<circle cx="4" cy="4" r="2"></circle>
+					</svg>
+				</a>
+				<a href="https://github.com/SomosNexusApp/" target="_blank" class="social-icon" aria-label="GitHub">
+					<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+						<path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+					</svg>
+				</a>
+			</div>
+
+			<div class="nav-links header-inline-nav">
+				<a href="/#hero">Inicio</a>
+				<a href="/documentacion">Documentación</a>
+				<a href="/tecnologias">Tecnologías</a>
+				<a href="/blog">Blog</a>
+			</div>
+		</nav>
+
+		<slot />
+
+		<!-- MAIN FOOTER (ASHLEY THEME ADAPTED) -->
+		<footer class="site-footer">
+			<div class="footer-vertical-text footer-vert-left">HOMEPAGE</div>
+			<div class="footer-vertical-text footer-vert-right" id="back-to-top-text">BACK TO TOP &uarr;</div>
+			<div class="container footer-new-container">
+				<!-- Top Half -->
+				<div class="footer-new-top">
+					<!-- Left Col: Brand & Newsletter -->
+					<div class="footer-left-col">
+						<a href="/#hero" style="text-decoration: none; color: inherit;">
+							<h2 class="footer-big-brand" style="margin-bottom: 10px;">Nexus<span style="color: var(--accent);">.</span></h2>
+						</a>
+						<div class="footer-app-subtitle">
+							<span>Una aplicación de </span>
+							<a href="https://ecentia.es" target="_blank" class="footer-ecentia-link">
+								<img src="/ecentia-icon.ico" alt="Ecentia Icon" class="footer-inline-icon" /> 
+								<strong>Ecentia</strong>
+							</a>
+						</div>
+						<p class="footer-news-label" style="margin-top: 40px;">Suscríbete a nuestra newsletter:</p>
+						<form class="footer-newsletter" id="newsletter-form">
+							<input type="email" id="newsletter-email-input" placeholder="Tu correo electrónico..." required />
+							<button type="submit" id="newsletter-submit-btn" aria-label="Suscribirse">
+								<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+									<line x1="5" y1="12" x2="19" y2="12"></line>
+									<polyline points="12 5 19 12 12 19"></polyline>
+								</svg>
+							</button>
+						</form>
+					</div>
+
+					<!-- Right Col: Links Grids -->
+					<div class="footer-right-col">
+						<!-- Main Links (Big) -->
+						<ul class="footer-main-links">
+							<li><a href="/#hero" class="active">Inicio</a></li>
+							<li><a href="/#tecnologias">Servicios</a></li>
+							<li><a href="/#mockup">Prototipos</a></li>
+							<li><a href="/#equipo">Contacto</a></li>
+							<li><a href="/#blog">Blog</a></li>
+						</ul>
+						<!-- Sub Links (Small) -->
+						<ul class="footer-sub-links">
+							<li><a href="/legal/aviso-legal">Aviso Legal</a></li>
+							<li><a href="/legal/privacidad">Política de Privacidad</a></li>
+							<li><a href="/legal/terminos">Términos y condiciones</a></li>
+							<li><a href="/legal/cookies">Política de Cookies</a></li>
+							<li><a href="/legal/accesibilidad">Accesibilidad</a></li>
+							<li><a href="/documentacion">Documentación</a></li>
+						</ul>
+					</div>
+				</div>
+
+				<!-- Bottom Half -->
+				<div class="footer-new-bottom">
+					<!-- Socials & Copyright -->
+					<div class="footer-bottom-left">
+						<div class="footer-social-logos">
+							<a href="https://www.instagram.com/nexusapp_es/" target="_blank" aria-label="Instagram">
+								<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+									<rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+									<path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+									<line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+								</svg>
+							</a>
+							<a href="https://www.linkedin.com/company/ecentia-marketing/" target="_blank" aria-label="LinkedIn">
+								<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+									<path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+									<rect x="2" y="9" width="4" height="12"></rect>
+									<circle cx="4" cy="4" r="2"></circle>
+								</svg>
+							</a>
+							<a href="https://x.com/somosnexusapp" target="_blank" aria-label="X (Twitter)">
+								<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+									<path d="M4 4l11.733 16h4.267l-11.733 -16z"></path>
+									<path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"></path>
+								</svg>
+							</a>
+							<a href="https://github.com/SomosNexusApp/" target="_blank" aria-label="GitHub">
+								<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+									<path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+								</svg>
+							</a>
+						</div>
+						<p class="footer-copy">&copy; Copyright {currentYear} - Nexus App. Reservados todos los derechos.</p>
+					</div>
+
+					<!-- Locations -->
+					<div class="footer-locations">
+						<div class="loc-item">
+							<h4>Ubicación</h4>
+							<p>IES Francisco Rodríguez Marín<br />P.º San Arcadio, S/N, 41640 Osuna, Sevilla</p>
+						</div>
+						<div class="loc-item">
+							<h4>Proyecto</h4>
+							<p>Desarrollado como TFG Escolar<br />Ecentia ha sido la marca patrocinadora de este proyecto</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</footer>
+
+		<!-- FLOATING BACK TO TOP BUTTON -->
+		<button id="floating-back-to-top" class="floating-back-to-top" aria-label="Volver arriba">
+			<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+				<path d="M18 15l-6-6-6 6"></path>
+			</svg>
+		</button>
+
+		<!-- COOKIE BANNER -->
+		<div id="cookie-banner" class="cookie-banner">
+			<div class="cookie-content">
+				<div class="cookie-icon">🍪</div>
+				<div class="cookie-text">
+					<p>Utilizamos cookies para mejorar tu experiencia en <strong>Nexus App</strong>. <a href="/legal/cookies">Más información</a>.</p>
+				</div>
+				<div class="cookie-actions">
+					<button id="accept-cookies" class="btn-cookie accept">Aceptar todas</button>
+					<button id="open-cookie-settings" class="btn-cookie decline">Configurar</button>
+				</div>
+			</div>
+		</div>
+
+		<!-- COOKIE SETTINGS MODAL -->
+		<div id="cookie-settings-modal" class="cookie-settings-modal">
+			<div class="cookie-modal-content">
+				<div class="cookie-modal-header">
+					<h3>Configuración de Cookies</h3>
+					<button id="close-cookie-settings" class="close-btn">&times;</button>
+				</div>
+				<div class="cookie-modal-body">
+					<div class="cookie-option">
+						<div class="option-info">
+							<h4>Necesarias</h4>
+							<p>Esenciales para el funcionamiento de la web.</p>
+						</div>
+						<label class="toggle">
+							<input type="checkbox" checked disabled />
+							<span class="slider"></span>
+						</label>
+					</div>
+					<div class="cookie-option">
+						<div class="option-info">
+							<h4>Análisis</h4>
+							<p>Nos ayudan a entender cómo usas la web.</p>
+						</div>
+						<label class="toggle">
+							<input type="checkbox" id="cookie-analytics" />
+							<span class="slider"></span>
+						</label>
+					</div>
+					<div class="cookie-option">
+						<div class="option-info">
+							<h4>Marketing</h4>
+							<p>Permiten mostrarte contenido personalizado.</p>
+						</div>
+						<label class="toggle">
+							<input type="checkbox" id="cookie-marketing" />
+							<span class="slider"></span>
+						</label>
+					</div>
+				</div>
+				<div class="cookie-modal-footer">
+					<button id="save-cookie-settings" class="btn-cookie accept">Guardar preferencias</button>
+				</div>
+			</div>
+		</div>
+
+		<script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+		<script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+		<script is:inline src="/js/main.js"></script>
+
+		<script>
+			// Cookie System
+			const cookieBanner = document.getElementById('cookie-banner');
+			const cookieModal = document.getElementById('cookie-settings-modal');
+			const acceptBtn = document.getElementById('accept-cookies');
+			const openSettingsBtn = document.getElementById('open-cookie-settings');
+			const closeSettingsBtn = document.getElementById('close-cookie-settings');
+			const saveSettingsBtn = document.getElementById('save-cookie-settings');
+			
+			const analyticsToggle = document.getElementById('cookie-analytics');
+			const marketingToggle = document.getElementById('cookie-marketing');
+
+			let bannerTriggered = false;
+
+			// Show banner on scroll
+			window.addEventListener('scroll', () => {
+				if (!bannerTriggered && window.scrollY > 300 && !localStorage.getItem('cookies-accepted')) {
+					bannerTriggered = true;
+					cookieBanner.classList.add('show');
+				}
+			});
+
+			const hideBanner = () => {
+				cookieBanner.classList.remove('show');
+				localStorage.setItem('cookies-accepted', 'true');
+			};
+
+			const savePreferences = (analytics, marketing) => {
+				const prefs = {
+					analytics: analytics,
+					marketing: marketing,
+					timestamp: new Date().getTime()
+				};
+				localStorage.setItem('cookie-preferences', JSON.stringify(prefs));
+				hideBanner();
+				cookieModal.classList.remove('show');
+				
+				// Here you would typically initialize scripts based on prefs
+				if (analytics) console.log('Analytics initialized');
+				if (marketing) console.log('Marketing initialized');
+			};
+
+			if (acceptBtn) {
+				acceptBtn.addEventListener('click', () => savePreferences(true, true));
+			}
+
+			if (openSettingsBtn) {
+				openSettingsBtn.addEventListener('click', () => {
+					cookieModal.classList.add('show');
+				});
+			}
+
+			if (closeSettingsBtn) {
+				closeSettingsBtn.addEventListener('click', () => {
+					cookieModal.classList.remove('show');
+				});
+			}
+
+			if (saveSettingsBtn) {
+				saveSettingsBtn.addEventListener('click', () => {
+					savePreferences(analyticsToggle.checked, marketingToggle.checked);
+				});
+			}
+
+			// Close modal on click outside
+			window.addEventListener('click', (e) => {
+				if (e.target === cookieModal) {
+					cookieModal.classList.remove('show');
+				}
+			});
+		</script>
+		
+		<script define:vars={{ apiUrl }}>
+			document.addEventListener('DOMContentLoaded', () => {
+				const form = document.getElementById('newsletter-form');
+				if (form) {
+					form.addEventListener('submit', async (e) => {
+						e.preventDefault();
+						const input = document.getElementById('newsletter-email-input');
+						const btn = document.getElementById('newsletter-submit-btn');
+						
+						if (!input.value) return;
+
+						const originalBtnText = btn.innerHTML;
+						btn.innerHTML = '...';
+						btn.disabled = true;
+
+						try {
+							const response = await fetch(`${apiUrl}/newsletter/suscribir`, {
+								method: 'POST',
+								headers: {
+									'Content-Type': 'application/json'
+								},
+								body: JSON.stringify({
+									email: input.value,
+									nombre: input.value.split('@')[0],
+									recibirOfertas: true,
+									recibirNoticias: true,
+									recibirTrending: true,
+									frecuencia: 'SEMANAL'
+								})
+							});
+
+							const data = await response.json();
+
+							if (response.ok) {
+								input.value = '';
+								input.placeholder = "¡Revisa tu email!";
+								btn.innerHTML = '✓';
+								btn.style.backgroundColor = '#4CAF50';
+								btn.style.color = 'white';
+								
+								// Reset after 3 seconds
+								setTimeout(() => {
+									input.placeholder = "Introduce tu email...";
+									btn.innerHTML = originalBtnText;
+									btn.disabled = false;
+									btn.style.backgroundColor = '';
+									btn.style.color = '';
+								}, 3000);
+							} else {
+								alert(data.error || 'Error al suscribirse');
+								btn.innerHTML = originalBtnText;
+								btn.disabled = false;
+							}
+						} catch (error) {
+							console.error("Error subscribing to newsletter:", error);
+							alert("Hubo un error de conexión con el servidor.");
+							btn.innerHTML = originalBtnText;
+							btn.disabled = false;
+						}
+					});
+				}
+			});
+		</script>
+	</body>
+</html>
+
+<style is:global>
+	@import "../styles/variables.css";
+	@import "../styles/base.css";
+	@import "../styles/components.css";
+	@import "../styles/sections.css";
+
+	.footer-app-subtitle {
+		font-size: 14px;
+		color: #aaa;
+		display: flex;
+		align-items: center;
+		gap: 4px;
+		margin: 0;
+	}
+
+	.footer-ecentia-link {
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+		text-decoration: none;
+		color: inherit;
+		transition: color 0.3s;
+	}
+
+	.footer-ecentia-link:hover {
+		color: var(--accent);
+	}
+
+	.footer-inline-icon {
+		width: 18px;
+		height: 18px;
+		object-fit: contain;
+		vertical-align: middle;
+	}
+
+	.floating-back-to-top {
+		position: fixed;
+		bottom: 30px;
+		right: 30px;
+		width: 50px;
+		height: 50px;
+		border-radius: 50%;
+		background: var(--accent);
+		color: var(--bg-primary);
+		border: none;
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		z-index: 1000;
+		opacity: 0;
+		visibility: hidden;
+		transform: translateY(20px);
+		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+		box-shadow: 0 4px 20px rgba(218,176,255,0.3);
+	}
+
+	.floating-back-to-top.visible {
+		opacity: 1;
+		visibility: visible;
+		transform: translateY(0);
+	}
+
+	.floating-back-to-top:hover {
+		background: var(--accent-hover);
+		transform: translateY(-5px);
+		box-shadow: 0 8px 25px rgba(218,176,255,0.5);
+	}
+
+	@media (max-width: 767px) {
+		.floating-back-to-top {
+			bottom: 20px;
+			right: 20px;
+			width: 45px;
+			height: 45px;
+		}
+	}
+
+	/* COOKIE BANNER STYLES */
+	.cookie-banner {
+		position: fixed;
+		bottom: 30px;
+		left: 30px;
+		max-width: 450px;
+		background: rgba(20, 20, 20, 0.9);
+		backdrop-filter: blur(15px);
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		border-radius: 20px;
+		padding: 24px;
+		z-index: 9999;
+		transform: translateY(150%);
+		transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+		box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+	}
+
+	.cookie-banner.show {
+		transform: translateY(0);
+	}
+
+	.cookie-content {
+		display: flex;
+		flex-direction: column;
+		gap: 16px;
+	}
+
+	.cookie-icon {
+		font-size: 24px;
+	}
+
+	.cookie-text p {
+		font-size: 14px;
+		line-height: 1.6;
+		color: #ccc;
+		margin: 0;
+	}
+
+	.cookie-text a {
+		color: var(--accent);
+		text-decoration: none;
+		font-weight: 600;
+	}
+
+	.cookie-actions {
+		display: flex;
+		gap: 12px;
+	}
+
+	.btn-cookie {
+		padding: 10px 20px;
+		border-radius: 10px;
+		font-size: 13px;
+		font-weight: 600;
+		cursor: pointer;
+		transition: all 0.3s;
+		border: none;
+	}
+
+	.btn-cookie.accept {
+		background: var(--accent);
+		color: var(--bg-primary);
+		flex: 1;
+	}
+
+	.btn-cookie.accept:hover {
+		background: var(--accent-hover);
+		transform: translateY(-2px);
+	}
+
+	.btn-cookie.decline {
+		background: transparent;
+		color: #fff;
+		border: 1px solid rgba(255,255,255,0.2);
+	}
+
+	.btn-cookie.decline:hover {
+		background: rgba(255,255,255,0.05);
+	}
+
+	@media (max-width: 500px) {
+		.cookie-banner {
+			left: 15px;
+			right: 15px;
+			bottom: 15px;
+			max-width: none;
+		}
+	}
+
+	/* COOKIE SETTINGS MODAL */
+	.cookie-settings-modal {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: rgba(0, 0, 0, 0.8);
+		backdrop-filter: blur(5px);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		z-index: 10000;
+		opacity: 0;
+		visibility: hidden;
+		transition: all 0.3s ease;
+	}
+
+	.cookie-settings-modal.show {
+		opacity: 1;
+		visibility: visible;
+	}
+
+	.cookie-modal-content {
+		background: #111;
+		width: 90%;
+		max-width: 500px;
+		border-radius: 24px;
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		overflow: hidden;
+		transform: scale(0.9);
+		transition: transform 0.3s ease;
+	}
+
+	.cookie-settings-modal.show .cookie-modal-content {
+		transform: scale(1);
+	}
+
+	.cookie-modal-header {
+		padding: 24px;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	.cookie-modal-header h3 {
+		margin: 0;
+		font-size: 18px;
+		font-weight: 700;
+		color: #fff;
+	}
+
+	.close-btn {
+		background: none;
+		border: none;
+		color: #999;
+		font-size: 24px;
+		cursor: pointer;
+	}
+
+	.cookie-modal-body {
+		padding: 24px;
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
+	}
+
+	.cookie-option {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 20px;
+	}
+
+	.option-info h4 {
+		margin: 0 0 4px;
+		font-size: 15px;
+		color: #fff;
+	}
+
+	.option-info p {
+		margin: 0;
+		font-size: 13px;
+		color: #888;
+	}
+
+	.cookie-modal-footer {
+		padding: 24px;
+		background: rgba(255, 255, 255, 0.02);
+		display: flex;
+		justify-content: flex-end;
+	}
+
+	/* TOGGLE SWITCH */
+	.toggle {
+		position: relative;
+		display: inline-block;
+		width: 50px;
+		height: 26px;
+	}
+
+	.toggle input {
+		opacity: 0;
+		width: 0;
+		height: 0;
+	}
+
+	.slider {
+		position: absolute;
+		cursor: pointer;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background-color: #333;
+		transition: .4s;
+		border-radius: 34px;
+	}
+
+	.slider:before {
+		position: absolute;
+		content: "";
+		height: 18px;
+		width: 18px;
+		left: 4px;
+		bottom: 4px;
+		background-color: white;
+		transition: .4s;
+		border-radius: 50%;
+	}
+
+	input:checked + .slider {
+		background-color: var(--accent);
+	}
+
+	input:checked + .slider:before {
+		transform: translateX(24px);
+	}
+
+	input:disabled + .slider {
+		opacity: 0.5;
+		cursor: not-allowed;
+	}
+</style>

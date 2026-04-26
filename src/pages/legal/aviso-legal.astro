@@ -1,0 +1,332 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const currentYear = new Date().getFullYear();
+---
+
+<Layout title="Aviso Legal - Nexus App" description="Aviso Legal de Nexus App, propiedad de Ecentia. Información sobre el titular y condiciones generales de uso.">
+	<main class="legal-container">
+		<header class="legal-header">
+			<div class="container">
+				<span class="eyebrow">INFORMACIÓN TITULAR</span>
+				<h1>Aviso <span class="accent">Legal</span></h1>
+				<p class="last-updated">Última actualización: 25 de abril, {currentYear}</p>
+				<div class="project-badge">
+					<span>Propiedad de <strong>Ecentia</strong></span>
+					<span class="separator">|</span>
+					<span>Proyecto Final de <strong>DAM</strong></span>
+				</div>
+			</div>
+		</header>
+
+		<section class="legal-content">
+			<div class="container narrow">
+				<div class="content-wrapper">
+					<h2>1. Datos Identificativos</h2>
+					<p>
+						En cumplimiento con el deber de información recogido en el artículo 10 de la Ley 34/2002, de 11 de julio, de Servicios de la Sociedad de la Información y del Comercio Electrónico (LSSI-CE), se facilitan los siguientes datos identificativos del titular del sitio web:
+					</p>
+					<ul>
+						<li><strong>Nombre del Proyecto:</strong> Nexus App</li>
+						<li><strong>Titular de la Propiedad:</strong> Ecentia</li>
+						<li><strong>Entorno de Desarrollo:</strong> Proyecto Final del Grado Superior DAM</li>
+						<li><strong>Centro de Referencia:</strong> IES Francisco Rodríguez Marín (Osuna, Sevilla)</li>
+						<li><strong>Email de contacto:</strong> somosnexusapp@gmail.com</li>
+					</ul>
+
+					<h2>2. Usuarios y Condiciones de Uso</h2>
+					<p>
+						El acceso y/o uso de este portal de Nexus App atribuye la condición de USUARIO, que acepta, desde dicho acceso y/o uso, las Condiciones Generales de Uso aquí reflejadas.
+					</p>
+					<p>
+						El usuario se compromete a hacer un uso adecuado de los contenidos y servicios que Nexus App ofrece a través de su portal, no empleándolos para incurrir en actividades ilícitas, ilegales o contrarias a la buena fe y al orden público.
+					</p>
+
+					<h2>3. Propiedad Intelectual e Industrial</h2>
+					<p>
+						<strong>Ecentia</strong>, por sí o como cesionaria, es titular de todos los derechos de propiedad intelectual e industrial de su página web, así como de los elementos contenidos en la misma (a título enunciativo, imágenes, sonido, audio, vídeo, software o textos; marcas o logotipos, combinaciones de colores, estructura y diseño, selección de materiales usados, programas de ordenador necesarios para su funcionamiento, acceso y uso, etc.).
+					</p>
+					<p>
+						Todos los derechos reservados. En virtud de lo dispuesto en los artículos 8 y 32.1, párrafo segundo, de la Ley de Propiedad Intelectual, quedan expresamente prohibidas la reproducción, la distribución y la comunicación pública, incluida su modalidad de puesta a disposición, de la totalidad o parte de los contenidos de esta página web, con fines comerciales, en cualquier soporte y por cualquier medio técnico, sin la autorización de Ecentia.
+					</p>
+
+					<h2>4. Exclusión de Garantías y Responsabilidad</h2>
+					<p>
+						Nexus App se proporciona como un <strong>proyecto final de formación académica</strong>. En consecuencia, el titular no se hace responsable, en ningún caso, de los daños y perjuicios de cualquier naturaleza que pudieran ocasionar, a título enunciativo: errores u omisiones en los contenidos, falta de disponibilidad del portal o la transmisión de virus o programas maliciosos o lesivos en los contenidos, a pesar de haber adoptado todas las medidas tecnológicas necesarias para evitarlo.
+					</p>
+
+					<h2>5. Modificaciones</h2>
+					<p>
+						El titular se reserva el derecho de efectuar sin previo aviso las modificaciones que considere oportunas en su portal, pudiendo cambiar, suprimir o añadir tanto los contenidos y servicios que se presten a través de la misma como la forma en la que éstos aparezcan presentados o localizados en su portal.
+					</p>
+
+					<h2>6. Enlaces (Links)</h2>
+					<p>
+						En el caso de que en Nexus App se dispusiesen enlaces o hipervínculos hacía otros sitios de Internet, el titular no ejercerá ningún tipo de control sobre dichos sitios y contenidos. En ningún caso asumirá responsabilidad alguna por los contenidos de algún enlace perteneciente a un sitio web ajeno.
+					</p>
+
+					<h2>7. Derecho de Exclusión</h2>
+					<p>
+						El titular se reserva el derecho a denegar o retirar el acceso a portal y/o los servicios ofrecidos sin necesidad de preaviso, a instancia propia o de un tercero, a aquellos usuarios que incumplan las presentes Condiciones Generales de Uso.
+					</p>
+
+					<h2>8. Generalidades</h2>
+					<p>
+						Se perseguirá el incumplimiento de las presentes condiciones, así como cualquier utilización indebida de su portal ejerciendo todas las acciones civiles y penales que le puedan corresponder en derecho.
+					</p>
+
+					<h2>9. Legislación Aplicable y Jurisdicción</h2>
+					<p>
+						La relación entre el titular y el USUARIO se regirá por la normativa española vigente y cualquier controversia se someterá a los Juzgados y tribunales de la ciudad de <strong>Sevilla, España</strong>.
+					</p>
+
+					<div class="contact-box">
+						<p><strong>Nexus App - Aviso Legal</strong></p>
+						<p>Ecentia | Proyecto Final DAM</p>
+						<p>Osuna, Sevilla</p>
+					</div>
+
+					<p class="disclaimer-footer">
+						<em>Nexus App es un proyecto universitario/escolar. Los datos identificativos aquí expuestos corresponden a la simulación legal necesaria para el proyecto final de DAM.</em>
+					</p>
+				</div>
+			</div>
+		</section>
+	</main>
+</Layout>
+
+<style>
+	:root {
+		--bg-primary-light: #ffffff;
+		--bg-secondary-light: #f9f9f9;
+		--text-primary-light: #111111;
+		--text-secondary-light: #444444;
+		--border-color-light: #eeeeee;
+	}
+
+	.legal-container {
+		padding-top: 100px;
+		background-color: var(--bg-primary-light);
+		min-height: 100vh;
+		color: var(--text-primary-light);
+	}
+
+	.legal-header {
+		padding: 80px 0 60px;
+		background: linear-gradient(to bottom, #fcfcfc, #ffffff);
+		text-align: center;
+		border-bottom: 1px solid var(--border-color-light);
+	}
+
+	.eyebrow {
+		display: block;
+		font-weight: 800;
+		font-size: 14px;
+		letter-spacing: 0.2em;
+		color: #9d5ae5;
+		margin-bottom: 15px;
+		text-transform: uppercase;
+	}
+
+	h1 {
+		font-size: clamp(2.5rem, 8vw, 4.5rem);
+		font-weight: 900;
+		margin-bottom: 20px;
+		letter-spacing: -0.03em;
+		line-height: 1.1;
+		color: #000000;
+	}
+
+	.accent {
+		color: #9d5ae5;
+	}
+
+	.last-updated {
+		color: var(--text-secondary-light);
+		font-size: 16px;
+		font-weight: 500;
+		margin-bottom: 20px;
+	}
+
+	.project-badge {
+		display: inline-flex;
+		align-items: center;
+		gap: 15px;
+		padding: 10px 25px;
+		background: #f0f0f0;
+		border-radius: 50px;
+		font-size: 14px;
+		color: #555;
+		font-weight: 500;
+	}
+
+	.project-badge .separator {
+		color: #ccc;
+	}
+
+	.project-badge strong {
+		color: #000;
+	}
+
+	.legal-content {
+		padding: 80px 0;
+	}
+
+	.container {
+		width: 100%;
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 0 20px;
+	}
+
+	.container.narrow {
+		max-width: 800px;
+	}
+
+	.content-wrapper {
+		background: #ffffff;
+		padding: 60px;
+		border-radius: 24px;
+		border: 1px solid var(--border-color-light);
+		box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+	}
+
+	h2 {
+		font-size: 1.8rem;
+		font-weight: 800;
+		margin: 45px 0 20px;
+		color: #000000;
+		letter-spacing: -0.01em;
+	}
+
+	h2:first-child {
+		margin-top: 0;
+	}
+
+	p {
+		font-size: 1.1rem;
+		line-height: 1.8;
+		color: var(--text-secondary-light);
+		margin-bottom: 20px;
+	}
+
+	ul {
+		margin-bottom: 25px;
+		padding-left: 20px;
+	}
+
+	li {
+		font-size: 1.1rem;
+		line-height: 1.7;
+		color: var(--text-secondary-light);
+		margin-bottom: 12px;
+		list-style-type: none;
+		position: relative;
+	}
+
+	li::before {
+		content: "•";
+		position: absolute;
+		left: -20px;
+		color: #9d5ae5;
+		font-weight: bold;
+	}
+
+	strong {
+		color: #000000;
+		font-weight: 700;
+	}
+
+	a {
+		color: #9d5ae5;
+		text-decoration: none;
+		transition: all 0.3s ease;
+		font-weight: 600;
+		border-bottom: 1px solid transparent;
+	}
+
+	a:hover {
+		border-bottom-color: #9d5ae5;
+	}
+
+	.contact-box {
+		margin-top: 40px;
+		padding: 30px;
+		background: #f9f9f9;
+		border-radius: 16px;
+		border-left: 4px solid #9d5ae5;
+	}
+
+	.contact-box p {
+		margin-bottom: 5px;
+		color: var(--text-secondary-light);
+	}
+
+	.disclaimer-footer {
+		margin-top: 100px;
+		padding-top: 30px;
+		border-top: 1px solid #eee;
+		font-size: 0.85rem !important;
+		color: #aaa !important;
+		text-align: center;
+		line-height: 1.6;
+	}
+
+	/* Ajustes para visibilidad del header en fondo blanco */
+	:global(.site-nav) {
+		border-bottom-color: #eee !important;
+	}
+
+	:global(.nav-brand) {
+		border-right-color: #eee !important;
+	}
+
+	:global(.nav-contact span) {
+		color: #111 !important;
+	}
+
+	:global(.nav-contact .nav-line) {
+		background-color: #ddd !important;
+	}
+
+	:global(.social-icon) {
+		background: #f0f0f0 !important;
+		color: #111 !important;
+	}
+
+	:global(.social-icon:hover) {
+		background: #e0e0e0 !important;
+	}
+
+	:global(.header-inline-nav) {
+		border-left-color: #eee !important;
+	}
+
+	:global(.header-inline-nav a) {
+		color: #111 !important;
+	}
+
+	:global(.header-inline-nav a:hover) {
+		color: #9d5ae5 !important;
+	}
+
+	@media (max-width: 768px) {
+		.content-wrapper {
+			padding: 40px 25px;
+		}
+
+		h1 {
+			font-size: 3rem;
+		}
+
+		.project-badge {
+			flex-direction: column;
+			gap: 5px;
+			border-radius: 15px;
+		}
+
+		.project-badge .separator {
+			display: none;
+		}
+	}
+</style>

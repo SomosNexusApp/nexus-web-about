@@ -1,0 +1,382 @@
+---
+interface Props {
+	title: string;
+	description?: string;
+}
+
+const { title, description = "Documentación técnica de Nexus App" } = Astro.props;
+const currentYear = new Date().getFullYear();
+
+// Documentos para el panel lateral
+const docs = [
+    {
+        title: "Documento General",
+        items: [
+            { name: "Introducción y Contexto", id: "introduccion" },
+            { name: "Análisis y Requisitos", id: "analisis" },
+            { name: "Diseño", id: "diseno" },
+            { name: "Implementación", id: "implementacion" },
+            { name: "Pruebas y Evaluación", id: "pruebas" },
+            { name: "Conclusiones y Mejoras", id: "conclusiones" },
+            { name: "Bibliografía", id: "bibliografia" },
+            { name: "Anexos", id: "anexos" }
+        ]
+    },
+    {
+        title: "Otros Documentos",
+        items: [
+            { name: "Plan de Proyecto", id: "plan-proyecto" },
+            { name: "Estudio de Viabilidad", id: "viabilidad" },
+            { name: "Requisitos del Sistema", id: "requisitos-sistema" },
+            { name: "Diagrama UML", id: "uml" },
+            { name: "Mockup Interactivo", id: "mockup", icon: "/assets/herramientas/figma.png" }
+        ]
+    }
+];
+---
+
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content={description} />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/x-icon" href="/favicon.ico" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+			rel="stylesheet"
+		/>
+	</head>
+	<body class="light-theme">
+		<nav class="doc-nav">
+			<div class="nav-container">
+				<a href="/" class="brand">
+					<img src="/assets/identidad/logotipo.webp" alt="Nexus Logo" class="logo" />
+				</a>
+				<div class="nav-links">
+					<a href="/">Volver a la Web</a>
+					<a href="https://github.com/SomosNexusApp/" target="_blank" class="github-btn">
+						<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+							<path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+						</svg>
+					</a>
+				</div>
+			</div>
+		</nav>
+
+		<div class="doc-layout">
+			<aside class="sidebar">
+				<div class="sidebar-content">
+					{docs.map(section => (
+						<div class="sidebar-section">
+							<h3>{section.title}</h3>
+							<ul>
+								{section.items.map(item => (
+									<li>
+										<a href={`#${item.id}`} class="sidebar-link">
+											{item.name}
+											{(item as any).icon && <img src={(item as any).icon} alt={item.name} class="sidebar-icon" />}
+										</a>
+									</li>
+								))}
+							</ul>
+						</div>
+					))}
+				</div>
+			</aside>
+
+			<main class="content">
+				<slot />
+				<footer class="doc-footer">
+					<p>&copy; {currentYear} Nexus App - Documentación Técnica | <a href="/legal/aviso-legal" style="color: inherit; text-decoration: underline;">Legal</a> | <a href="/legal/privacidad" style="color: inherit; text-decoration: underline;">Privacidad</a> | <a href="/legal/terminos" style="color: inherit; text-decoration: underline;">Términos</a> | <a href="/legal/cookies" style="color: inherit; text-decoration: underline;">Cookies</a> | <a href="/legal/accesibilidad" style="color: inherit; text-decoration: underline;">Accesibilidad</a></p>
+				</footer>
+			</main>
+		</div>
+
+		<style is:global>
+			:root {
+				--doc-bg: #ffffff;
+				--doc-sidebar-bg: #f8f9fa;
+				--doc-text: #1a1a1a;
+				--doc-text-muted: #666666;
+				--doc-accent: #9d5ae5; /* Slightly darker purple for better contrast on white */
+				--doc-accent-soft: rgba(157, 90, 229, 0.1);
+				--doc-border: #eef0f2;
+				--doc-shadow: 0 4px 20px rgba(0,0,0,0.05);
+			}
+
+			* {
+				box-sizing: border-box;
+				margin: 0;
+				padding: 0;
+			}
+
+			body.light-theme {
+				background-color: var(--doc-bg);
+				color: var(--doc-text);
+				font-family: 'Inter', sans-serif;
+				line-height: 1.6;
+				overflow-x: hidden;
+			}
+
+			/* Navigation */
+			.doc-nav {
+				position: fixed;
+				top: 0;
+				left: 0;
+				right: 0;
+				height: 70px;
+				background: rgba(255, 255, 255, 0.8);
+				backdrop-filter: blur(10px);
+				border-bottom: 1px solid var(--doc-border);
+				z-index: 1000;
+				display: flex;
+				align-items: center;
+			}
+
+			.nav-container {
+				width: 100%;
+				max-width: 1400px;
+				margin: 0 auto;
+				padding: 0 2rem;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+			}
+
+			.brand {
+				display: flex;
+				align-items: center;
+				gap: 12px;
+				text-decoration: none;
+				color: var(--doc-text);
+				font-weight: 800;
+				font-size: 1.2rem;
+			}
+
+			.logo {
+				height: 32px;
+				width: auto;
+			}
+
+			.dot {
+				color: var(--doc-accent);
+			}
+
+			.nav-links {
+				display: flex;
+				align-items: center;
+				gap: 24px;
+			}
+
+			.nav-links a {
+				text-decoration: none;
+				color: var(--doc-text-muted);
+				font-size: 0.9rem;
+				font-weight: 500;
+				transition: color 0.3s;
+			}
+
+			.nav-links a:hover {
+				color: var(--doc-accent);
+			}
+
+			.github-btn {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				color: var(--doc-text) !important;
+			}
+
+			/* Layout */
+			.doc-layout {
+				display: flex;
+				min-height: 100vh;
+				padding-top: 70px;
+				max-width: 1400px;
+				margin: 0 auto;
+			}
+
+			/* Sidebar */
+			.sidebar {
+				width: 280px;
+				height: calc(100vh - 70px);
+				position: sticky;
+				top: 70px;
+				background: var(--doc-sidebar-bg);
+				border-right: 1px solid var(--doc-border);
+				padding: 2rem;
+				overflow-y: auto;
+			}
+
+			.sidebar-section {
+				margin-bottom: 2rem;
+			}
+
+			.sidebar-section h3 {
+				font-size: 0.75rem;
+				text-transform: uppercase;
+				letter-spacing: 0.05em;
+				color: var(--doc-text-muted);
+				margin-bottom: 1rem;
+				font-weight: 700;
+			}
+
+			.sidebar-section ul {
+				list-style: none;
+			}
+
+			.sidebar-link {
+				display: flex;
+				align-items: center;
+				gap: 8px;
+				padding: 0.5rem 0;
+				color: var(--doc-text);
+				text-decoration: none;
+				font-size: 0.95rem;
+				transition: all 0.3s;
+				border-left: 2px solid transparent;
+				padding-left: 12px;
+				margin-left: -12px;
+			}
+
+			.sidebar-icon {
+				width: 16px;
+				height: 16px;
+				object-fit: contain;
+			}
+
+			.sidebar-link:hover {
+				color: var(--doc-accent);
+				padding-left: 16px;
+			}
+
+			.sidebar-link.active {
+				color: var(--doc-accent);
+				font-weight: 600;
+				border-left-color: var(--doc-accent);
+				background: var(--doc-accent-soft);
+			}
+
+			/* Main Content */
+			.content {
+				flex: 1;
+				padding: 3rem 4rem;
+				max-width: 900px;
+			}
+
+			.content h1 {
+				font-size: 3rem;
+				font-weight: 800;
+				margin-bottom: 1.5rem;
+				letter-spacing: -0.02em;
+			}
+
+			.content h2 {
+				font-size: 2rem;
+				font-weight: 700;
+				margin: 3rem 0 1.5rem;
+				scroll-margin-top: 100px;
+			}
+
+			.content p {
+				font-size: 1.1rem;
+				color: #444;
+				margin-bottom: 1.5rem;
+				line-height: 1.8;
+			}
+
+			.content .lead {
+				font-size: 1.25rem;
+				color: var(--doc-text-muted);
+				margin-bottom: 2rem;
+			}
+
+			/* Cards and elements */
+			.doc-card {
+				background: white;
+				border: 1px solid var(--doc-border);
+				border-radius: 12px;
+				padding: 2rem;
+				margin-bottom: 2rem;
+				transition: transform 0.3s, box-shadow 0.3s;
+				box-shadow: var(--doc-shadow);
+			}
+
+			.doc-card:hover {
+				transform: translateY(-5px);
+				box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+			}
+
+			.doc-footer {
+				margin-top: 4rem;
+				padding-top: 2rem;
+				border-top: 1px solid var(--doc-border);
+				color: var(--doc-text-muted);
+				font-size: 0.9rem;
+			}
+
+			/* Responsive */
+			@media (max-width: 1024px) {
+				.sidebar {
+					display: none;
+				}
+				.content {
+					padding: 2rem;
+				}
+			}
+		</style>
+		<script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+		<script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+		<script>
+			// GSAP Animations
+			document.addEventListener('DOMContentLoaded', () => {
+				// @ts-ignore
+				if (typeof gsap !== 'undefined') {
+					// @ts-ignore
+					gsap.from('.sidebar', {
+						x: -100,
+						opacity: 0,
+						duration: 1,
+						ease: 'power4.out'
+					});
+
+					// @ts-ignore
+					gsap.from('.content section', {
+						y: 50,
+						opacity: 0,
+						duration: 0.8,
+						stagger: 0.2,
+						ease: 'power3.out'
+					});
+				}
+			});
+
+			// Scroll Spy Logic
+			const sections = document.querySelectorAll('section[id]');
+			const navLinks = document.querySelectorAll('.sidebar-link');
+
+			window.addEventListener('scroll', () => {
+				let current = '';
+				sections.forEach(section => {
+					const htmlSection = section as HTMLElement;
+					const sectionTop = htmlSection.offsetTop;
+					if (window.scrollY >= (sectionTop - 150)) {
+						current = section.getAttribute('id') || '';
+					}
+				});
+
+				navLinks.forEach(link => {
+					link.classList.remove('active');
+					const href = link.getAttribute('href');
+					if (href && current && href.includes(current)) {
+						link.classList.add('active');
+					}
+				});
+			});
+		</script>
+	</body>
+</html>
