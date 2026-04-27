@@ -19,7 +19,7 @@ export async function getStaticPaths() {
             </ul>
 
             <div class="article-quote">
-                "La estabilidad de Java nos permitió escalar de 0 a 1.000 usuarios sin un solo segundo de inactividad."
+                "La estabilidad de Java nos permitió escalar nuestra infraestructura con total seguridad y sin tiempos de inactividad."
             </div>
 
             <h2>La Cara: Astro y Angular</h2>
@@ -103,25 +103,32 @@ export async function getStaticPaths() {
         id: "4",
         title: "Despliegue escalable con Docker y Render",
         content: `
-            <p class="lead">La disponibilidad es nuestra prioridad número uno. En Nexus, utilizamos una infraestructura moderna basada en contenedores para garantizar que el servicio nunca se detenga.</p>
+            <p class="lead">La disponibilidad es nuestra prioridad número uno. En Nexus, utilizamos una infraestructura moderna basada en contenedores para garantizar que el servicio nunca se detenga, permitiéndonos iterar rápido sin comprometer la estabilidad.</p>
             
-            <h2>Dockerización del Ecosistema</h2>
-            <p>Tanto nuestro backend en Spring Boot como nuestras bases de datos PostgreSQL están completamente dockerizados. Esto nos permite:</p>
+            <h2>Docker: Contenedores que viajan con nosotros</h2>
+            <p>Tanto nuestro backend en Spring Boot como nuestras bases de datos PostgreSQL están completamente dockerizados. Esto nos permite eliminar el clásico problema de 'en mi máquina funciona'. Al empaquetar la aplicación con todas sus dependencias, aseguramos que el entorno de desarrollo sea idéntico al de producción.</p>
             <ul>
-                <li><strong>Entornos Idénticos:</strong> Eliminar el clásico problema de "en mi máquina funciona".</li>
-                <li><strong>Escalado Rápido:</strong> Levantar nuevas instancias del servidor en segundos ante picos de tráfico.</li>
-                <li><strong>Aislamiento:</strong> Garantizar que cada servicio tenga sus propios recursos dedicados.</li>
+                <li><strong>Aislamiento total:</strong> Cada servicio corre en su propio entorno controlado, evitando conflictos de versiones.</li>
+                <li><strong>Eficiencia de recursos:</strong> Los contenedores son mucho más ligeros que las máquinas virtuales tradicionales, permitiéndonos aprovechar al máximo cada servidor.</li>
+                <li><strong>Portabilidad:</strong> Podemos mover nuestra infraestructura de un proveedor a otro en cuestión de minutos si fuera necesario.</li>
             </ul>
 
             <div class="article-quote">
-                "Docker nos ha permitido reducir el tiempo de despliegue de 15 minutos a menos de 60 segundos."
+                "La automatización no es un lujo, es la base sobre la que construimos la confianza de nuestros usuarios."
             </div>
 
-            <h2>Render: Despliegue Continuo (CI/CD)</h2>
-            <p>Elegimos Render para el hosting por su integración perfecta con GitHub. Cada vez que realizamos un 'push' a nuestra rama principal, Render detecta el cambio, construye la nueva imagen de Docker y la despliega automáticamente sin tiempo de inactividad.</p>
+            <h2>Render: El aliado perfecto para CI/CD</h2>
+            <p>Elegimos Render por su simplicidad y potencia. Gracias a su integración nativa con GitHub, hemos implementado un flujo de despliegue continuo (CI/CD) donde cada mejora que aprobamos se despliega automáticamente en cuestión de segundos.</p>
+            <ul>
+                <li><strong>Zero Downtime Deploys:</strong> Render mantiene la versión antigua activa hasta que la nueva está 100% lista, garantizando que el usuario nunca vea una página de error.</li>
+                <li><strong>Escalado Automático:</strong> El sistema detecta picos de tráfico y levanta nuevas instancias de los contenedores automáticamente para absorber la carga.</li>
+                <li><strong>Gestión de Secretos:</strong> Todas nuestras claves de API y configuraciones sensibles se gestionan de forma segura fuera del código fuente.</li>
+            </ul>
 
-            <h2>Monitorización Constante</h2>
-            <p>Utilizamos sistemas de health-check que verifican la salud de la aplicación cada minuto. Si algo falla, el sistema reinicia automáticamente el contenedor afectado, manteniendo una disponibilidad del 99.9%.</p>
+            <h2>Monitorización y Salud</h2>
+            <p>No basta con desplegar; hay que vigilar. Utilizamos sistemas de 'health-check' que verifican la salud de cada contenedor cada pocos segundos. Si un servicio deja de responder, Render lo reinicia automáticamente antes de que afecte a la experiencia del usuario.</p>
+            
+            <p>En definitiva, Docker y Render nos dan la tranquilidad necesaria para centrarnos en lo que mejor sabemos hacer: crear la mejor herramienta de ahorro para ti.</p>
         `,
         date: "10 Abr 2026",
         readTime: "7 min",
@@ -133,25 +140,48 @@ export async function getStaticPaths() {
         id: "5",
         title: "Lanzamiento de Nexus Beta: Primeros resultados",
         content: `
-            <p class="lead">Un mes después del lanzamiento de nuestra beta privada, los resultados superan nuestras expectativas más optimistas. Nexus no es solo una idea; es una comunidad en crecimiento.</p>
+            <p class="lead">Un mes después del lanzamiento de nuestra beta privada, hemos recopilado información valiosa que está dando forma al futuro de Nexus. Gracias al compromiso de nuestra comunidad inicial, estamos más cerca de nuestra visión definitiva.</p>
             
-            <h2>Cifras Impactantes</h2>
-            <p>Durante los primeros 30 días, hemos alcanzado hitos significativos:</p>
+            <h2>Escuchando a la Comunidad</h2>
+            <p>La fase beta no se trataba de alcanzar grandes cifras, sino de garantizar la calidad y la robustez del sistema. Nos centramos en un grupo selecto de usuarios para entender cómo interactúan con la plataforma en situaciones reales. Los resultados han sido inspiradores:</p>
             <ul>
-                <li><strong>+1.000 Usuarios Activos:</strong> Que han explorado miles de ofertas diarias.</li>
-                <li><strong>+50.000 Búsquedas:</strong> Realizadas con éxito a través de nuestra arquitectura escalable.</li>
-                <li><strong>Ahorro Estimado:</strong> Nuestros usuarios han ahorrado una media del 15% en sus compras habituales.</li>
+                <li><strong>Usabilidad Intuitiva:</strong> La gran mayoría de los probadores destacaron la facilidad para encontrar ofertas y gestionar su perfil.</li>
+                <li><strong>Estabilidad del Sistema:</strong> Hemos mantenido una disponibilidad del 100% durante toda la fase de pruebas, validando nuestra arquitectura.</li>
+                <li><strong>Feedback Constructivo:</strong> Las sugerencias recibidas ya se están traduciendo en nuevas funcionalidades que llegarán muy pronto.</li>
             </ul>
 
             <div class="article-quote">
-                "La beta nos ha demostrado que la gente buscaba una herramienta que simplificara el caos de las ofertas online."
+                "La beta no es solo una prueba técnica; es la base sobre la cual construimos una relación de confianza con quienes creen en el ahorro inteligente."
             </div>
 
-            <h2>Feedback de la Comunidad</h2>
-            <p>Lo más valioso ha sido el feedback directo. Gracias a vuestras sugerencias, hemos optimizado los filtros de búsqueda y mejorado la velocidad de carga de las imágenes en un 40%.</p>
+            <h2>Próximos Pasos en nuestra Hoja de Ruta</h2>
+            <p>Con los datos en la mano, estamos priorizando las siguientes mejoras:</p>
+            <ul>
+                <li><strong>Refinamiento de la IA:</strong> Ajustando los algoritmos de recomendación basados en los patrones de ahorro reales de nuestros probadores.</li>
+                <li><strong>Nuevas Alianzas:</strong> Estamos cerrando acuerdos con más de 20 grandes comercios para ampliar el catálogo de beneficios exclusivos.</li>
+                <li><strong>Lanzamiento Público:</strong> Preparando la infraestructura para una apertura escalonada que garantice la mejor experiencia para todos.</li>
+            </ul>
 
-            <h2>Próximos Pasos</h2>
-            <p>Estamos preparando el lanzamiento de la versión móvil nativa en la App Store y Google Play, integrando pagos directos y alertas personalizadas de stock.</p>
+            <h2>Funcionalidades que han marcado la diferencia</h2>
+            <p>Durante estas semanas, hemos puesto a prueba herramientas clave que pronto estarán disponibles para todos:</p>
+            <ul>
+                <li><strong>El comparador inteligente:</strong> Capaz de analizar precios en múltiples plataformas en tiempo récord, ayudando a encontrar la opción más económica al instante.</li>
+                <li><strong>Alertas de bajada de precio:</strong> Un sistema de notificaciones que ha permitido a los usuarios de la beta adelantarse a las rebajas y agotar stocks de productos muy demandados.</li>
+                <li><strong>Modo Ahorro Extremo:</strong> Una funcionalidad experimental que sugiere alternativas inteligentes para maximizar el presupuesto mensual de cada usuario.</li>
+            </ul>
+
+            <h2>Un Backend robusto y eficiente</h2>
+            <p>Desde el punto de vista técnico, la beta ha sido el escenario perfecto para estresar nuestra arquitectura. Hemos optimizado las consultas a la base de datos y refinado los sistemas de caché, logrando una fluidez asombrosa incluso en momentos de mayor actividad.</p>
+
+            <div class="article-quote">
+                "La eficiencia no es solo gastar menos, es hacer más con lo que tenemos. Esa es la filosofía que impregna cada línea de código en Nexus."
+            </div>
+
+            <h2>Seguridad y Confianza</h2>
+            <p>La privacidad de vuestros datos es nuestra prioridad absoluta. Hemos aprovechado esta fase para auditar nuestras capas de seguridad y asegurar que Nexus sea un entorno totalmente protegido para vuestra información personal y financiera.</p>
+
+            <h2>Un Agradecimiento Especial</h2>
+            <p>A todos los que habéis dedicado vuestro tiempo a probar Nexus: gracias. Vuestra participación es el motor que nos impulsa a seguir innovando cada día.</p>
         `,
         date: "05 Abr 2026",
         readTime: "3 min",
