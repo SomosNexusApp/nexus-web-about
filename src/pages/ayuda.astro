@@ -1,0 +1,918 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const faqs = [
+    // CUENTA
+    {
+      pregunta: '¿Cómo puedo verificar mi cuenta?',
+      respuesta:
+        'Puedes verificar tu cuenta en los ajustes de perfil vinculando tu número de teléfono o una cuenta de Google. Una cuenta verificada genera más confianza.',
+      categoria: 'cuenta',
+    },
+    {
+      pregunta: '¿Cómo cambio mi contraseña?',
+      respuesta:
+        'Ve a Configuración > Seguridad. Allí podrás introducir tu contraseña actual y la nueva. Te recomendamos usar una combinación de letras, números y símbolos.',
+      categoria: 'cuenta',
+    },
+    {
+      pregunta: '¿Puedo eliminar mi cuenta permanentemente?',
+      respuesta:
+        'Sí, desde el apartado de Configuración > Cuenta. Ten en cuenta que esta acción es irreversible y perderás tu historial de compras y ventas.',
+      categoria: 'cuenta',
+    },
+
+    // COMPRAS
+    {
+      pregunta: '¿Qué formas de pago se aceptan?',
+      respuesta:
+        'Aceptamos tarjetas de crédito/débito, Apple Pay y Google Pay a través de nuestra pasarela de pagos segura gestionada por Stripe.',
+      categoria: 'compras',
+    },
+    {
+      pregunta: '¿Qué es el Pago Seguro de Nexus?',
+      respuesta:
+        'Es un sistema que retiene el dinero del comprador hasta que este confirma que ha recibido el producto en buen estado. Así protegemos a ambas partes.',
+      categoria: 'compras',
+    },
+    {
+      pregunta: '¿Cómo solicito una devolución?',
+      respuesta:
+        'Si el producto no coincide con la descripción, tienes 48h desde la recepción para abrir una disputa desde los detalles de tu compra.',
+      categoria: 'compras',
+    },
+
+    // VENDER
+    {
+      pregunta: '¿Es gratis publicar en Nexus?',
+      respuesta:
+        'Sí, publicar anuncios básicos en Nexus es totalmente gratuito. Solo cobramos una pequeña comisión si decides usar nuestro sistema de pagos y envíos protegidos.',
+      categoria: 'vender',
+    },
+    {
+      pregunta: '¿Cómo puedo destacar mi anuncio?',
+      respuesta:
+        'Desde "Mis anuncios", selecciona el producto y pulsa en "Promocionar". Esto hará que aparezca en las primeras posiciones de búsqueda.',
+      categoria: 'vender',
+    },
+    {
+      pregunta: '¿Cuándo recibiré el dinero de mi venta?',
+      respuesta:
+        'Una vez el comprador reciba el paquete y confirme que todo está bien (o pasen 48h sin reclamaciones), el dinero se transferirá a tu monedero Nexus.',
+      categoria: 'vender',
+    },
+
+    // ENVIOS
+    {
+      pregunta: '¿Cómo funcionan los envíos integrados?',
+      respuesta:
+        'Nexus genera una etiqueta automática. Solo tienes que imprimirla y llevar el paquete a un punto de recogida asociado (Correos o GLS).',
+      categoria: 'envios',
+    },
+    {
+      pregunta: '¿Quién paga los gastos de envío?',
+      respuesta:
+        'Por defecto, los gastos de envío los asume el comprador, a menos que el vendedor decida ofrecer "Envío gratis" en la configuración del producto.',
+      categoria: 'envios',
+    },
+    {
+      pregunta: '¿Qué peso máximo puedo enviar?',
+      respuesta:
+        'Nuestro sistema admite paquetes de hasta 30kg. Para objetos más grandes, deberás gestionar el transporte de forma externa.',
+      categoria: 'envios',
+    },
+
+    // SEGURIDAD
+    {
+      pregunta: '¿Cómo reconozco un intento de estafa?',
+      respuesta:
+        'Desconfía de usuarios que quieran continuar la conversación fuera de Nexus o que te pidan pagos por métodos no oficiales (Bizum directo, transferencias, etc.).',
+      categoria: 'seguridad',
+    },
+    {
+      pregunta: '¿Qué es la moderación de contenido?',
+      respuesta:
+        'Nexus utiliza IA y moderadores humanos para asegurar que no se publiquen artículos prohibidos o lenguaje ofensivo en nuestra plataforma.',
+      categoria: 'seguridad',
+    },
+    {
+      pregunta: '¿Cómo denuncio a un usuario?',
+      respuesta:
+        'En el perfil del usuario o en el chat, pulsa sobre los tres puntos y selecciona "Reportar usuario" especificando el motivo.',
+      categoria: 'seguridad',
+    },
+
+    // VIAJES
+    {
+      pregunta: '¿Cómo funcionan las ofertas de viajes en Nexus?',
+      respuesta:
+        'Nexus selecciona las mejores ofertas de agencias colaboradoras. Puedes ver los detalles, disponibilidad y reservar directamente desde la ficha de la oferta usando nuestra pasarela de pago.',
+      categoria: 'viajes',
+    },
+    {
+      pregunta: '¿Qué incluye el precio de un viaje?',
+      respuesta:
+        'Cada oferta es única. En la sección "Qué incluye" de la oferta verás detallado si incluye vuelos, hotel, traslados o régimen de comidas (TI, PC, MP).',
+      categoria: 'viajes',
+    },
+
+    // VEHICULOS
+    {
+      pregunta: '¿Cómo contacto con un vendedor de un vehículo?',
+      respuesta:
+        'Puedes usar el chat directo de Nexus para preguntar detalles. En vehículos de concesionarios, a veces verás un botón de "Llamar" para contacto telefónico directo.',
+      categoria: 'vehiculos',
+    },
+
+    // NEXUS ELITE & PRO
+    {
+      pregunta: '¿Qué ventajas tiene el diseño Nexus Elite?',
+      respuesta:
+        'Es nuestra nueva interfaz ultra-fluida con glassmorphing avanzado, diseñada para que navegar sea una experiencia visual espectacular y extremadamente rápida.',
+      categoria: 'elite',
+    },
+
+    // SOPORTE TECNICO
+    {
+      pregunta: '¿Cómo instalo Nexus como aplicación en mi móvil?',
+      respuesta:
+        'Al abrir Nexus en Chrome (Android) o Safari (iOS), pulsa en "Añadir a pantalla de inicio". Se instalará como una PWA ligera que funciona igual que una app nativa.',
+      categoria: 'tecnico',
+    },
+  ];
+
+// Categorías con sus respectivos iconos SVG
+const categories = [
+  { id: 'todas', label: 'Ver todas', icon: 'M4 6h16M4 12h16M4 18h16' },
+  { id: 'cuenta', label: 'Mi Cuenta', icon: 'M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8z' },
+  { id: 'compras', label: 'Compras', icon: 'M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4zM3 6h18M16 10a4 4 0 0 1-8 0' },
+  { id: 'vender', label: 'Vender', icon: 'M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82zM7 7h.01' },
+  { id: 'envios', label: 'Envíos y Pagos', icon: 'M1 3h15v13H1zM16 8h4l3 3v5h-7M5.5 21a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zM17.5 21a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z' },
+  { id: 'viajes', label: 'Nexus Viajes', icon: 'M17.8 19.2L16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z' },
+  { id: 'vehiculos', label: 'Nexus Motor', icon: 'M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9C2.1 11.6 2 12.2 2 12.8V16c0 .6.4 1 1 1h2M7 17a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM17 17a2 2 0 1 0 0-4 2 2 0 0 0 0 4z' },
+  { id: 'seguridad', label: 'Seguridad', icon: 'M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z' },
+  { id: 'elite', label: 'Nexus Elite', icon: 'M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5' },
+  { id: 'tecnico', label: 'Soporte Técnico', icon: 'M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z' },
+];
+
+---
+
+<Layout 
+  title="Centro de Ayuda - Nexus"
+  description="Encuentra respuestas a todas tus preguntas sobre Nexus, pagos, envíos, seguridad y más."
+>
+  <div class="help-page-brutalist">
+    <!-- HERO SECCIÓN -->
+    <section class="help-hero">
+      <div class="bg-mesh"></div>
+      <div class="container">
+        <div class="hero-content">
+          <div class="hero-label">SOPORTE & AYUDA &nearr;</div>
+          <h1 class="massive-text">
+            <span>¿Cómo podemos</span>
+            <div class="second-line">
+              <svg class="neon-star" viewBox="0 0 100 100" stroke="var(--accent)" stroke-width="6" stroke-linecap="round">
+                <path d="M50 10 L50 90 M10 50 L90 50 M20 20 L80 80 M20 80 L80 20"></path>
+              </svg>
+              <span class="split-color-text" data-text="ayudarte?">ayudarte?</span>
+            </div>
+          </h1>
+          <p class="hero-desc">
+            Todo lo que necesitas saber sobre Nexus, en un solo lugar. 
+            Busca respuestas rápidas o explora nuestras categorías.
+          </p>
+          
+          <div class="search-container">
+            <div class="search-box-brutalist">
+              <input type="text" id="help-search" placeholder="Escribe tu duda aquí..." />
+              <button class="search-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPICS QUICK ACCESS -->
+    <section class="popular-topics">
+      <div class="container">
+        <div class="topics-grid">
+          {categories.slice(1, 5).map((cat) => (
+            <button class="topic-card topic-trigger" data-section={cat.id}>
+              <div class="card-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d={cat.icon}></path>
+                </svg>
+              </div>
+              <h3 class="card-title">{cat.label}</h3>
+              <div class="card-arrow">&nearr;</div>
+            </button>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- MAIN CONTENT -->
+    <main class="help-main">
+      <div class="container">
+        <div class="layout-grid">
+          <!-- Sidebar Navigation -->
+          <aside class="sidebar">
+            <div class="sidebar-sticky">
+              <h2 class="sidebar-title">Categorías</h2>
+              <nav class="categories-nav">
+                {categories.map((cat) => (
+                  <button class={`nav-item ${cat.id === 'todas' ? 'active' : ''}`} data-section={cat.id}>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d={cat.icon}></path>
+                    </svg>
+                    <span>{cat.label}</span>
+                  </button>
+                ))}
+              </nav>
+
+              <div class="contact-box">
+                <div class="contact-label">¿Aún tienes dudas?</div>
+                <h3 class="contact-title">Contacta con soporte</h3>
+                <p>Estamos disponibles para ayudarte 24/7.</p>
+                <a href="mailto:somosnexusapp@gmail.com" class="contact-btn">
+                  Enviar Email 
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <line x1="7" y1="17" x2="17" y2="7"></line>
+                    <polyline points="7 7 17 7 17 17"></polyline>
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </aside>
+
+          <!-- FAQ Content Area -->
+          <section class="content-area">
+            <div class="section-header">
+              <h2 class="brutalist-title">Preguntas Frecuentes</h2>
+              <div class="title-line"></div>
+            </div>
+
+            <div class="faq-list" id="faq-list">
+              {faqs.map((faq, index) => (
+                <div class="faq-card animate-up" style={`animation-delay: ${index * 0.05}s`} data-categoria={faq.categoria}>
+                  <div class="faq-header">
+                    <h3 class="faq-question">{faq.pregunta}</h3>
+                    <div class="faq-tag">{faq.categoria}</div>
+                  </div>
+                  <div class="faq-body">
+                    <p>{faq.respuesta}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <!-- Empty state for search -->
+            <div id="no-results" class="empty-state hidden">
+              <div class="empty-icon">¯\_(ツ)_/¯</div>
+              <h3>No hemos encontrado nada para tu búsqueda</h3>
+              <p>Prueba con otros términos o elige una categoría lateral.</p>
+            </div>
+
+            <!-- Extra Guides -->
+            <div class="extra-guides">
+              <h2 class="brutalist-title">Guías Destacadas</h2>
+              <div class="guides-grid">
+                <div class="guide-mini-card">
+                  <div class="guide-num">01</div>
+                  <div class="guide-info">
+                    <h4>Primeros pasos</h4>
+                    <p>Configura tu perfil y publica en minutos.</p>
+                  </div>
+                </div>
+                <div class="guide-mini-card">
+                  <div class="guide-num">02</div>
+                  <div class="guide-info">
+                    <h4>Ventas seguras</h4>
+                    <p>Evita estafas y protege tu dinero.</p>
+                  </div>
+                </div>
+                <div class="guide-mini-card">
+                  <div class="guide-num">03</div>
+                  <div class="guide-info">
+                    <h4>Reputación</h4>
+                    <p>Mejora tu perfil y vende más rápido.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+  </div>
+</Layout>
+
+<style>
+  /* --- BASE PAGE STYLES --- */
+  .help-page-brutalist {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: var(--font-main);
+    padding-bottom: 100px;
+  }
+
+  .container {
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: 0 var(--container-pad);
+  }
+
+  /* --- HERO --- */
+  .help-hero {
+    position: relative;
+    padding: 160px 0 80px;
+    overflow: hidden;
+    background-color: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .bg-mesh {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: radial-gradient(circle at 70% 30%, rgba(218, 176, 255, 0.05) 0%, transparent 50%);
+    z-index: 1;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .hero-label {
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    margin-bottom: 20px;
+  }
+
+  .massive-text {
+    font-size: clamp(40px, 8vw, 100px);
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: -0.04em;
+    margin: 0;
+    padding-bottom: 30px;
+  }
+
+  .second-line {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 10px;
+  }
+
+  .neon-star {
+    width: clamp(40px, 6vw, 70px);
+    height: clamp(40px, 6vw, 70px);
+    animation: rotate 20s linear infinite;
+  }
+
+  @keyframes rotate { 100% { transform: rotate(360deg); } }
+
+  .split-color-text {
+    background: linear-gradient(to bottom, #FFFFFF 50%, var(--accent) 50%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    padding-bottom: 10px;
+    display: inline-block;
+  }
+
+  .hero-desc {
+    max-width: 550px;
+    margin: 30px auto;
+    font-size: 16px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .search-container {
+    margin-top: 50px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .search-box-brutalist {
+    display: flex;
+    width: 100%;
+    max-width: 600px;
+    background: var(--bg-primary);
+    border: 2px solid var(--border-light);
+    border-radius: var(--radius-sm);
+    padding: 8px;
+    transition: all 0.3s;
+  }
+
+  .search-box-brutalist:focus-within {
+    border-color: var(--accent);
+    box-shadow: 0 0 30px rgba(218, 176, 255, 0.15);
+    transform: translateY(-2px);
+  }
+
+  .search-box-brutalist input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: #fff;
+    padding: 12px 20px;
+    font-size: 16px;
+    outline: none;
+    font-family: var(--font-main);
+  }
+
+  .search-btn {
+    width: 50px;
+    height: 50px;
+    background: var(--accent);
+    color: #000;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    transition: all 0.3s;
+  }
+
+  .search-btn:hover {
+    transform: scale(1.05) rotate(5deg);
+  }
+
+  /* --- TOPIC CARDS --- */
+  .popular-topics {
+    padding: 60px 0;
+    background: var(--bg-primary);
+  }
+
+  .topics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+  }
+
+  .topic-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-card);
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    position: relative;
+    text-align: left;
+    border-radius: var(--radius-sm);
+  }
+
+  .topic-card:hover {
+    background: var(--accent-light);
+    border-color: var(--accent);
+    transform: translateY(-10px);
+  }
+
+  .card-icon {
+    width: 48px;
+    height: 48px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent);
+    transition: all 0.3s;
+  }
+
+  .topic-card:hover .card-icon {
+    background: var(--accent);
+    color: #000;
+  }
+
+  .card-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0;
+    color: var(--text-primary);
+  }
+
+  .card-arrow {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    font-size: 20px;
+    color: var(--text-muted);
+    transition: all 0.3s;
+  }
+
+  .topic-card:hover .card-arrow {
+    color: var(--accent);
+    transform: translate(5px, -5px);
+  }
+
+  /* --- MAIN CONTENT --- */
+  .help-main {
+    padding: 80px 0;
+  }
+
+  .layout-grid {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 80px;
+  }
+
+  /* Sidebar */
+  .sidebar-sticky {
+    position: sticky;
+    top: 120px;
+  }
+
+  .sidebar-title {
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 30px;
+  }
+
+  .categories-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 16px 20px;
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    border-radius: var(--radius-sm);
+    text-align: left;
+    width: 100%;
+  }
+
+  .nav-item svg {
+    opacity: 0.5;
+    transition: all 0.3s;
+  }
+
+  .nav-item:hover {
+    background: rgba(255,255,255,0.03);
+    color: #fff;
+    padding-left: 25px;
+  }
+
+  .nav-item.active {
+    background: var(--accent-light);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .nav-item.active svg {
+    opacity: 1;
+    color: var(--accent);
+  }
+
+  .contact-box {
+    margin-top: 60px;
+    padding: 30px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-sm);
+  }
+
+  .contact-label {
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .contact-title {
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 15px;
+    line-height: 1.2;
+  }
+
+  .contact-box p {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 25px;
+    line-height: 1.5;
+  }
+
+  .contact-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--accent);
+    color: #000;
+    padding: 12px 20px;
+    font-size: 13px;
+    font-weight: 800;
+    text-decoration: none;
+    border-radius: var(--radius-sm);
+    transition: all 0.3s;
+  }
+
+  .contact-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(218, 176, 255, 0.2);
+  }
+
+  /* Content Area */
+  .section-header {
+    margin-bottom: 50px;
+  }
+
+  .brutalist-title {
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin: 0 0 15px;
+  }
+
+  .title-line {
+    width: 80px;
+    height: 4px;
+    background: var(--accent);
+  }
+
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .faq-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-sm);
+    padding: 30px;
+    transition: all 0.3s;
+  }
+
+  .faq-card:hover {
+    border-color: rgba(255,255,255,0.1);
+    background: #1c1c1c;
+  }
+
+  .faq-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 15px;
+  }
+
+  .faq-question {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0;
+    color: var(--text-primary);
+    line-height: 1.4;
+  }
+
+  .faq-tag {
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    background: rgba(255,255,255,0.05);
+    padding: 4px 10px;
+    border-radius: 30px;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+
+  .faq-body p {
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  .faq-card.hidden { display: none; }
+
+  /* Empty State */
+  .empty-state {
+    padding: 80px 0;
+    text-align: center;
+  }
+
+  .empty-icon {
+    font-size: 60px;
+    margin-bottom: 20px;
+    opacity: 0.5;
+  }
+
+  .empty-state h3 {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+
+  .empty-state p {
+    color: var(--text-secondary);
+  }
+
+  /* Extra Guides */
+  .extra-guides {
+    margin-top: 100px;
+  }
+
+  .guides-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+  }
+
+  .guide-mini-card {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+  }
+
+  .guide-num {
+    font-size: 30px;
+    font-weight: 800;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(255,255,255,0.2);
+    font-family: var(--font-mono);
+  }
+
+  .guide-info h4 {
+    font-size: 15px;
+    font-weight: 700;
+    margin: 0 0 5px;
+  }
+
+  .guide-info p {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  /* Animations */
+  .animate-up {
+    animation: slideUp 0.6s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+    opacity: 0;
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Responsive */
+  @media (max-width: 1100px) {
+    .layout-grid {
+      grid-template-columns: 1fr;
+      gap: 50px;
+    }
+
+    .sidebar-sticky {
+      position: relative;
+      top: 0;
+    }
+
+    .categories-nav {
+      flex-direction: row;
+      overflow-x: auto;
+      padding-bottom: 10px;
+      scrollbar-width: none;
+    }
+    
+    .categories-nav::-webkit-scrollbar { display: none; }
+
+    .nav-item {
+      white-space: nowrap;
+      width: auto;
+    }
+
+    .contact-box {
+      display: none;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .massive-text { font-size: 48px; }
+    .second-line { flex-wrap: wrap; gap: 10px; }
+    .faq-card { padding: 20px; }
+    .topic-card { padding: 20px; }
+  }
+</style>
+
+<script>
+  // Selección de elementos
+  const searchInput = document.getElementById('help-search') as HTMLInputElement;
+  const navBtns = document.querySelectorAll('.nav-item');
+  const topicTriggers = document.querySelectorAll('.topic-trigger');
+  const faqCards = document.querySelectorAll('.faq-card');
+  const noResults = document.getElementById('no-results');
+  
+  let activeSection = 'todas';
+
+  function filterFaqs() {
+    const query = searchInput.value.toLowerCase().trim();
+    let visibleCount = 0;
+    
+    faqCards.forEach((card) => {
+      const element = card as HTMLElement;
+      const pregunta = element.querySelector('.faq-question')?.textContent?.toLowerCase() || '';
+      const respuesta = element.querySelector('.faq-body p')?.textContent?.toLowerCase() || '';
+      const categoria = element.dataset.categoria;
+      
+      const matchesQuery = !query || pregunta.includes(query) || respuesta.includes(query);
+      const matchesSection = activeSection === 'todas' || categoria === activeSection;
+      
+      if (matchesQuery && (query || matchesSection)) {
+        element.classList.remove('hidden');
+        visibleCount++;
+      } else {
+        element.classList.add('hidden');
+      }
+    });
+
+    // Manejo del estado vacío
+    if (visibleCount === 0) {
+      noResults?.classList.remove('hidden');
+    } else {
+      noResults?.classList.add('hidden');
+    }
+  }
+
+  // Evento de búsqueda
+  searchInput?.addEventListener('input', () => {
+    filterFaqs();
+  });
+
+  // Eventos de navegación (Sidebar)
+  navBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const element = btn as HTMLElement;
+      activeSection = element.dataset.section || 'todas';
+      
+      // Actualizar estado activo en UI
+      navBtns.forEach(b => b.classList.remove('active'));
+      element.classList.add('active');
+      
+      // Limpiar búsqueda al cambiar categoría
+      searchInput.value = '';
+      filterFaqs();
+      
+      // Scroll suave en móvil
+      if (window.innerWidth < 1100) {
+        document.querySelector('.content-area')?.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  });
+
+  // Eventos de tarjetas rápidas (Hero/Topics)
+  topicTriggers.forEach(card => {
+    card.addEventListener('click', () => {
+      const element = card as HTMLElement;
+      activeSection = element.dataset.section || 'todas';
+      
+      // Sincronizar sidebar
+      navBtns.forEach(b => {
+        const btn = b as HTMLElement;
+        if (btn.dataset.section === activeSection) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+      
+      searchInput.value = '';
+      filterFaqs();
+      
+      // Scroll a la sección
+      document.querySelector('.help-main')?.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+</script>
