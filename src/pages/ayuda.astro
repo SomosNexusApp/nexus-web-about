@@ -830,6 +830,7 @@ const categories = [
 <script>
   // Selección de elementos
   const searchInput = document.getElementById('help-search') as HTMLInputElement;
+  const searchBtn = document.querySelector('.search-btn');
   const navBtns = document.querySelectorAll('.nav-item');
   const topicTriggers = document.querySelectorAll('.topic-trigger');
   const faqCards = document.querySelectorAll('.faq-card');
@@ -841,6 +842,10 @@ const categories = [
     const query = searchInput.value.toLowerCase().trim();
     let visibleCount = 0;
     
+    // Si hay búsqueda, desactivamos visualmente las categorías para indicar búsqueda global
+    // o simplemente filtramos dentro de la categoría actual si así se prefiere.
+    // Vamos a hacer que la búsqueda sea GLOBAL si hay texto, ignorando la categoría.
+    
     faqCards.forEach((card) => {
       const element = card as HTMLElement;
       const pregunta = element.querySelector('.faq-question')?.textContent?.toLowerCase() || '';
@@ -850,25 +855,54 @@ const categories = [
       const matchesQuery = !query || pregunta.includes(query) || respuesta.includes(query);
       const matchesSection = activeSection === 'todas' || categoria === activeSection;
       
-      if (matchesQuery && (query || matchesSection)) {
+      // Si hay query, mostramos si coincide con la query (Búsqueda Global)
+      // Si NO hay query, mostramos si coincide con la sección activa
+      let shouldShow = false;
+      if (query) {
+        shouldShow = matchesQuery;
+      } else {
+        shouldShow = matchesSection;
+      }
+      
+      if (shouldShow) {
         element.classList.remove('hidden');
+        element.style.display = 'block'; // Asegurar que se vea
         visibleCount++;
       } else {
         element.classList.add('hidden');
+        element.style.display = 'none'; // Asegurar que se oculte
       }
     });
 
     // Manejo del estado vacío
     if (visibleCount === 0) {
       noResults?.classList.remove('hidden');
+      if (noResults) noResults.style.display = 'block';
     } else {
       noResults?.classList.add('hidden');
+      if (noResults) noResults.style.display = 'none';
     }
   }
 
-  // Evento de búsqueda
+  // Evento de búsqueda (teclado)
   searchInput?.addEventListener('input', () => {
     filterFaqs();
+  });
+
+  // Evento de búsqueda (botón)
+  searchBtn?.addEventListener('click', (e) => {
+    e.preventDefault();
+    filterFaqs();
+    // Scroll a los resultados
+    document.getElementById('faq-list')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
+  // Enter en el input
+  searchInput?.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      filterFaqs();
+      document.getElementById('faq-list')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   });
 
   // Eventos de navegación (Sidebar)
@@ -881,8 +915,8 @@ const categories = [
       navBtns.forEach(b => b.classList.remove('active'));
       element.classList.add('active');
       
-      // Limpiar búsqueda al cambiar categoría
-      searchInput.value = '';
+      // Al elegir categoría, limpiamos la búsqueda para mostrar la categoría pura
+      if (searchInput) searchInput.value = '';
       filterFaqs();
       
       // Scroll suave en móvil
@@ -908,11 +942,14 @@ const categories = [
         }
       });
       
-      searchInput.value = '';
+      if (searchInput) searchInput.value = '';
       filterFaqs();
       
       // Scroll a la sección
       document.querySelector('.help-main')?.scrollIntoView({ behavior: 'smooth' });
     });
   });
+
+  // Inicializar estado
+  filterFaqs();
 </script>
