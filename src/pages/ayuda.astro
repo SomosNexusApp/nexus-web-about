@@ -115,12 +115,24 @@ const faqs = [
         'Cada oferta es única. En la sección "Qué incluye" de la oferta verás detallado si incluye vuelos, hotel, traslados o régimen de comidas (TI, PC, MP).',
       categoria: 'viajes',
     },
+    {
+      pregunta: '¿Puedo cancelar una reserva de viaje?',
+      respuesta:
+        'Las condiciones de cancelación dependen de la agencia proveedora. Consulta la sección de "Política de Cancelación" en la ficha del viaje antes de completar la reserva.',
+      categoria: 'viajes',
+    },
 
     // VEHICULOS
     {
       pregunta: '¿Cómo contacto con un vendedor de un vehículo?',
       respuesta:
         'Puedes usar el chat directo de Nexus para preguntar detalles. En vehículos de concesionarios, a veces verás un botón de "Llamar" para contacto telefónico directo.',
+      categoria: 'vehiculos',
+    },
+    {
+      pregunta: '¿Cómo sé si un coche tiene la ITV en vigor?',
+      respuesta:
+        'En la ficha técnica de cada vehículo, el vendedor debe indicar el estado de la ITV. Siempre recomendamos solicitar el informe de tráfico oficial antes de realizar cualquier pago.',
       categoria: 'vehiculos',
     },
 
@@ -132,11 +144,71 @@ const faqs = [
       categoria: 'elite',
     },
 
+    // PRIVACIDAD
+    {
+      pregunta: '¿Quién tiene acceso a mi ubicación?',
+      respuesta:
+        'Solo mostramos una ubicación aproximada en el mapa para proteger tu privacidad. Nunca mostramos tu dirección exacta a otros usuarios.',
+      categoria: 'seguridad',
+    },
+    {
+      pregunta: '¿Están protegidos mis datos bancarios?',
+      respuesta:
+        'Totalmente. Nexus no almacena tus datos de tarjeta. Toda la información es gestionada de forma encriptada por Stripe, cumpliendo con los estándares PCI-DSS.',
+      categoria: 'seguridad',
+    },
+
+    // COMUNIDAD
+    {
+      pregunta: '¿Qué significan las llamas (Sparks) en las ofertas?',
+      respuesta:
+        'Representan el "calor" de una oferta. Cuantos más votos positivos (Sparks) tiene, más sube su temperatura. Los votos negativos (Drips) la enfrían.',
+      categoria: 'todas',
+    },
+    {
+      pregunta: '¿Cómo puedo ser un usuario verificado?',
+      respuesta:
+        'Debes completar tu perfil, verificar tu email y teléfono, y contar con al menos 3 valoraciones positivas de otros usuarios.',
+      categoria: 'cuenta',
+    },
+
+    // NEGOCIOS
+    {
+      pregunta: '¿Cómo puedo anunciar mi empresa en Nexus?',
+      respuesta:
+        'Escríbenos a soporte o visita nuestra sección de Partners. Ofrecemos planes de publicidad nativa, banners y productos destacados para empresas.',
+      categoria: 'todas',
+    },
+    {
+      pregunta: '¿Qué es el programa de Afiliados Nexus?',
+      respuesta:
+        'Es un programa para creadores que permite ganar comisiones compartiendo ofertas. Si alguien compra a través de tu enlace, recibes una recompensa.',
+      categoria: 'elite',
+    },
+
     // SOPORTE TECNICO
     {
       pregunta: '¿Cómo instalo Nexus como aplicación en mi móvil?',
       respuesta:
         'Al abrir Nexus en Chrome (Android) o Safari (iOS), pulsa en "Añadir a pantalla de inicio". Se instalará como una PWA ligera que funciona igual que una app nativa.',
+      categoria: 'tecnico',
+    },
+    {
+      pregunta: '¿Qué hago si la aplicación va lenta?',
+      respuesta:
+        'Limpiar la caché de tu navegador o reinstalar la PWA suele solucionar la mayoría de problemas. También asegúrate de tener una conexión a internet estable.',
+      categoria: 'tecnico',
+    },
+    {
+      pregunta: 'No recibo las notificaciones push',
+      respuesta:
+        'Verifica que has concedido permisos de notificación tanto en los ajustes de tu dispositivo/navegador como en el panel de Configuración dentro de Nexus.',
+      categoria: 'tecnico',
+    },
+    {
+      pregunta: '¿Cómo activo el Modo Oscuro?',
+      respuesta:
+        'Nexus es una plataforma diseñada nativamente en modo oscuro para ofrecer una experiencia visual premium y reducir la fatiga ocular. Está disponible por defecto para todos los usuarios, sin necesidad de activar nada.',
       categoria: 'tecnico',
     },
   ];
@@ -301,6 +373,20 @@ const categories = [
                   <div class="guide-info">
                     <h4>Reputación</h4>
                     <p>Mejora tu perfil y vende más rápido.</p>
+                  </div>
+                </div>
+                <div class="guide-mini-card">
+                  <div class="guide-num">04</div>
+                  <div class="guide-info">
+                    <h4>Nexus Viajes</h4>
+                    <p>Reserva tus vacaciones con pago seguro.</p>
+                  </div>
+                </div>
+                <div class="guide-mini-card">
+                  <div class="guide-num">05</div>
+                  <div class="guide-info">
+                    <h4>Nexus Motor</h4>
+                    <p>Todo lo que necesitas para comprar tu coche.</p>
                   </div>
                 </div>
               </div>
