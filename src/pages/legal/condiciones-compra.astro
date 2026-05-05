@@ -1,0 +1,335 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const currentYear = new Date().getFullYear();
+---
+
+<Layout title="Condiciones de Compra - Nexus" description="Condiciones generales de compra y uso de la plataforma Nexus, gestionada por Ecentia.">
+	<main class="terms-container">
+		<header class="terms-header">
+			<div class="container">
+				<span class="eyebrow">INFORMACIÓN LEGAL</span>
+				<h1>Condiciones de <span class="accent">Compra</span></h1>
+				<p class="last-updated">Última modificación: 6 de marzo, {currentYear}</p>
+				<div class="project-badge">
+					<span>Propiedad de <strong>Ecentia</strong></span>
+					<span class="separator">|</span>
+					<span>Proyecto Final de <strong>DAM</strong></span>
+				</div>
+			</div>
+		</header>
+
+		<section class="terms-content">
+			<div class="container narrow">
+				<div class="content-wrapper">
+					<section id="intro">
+						<h2>1. Introducción</h2>
+						<p>Estas condiciones de uso son aplicables a nexus.com y la app de Nexus. Nexus es una plataforma de anuncios clasificados y marketplace gestionada por <strong>Ecentia</strong></p>
+						<p>Al acceder o utilizar nuestros servicios, el usuario acepta quedar vinculado por estas Condiciones, nuestra Política de Privacidad y nuestra Política de Cookies. Si no está de acuerdo con alguna parte de las mismas, no debe utilizar el portal.</p>
+					</section>
+
+					<section id="definicion">
+						<h2>2. Definición del servicio de Nexus</h2>
+						<p>Nexus ofrece una plataforma online que permite a los usuarios publicar anuncios para la venta de productos, vehículos y ofertas de servicios, así como interactuar con otros usuarios interesados en dichos anuncios.</p>
+						<p>El servicio incluye herramientas para la gestión de anuncios, sistemas de mensajería interna, pasarelas de pago seguras y servicios de envío gestionados por terceros.</p>
+					</section>
+
+					<section id="uso">
+						<h2>3. Uso del portal y sus servicios</h2>
+						<p>El usuario se compromete a hacer un uso lícito, diligente y correcto de la información y contenidos a los que tenga acceso a través de Nexus. En particular, el usuario no podrá:</p>
+						<ul>
+							<li>Publicar contenidos que sean ilícitos, obscenos o contrarios a la moral pública.</li>
+							<li>Difundir spam o comunicaciones comerciales no autorizadas.</li>
+							<li>Acceder a cuentas de otros usuarios sin permiso.</li>
+							<li>Interferir con el correcto funcionamiento de los servidores de Nexus.</li>
+						</ul>
+					</section>
+
+					<section id="publi">
+						<h2>4. Funcionalidades de publicidad en Nexus</h2>
+						<p>Nexus permite a los usuarios destacar sus anuncios mediante servicios de pago ("Anuncios Premium"), que incrementan la visibilidad de los productos en las listas de búsqueda y categorías.</p>
+						<p>La contratación de estos servicios de visibilidad no garantiza la venta del producto, sino únicamente una mayor exposición ante los posibles compradores.</p>
+					</section>
+
+					<section id="propiedad">
+						<h2>5. Propiedad intelectual e industrial</h2>
+						<p>Ecentia es titular de todos los derechos de propiedad intelectual e industrial del portal y de los elementos contenidos en el mismo. El diseño, estructura, selección y presentación de los contenidos son propiedad exclusiva de Nexus.</p>
+						<p>El usuario concede a Nexus una licencia no exclusiva, gratuita y mundial para utilizar, reproducir y mostrar los contenidos (texto, fotos) publicados en sus anuncios con el fin de prestar el servicio.</p>
+					</section>
+
+					<section id="garantias">
+						<h2>6. Exclusión de garantías y responsabilidad</h2>
+						<h3>6.1. Disponibilidad y Continuidad</h3>
+						<p>Nexus no garantiza la disponibilidad técnica constante del portal, aunque realizará sus mejores esfuerzos para minimizar las interrupciones por mantenimiento o fallos técnicos.</p>
+						<h3>6.2. Contenidos y Servicios</h3>
+						<p>Nexus no se hace responsable de la veracidad, exactitud o licitud de los anuncios publicados por los usuarios. No intervenimos en la transacción física a menos que se use expresamente nuestra pasarela de pagos seguros.</p>
+					</section>
+
+					<section id="contratacion">
+						<h2>7. Contratación de servicios vinculados al anuncio</h2>
+						<p>Los servicios adicionales como el transporte o seguros de devolución son prestados por partners externos. Nexus actúa únicamente como facilitador de la contratación técnica.</p>
+					</section>
+
+					<section id="terceros">
+						<h2>8. Contratación con terceros a través del portal</h2>
+						<p>Cualquier relación contractual entre el usuario comprador y el usuario vendedor es responsabilidad exclusiva de las partes. Nexus no asume ninguna responsabilidad por los defectos del producto o incumplimientos del vendedor.</p>
+					</section>
+
+					<section id="enlaces">
+						<h2>9. Enlaces de texto y enlaces gráficos</h2>
+						<p>El portal puede contener enlaces a sitios web de terceros. Nexus no ejerce ningún control sobre dichos sitios ni asume responsabilidad por su contenido o políticas de privacidad.</p>
+					</section>
+
+					<div class="contact-box">
+						<p><strong>Nexus App - Soporte Legal</strong></p>
+						<p>Proyecto DAM - Ecentia</p>
+						<p>Email: <a href="mailto:somosnexusapp@gmail.com">somosnexusapp@gmail.com</a></p>
+					</div>
+
+					<p class="disclaimer-footer">
+						<em>© {currentYear} Ecentia. Este documento es parte de un proyecto de formación profesional. Al aceptarlo, el usuario reconoce el carácter experimental de la aplicación y exonera de responsabilidad legal a sus creadores.</em>
+					</p>
+				</div>
+			</div>
+		</section>
+	</main>
+</Layout>
+
+<style>
+	:root {
+		--bg-primary-light: #ffffff;
+		--bg-secondary-light: #f9f9f9;
+		--text-primary-light: #111111;
+		--text-secondary-light: #444444;
+		--border-color-light: #eeeeee;
+	}
+
+	.terms-container {
+		padding-top: 100px;
+		background-color: var(--bg-primary-light);
+		min-height: 100vh;
+		color: var(--text-primary-light);
+	}
+
+	.terms-header {
+		padding: 80px 0 60px;
+		background: linear-gradient(to bottom, #fcfcfc, #ffffff);
+		text-align: center;
+		border-bottom: 1px solid var(--border-color-light);
+	}
+
+	.eyebrow {
+		display: block;
+		font-weight: 800;
+		font-size: 14px;
+		letter-spacing: 0.2em;
+		color: #9d5ae5;
+		margin-bottom: 15px;
+		text-transform: uppercase;
+	}
+
+	h1 {
+		font-size: clamp(2.5rem, 8vw, 4.5rem);
+		font-weight: 900;
+		margin-bottom: 20px;
+		letter-spacing: -0.03em;
+		line-height: 1.1;
+		color: #000000;
+	}
+
+	.accent {
+		color: #9d5ae5;
+	}
+
+	.last-updated {
+		color: var(--text-secondary-light);
+		font-size: 16px;
+		font-weight: 500;
+		margin-bottom: 20px;
+	}
+
+	.project-badge {
+		display: inline-flex;
+		align-items: center;
+		gap: 15px;
+		padding: 10px 25px;
+		background: #f0f0f0;
+		border-radius: 50px;
+		font-size: 14px;
+		color: #555;
+		font-weight: 500;
+	}
+
+	.project-badge .separator {
+		color: #ccc;
+	}
+
+	.project-badge strong {
+		color: #000;
+	}
+
+	.terms-content {
+		padding: 80px 0;
+	}
+
+	.container {
+		width: 100%;
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 0 20px;
+	}
+
+	.container.narrow {
+		max-width: 800px;
+	}
+
+	.content-wrapper {
+		background: #ffffff;
+		padding: 60px;
+		border-radius: 24px;
+		border: 1px solid var(--border-color-light);
+		box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+	}
+
+	h2 {
+		font-size: 1.8rem;
+		font-weight: 800;
+		margin: 45px 0 20px;
+		color: #000000;
+		letter-spacing: -0.01em;
+	}
+
+	h3 {
+		font-size: 1.3rem;
+		font-weight: 700;
+		margin: 30px 0 15px;
+		color: #111;
+	}
+
+	p {
+		font-size: 1.1rem;
+		line-height: 1.8;
+		color: var(--text-secondary-light);
+		margin-bottom: 20px;
+	}
+
+	ul {
+		margin-bottom: 25px;
+		padding-left: 20px;
+	}
+
+	li {
+		font-size: 1.1rem;
+		line-height: 1.7;
+		color: var(--text-secondary-light);
+		margin-bottom: 12px;
+		list-style-type: none;
+		position: relative;
+	}
+
+	li::before {
+		content: "•";
+		position: absolute;
+		left: -20px;
+		color: #9d5ae5;
+		font-weight: bold;
+	}
+
+	strong {
+		color: #000000;
+		font-weight: 700;
+	}
+
+	a {
+		color: #9d5ae5;
+		text-decoration: none;
+		transition: all 0.3s ease;
+		font-weight: 600;
+		border-bottom: 1px solid transparent;
+	}
+
+	a:hover {
+		border-bottom-color: #9d5ae5;
+	}
+
+	.contact-box {
+		margin-top: 40px;
+		padding: 30px;
+		background: #f9f9f9;
+		border-radius: 16px;
+		border-left: 4px solid #9d5ae5;
+	}
+
+	.contact-box p {
+		margin-bottom: 5px;
+		color: var(--text-secondary-light);
+	}
+
+	.disclaimer-footer {
+		margin-top: 100px;
+		padding-top: 30px;
+		border-top: 1px solid #eee;
+		font-size: 0.85rem !important;
+		color: #aaa !important;
+		text-align: center;
+		line-height: 1.6;
+	}
+
+	@media (max-width: 768px) {
+		.content-wrapper {
+			padding: 40px 25px;
+		}
+
+		h1 {
+			font-size: 3rem;
+		}
+
+		.project-badge {
+			flex-direction: column;
+			gap: 5px;
+			border-radius: 15px;
+		}
+
+		.project-badge .separator {
+			display: none;
+		}
+	}
+
+	/* Ajustes para visibilidad del header en fondo blanco */
+	:global(.site-nav) {
+		border-bottom-color: #eee !important;
+	}
+
+	:global(.nav-brand) {
+		border-right-color: #eee !important;
+	}
+
+	:global(.nav-contact span) {
+		color: #111 !important;
+	}
+
+	:global(.nav-contact .nav-line) {
+		background-color: #ddd !important;
+	}
+
+	:global(.social-icon) {
+		background: #f0f0f0 !important;
+		color: #111 !important;
+	}
+
+	:global(.social-icon:hover) {
+		background: #e0e0e0 !important;
+	}
+
+	:global(.header-inline-nav) {
+		border-left-color: #eee !important;
+	}
+
+	:global(.header-inline-nav a) {
+		color: #111 !important;
+	}
+
+	:global(.header-inline-nav a:hover) {
+		color: #9d5ae5 !important;
+	}
+</style>
