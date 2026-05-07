@@ -1,452 +1,801 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import Layout from "../layouts/Layout.astro";
 ---
 
-<Layout 
-	title="Nexus App | El comparador de ofertas definitivo de productos nuevos y segunda mano"
-	description="Descubre Nexus App, la plataforma que unifica la búsqueda de ofertas, descuentos y artículos de segunda mano. Ahorra tiempo y dinero con nuestro buscador inteligente."
+<Layout
+  title="Nexus App | El comparador de ofertas definitivo de productos nuevos y segunda mano"
+  description="Descubre Nexus App, la plataforma que unifica la búsqueda de ofertas, descuentos y artículos de segunda mano. Ahorra tiempo y dinero con nuestro buscador inteligente."
 >
-	<main>
-		<!-- HERO BRUTALISTA -->
-		<section id="hero" class="bg-primary brutalist-hero">
-			<!-- Subtle Background Mesh/Rings if needed -->
-			<div class="bg-mesh"></div>
+  <main>
+    <!-- HERO BRUTALISTA -->
+    <section id="hero" class="bg-primary brutalist-hero">
+      <!-- Subtle Background Mesh/Rings if needed -->
+      <div class="bg-mesh"></div>
 
-			<div class="container hero-container">
-				<!-- Left Side Floating Text -->
-				<div class="hero-left-col">
-					<p class="small-title">Búsqueda, Ahorro, Eficiencia &nearr;<br />Desarrollo TFG</p>
+      <div class="container hero-container">
+        <!-- Left Side Floating Text -->
+        <div class="hero-left-col">
+          <p class="small-title">
+            Búsqueda, Ahorro, Eficiencia &nearr;<br />Desarrollo TFG
+          </p>
 
-					<div class="bottom-arrow-container">
-						<!-- Floating large outlined down-right arrow -->
-						<svg class="outline-arrow" viewBox="0 0 100 100" fill="none" stroke="var(--text-secondary)" stroke-width="2">
-							<path d="M10,10 L80,80 M80,20 L80,80 L20,80"></path>
-						</svg>
+          <div class="bottom-arrow-container">
+            <!-- Floating large outlined down-right arrow -->
+            <svg
+              class="outline-arrow"
+              viewBox="0 0 100 100"
+              fill="none"
+              stroke="var(--text-secondary)"
+              stroke-width="2"
+            >
+              <path d="M10,10 L80,80 M80,20 L80,80 L20,80"></path>
+            </svg>
 
-						<!-- Floating Neon CTA box at bottom extreme left -->
-						<a href="mailto:somosnexusapp@gmail.com" class="floating-neon-chat" style="text-decoration: none;">
-							<svg viewBox="0 0 24 24" fill="currentColor">
-								<path d="M12 2C6.477 2 2 6.477 2 12c0 1.8.496 3.49 1.353 4.93L2 22l5.07-1.353A9.957 9.957 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm-1 13H8v-2h3v2zm4 0h-2v-2h2v2zm0-4H8V9h7v2z"></path>
-							</svg>
-						</a>
-					</div>
-				</div>
+            <!-- Floating Neon CTA box at bottom extreme left -->
+            <a
+              href="mailto:somosnexusapp@gmail.com"
+              class="floating-neon-chat"
+              style="text-decoration: none;"
+            >
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path
+                  d="M12 2C6.477 2 2 6.477 2 12c0 1.8.496 3.49 1.353 4.93L2 22l5.07-1.353A9.957 9.957 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm-1 13H8v-2h3v2zm4 0h-2v-2h2v2zm0-4H8V9h7v2z"
+                ></path>
+              </svg>
+            </a>
+          </div>
+        </div>
 
-				<!-- Center Massive Text -->
-				<div class="hero-center-col" style="flex: 1 1 auto; white-space: nowrap;">
-					<h1 class="massive-text">
-						<span>Encuentra Todo</span>
-						<div class="second-line">
-							<svg class="neon-star" viewBox="0 0 100 100" stroke="var(--accent)" stroke-width="6" stroke-linecap="round">
-								<path d="M50 10 L50 90 M10 50 L90 50 M20 20 L80 80 M20 80 L80 20"></path>
-							</svg>
-							<span class="split-color-text" data-text="En Una App">En Una App</span>
-						</div>
-					</h1>
+        <!-- Center Massive Text -->
+        <div
+          class="hero-center-col"
+          style="flex: 1 1 auto; white-space: nowrap;"
+        >
+          <h1 class="massive-text">
+            <span>Encuentra Todo</span>
+            <div class="second-line">
+              <svg
+                class="neon-star"
+                viewBox="0 0 100 100"
+                stroke="var(--accent)"
+                stroke-width="6"
+                stroke-linecap="round"
+              >
+                <path
+                  d="M50 10 L50 90 M10 50 L90 50 M20 20 L80 80 M20 80 L80 20"
+                ></path>
+              </svg>
+              <span class="split-color-text" data-text="En Una App"
+                >En Una App</span
+              >
+            </div>
+          </h1>
 
-					<p class="hero-desc" style="white-space: normal;">
-						Nexus unifica la búsqueda de ofertas de productos nuevos y artículos de segunda mano. Una herramienta poderosa para ahorrar tiempo y dinero, desarrollada como Proyecto de Fin de Grado.
-					</p>
-				</div>
+          <p class="hero-desc" style="white-space: normal;">
+            Nexus unifica la búsqueda de ofertas de productos nuevos y artículos
+            de segunda mano. Una herramienta poderosa para ahorrar tiempo y
+            dinero, desarrollada como Proyecto de Fin de Grado.
+          </p>
+        </div>
 
-				<!-- Right Side Stats -->
-				<div class="hero-right-col">
-					<div class="stats-list">
-						<div class="stat-item">Productos y Ofertas unificados</div>
-						<div class="stat-item">1ª Plataforma unificada de segunda mano</div>
-						<div class="stat-item">Arquitectura Spring Boot &amp; PostgreSQL</div>
-					</div>
+        <!-- Right Side Stats -->
+        <div class="hero-right-col">
+          <div class="stats-list">
+            <div class="stat-item">Productos y Ofertas unificados</div>
+            <div class="stat-item">1ª Plataforma unificada de segunda mano</div>
+            <div class="stat-item">
+              Arquitectura Spring Boot &amp; PostgreSQL
+            </div>
+          </div>
 
-					<div class="customer-faces">
-						<div class="faces">
-							<img src="/example-profile-screen.webp" alt="Face" />
-							<img src="https://i.pravatar.cc/100?img=2" alt="Face" />
-							<img src="https://i.pravatar.cc/100?img=3" alt="Face" />
-							<img src="https://i.pravatar.cc/100?img=4" alt="Face" />
-							<div class="faces-plus">+</div>
-						</div>
-						<p style="font-size: 13px; font-weight: 600; margin-top: 10px; max-width: 140px;">
-							Usuarios que han colaborado en la <span style="color: var(--accent)">beta</span>
-						</p>
-					</div>
-				</div>
-			</div>
-		</section>
+          <div class="customer-faces">
+            <div class="faces">
+              <img src="/example-profile-screen.webp" alt="Face" />
+              <img src="https://i.postimg.cc/8kvqQyMW/LCwxbc9.jpg" alt="Face" />
+              <img src="https://i.postimg.cc/nrb1ZGBb/W9VJj1c.jpg" alt="Face" />
+              <img src="https://i.pravatar.cc/100?img=4" alt="Face" />
+              <div class="faces-plus">+</div>
+            </div>
+            <p
+              style="font-size: 13px; font-weight: 600; margin-top: 10px; max-width: 140px;"
+            >
+              Usuarios que han colaborado en la <span
+                style="color: var(--accent)">beta</span
+              >
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
 
-		<!-- TOOLS STRIP DE DESARROLLO -->
-		<section class="tools-strip">
-			<div class="container tools-container">
-				<div class="tools-text-col">
-					<div class="tools-line"></div>
-					<p class="tools-desc">Tecnologías de<br />desarrollo y<br />arquitectura</p>
-				</div>
+    <!-- TOOLS STRIP DE DESARROLLO -->
+    <section class="tools-strip">
+      <div class="container tools-container">
+        <div class="tools-text-col">
+          <div class="tools-line"></div>
+          <p class="tools-desc">
+            Tecnologías de<br />desarrollo y<br />arquitectura
+          </p>
+        </div>
 
-				<div class="tools-logos-wrapper">
-					<div class="tools-logos-track">
-						<!-- Set 1 -->
-						<img src="/assets/herramientas/html5.png" alt="HTML5" title="HTML5" />
-						<img src="/assets/herramientas/css3.png" alt="CSS3" title="CSS3" />
-						<img src="/assets/herramientas/typescript.png" alt="TypeScript" title="TypeScript" />
-						<img src="/assets/herramientas/angular.png" alt="Angular" title="Angular" />
-						<img src="/assets/herramientas/capacitor.png" alt="Capacitor" title="Capacitor" />
-						<img src="/assets/herramientas/java.png" alt="Java" title="Java" />
-						<img src="/assets/herramientas/srping.png" alt="Spring Boot" title="Spring Boot" />
-						<img src="/assets/herramientas/postgresql.png" alt="PostgreSQL" title="PostgreSQL" />
-						<!-- Set 2 (Clon para infinite scroll) -->
-						<img src="/assets/herramientas/html5.png" alt="HTML5" title="HTML5" />
-						<img src="/assets/herramientas/css3.png" alt="CSS3" title="CSS3" />
-						<img src="/assets/herramientas/typescript.png" alt="TypeScript" title="TypeScript" />
-						<img src="/assets/herramientas/angular.png" alt="Angular" title="Angular" />
-						<img src="/assets/herramientas/capacitor.png" alt="Capacitor" title="Capacitor" />
-						<img src="/assets/herramientas/java.png" alt="Java" title="Java" />
-						<img src="/assets/herramientas/srping.png" alt="Spring Boot" title="Spring Boot" />
-						<img src="/assets/herramientas/postgresql.png" alt="PostgreSQL" title="PostgreSQL" />
-					</div>
-				</div>
-			</div>
-		</section>
+        <div class="tools-logos-wrapper">
+          <div class="tools-logos-track">
+            <!-- Set 1 -->
+            <img
+              src="/assets/herramientas/html5.png"
+              alt="HTML5"
+              title="HTML5"
+            />
+            <img src="/assets/herramientas/css3.png" alt="CSS3" title="CSS3" />
+            <img
+              src="/assets/herramientas/typescript.png"
+              alt="TypeScript"
+              title="TypeScript"
+            />
+            <img
+              src="/assets/herramientas/angular.png"
+              alt="Angular"
+              title="Angular"
+            />
+            <img
+              src="/assets/herramientas/capacitor.png"
+              alt="Capacitor"
+              title="Capacitor"
+            />
+            <img src="/assets/herramientas/java.png" alt="Java" title="Java" />
+            <img
+              src="/assets/herramientas/srping.png"
+              alt="Spring Boot"
+              title="Spring Boot"
+            />
+            <img
+              src="/assets/herramientas/postgresql.png"
+              alt="PostgreSQL"
+              title="PostgreSQL"
+            />
+            <!-- Set 2 (Clon para infinite scroll) -->
+            <img
+              src="/assets/herramientas/html5.png"
+              alt="HTML5"
+              title="HTML5"
+            />
+            <img src="/assets/herramientas/css3.png" alt="CSS3" title="CSS3" />
+            <img
+              src="/assets/herramientas/typescript.png"
+              alt="TypeScript"
+              title="TypeScript"
+            />
+            <img
+              src="/assets/herramientas/angular.png"
+              alt="Angular"
+              title="Angular"
+            />
+            <img
+              src="/assets/herramientas/capacitor.png"
+              alt="Capacitor"
+              title="Capacitor"
+            />
+            <img src="/assets/herramientas/java.png" alt="Java" title="Java" />
+            <img
+              src="/assets/herramientas/srping.png"
+              alt="Spring Boot"
+              title="Spring Boot"
+            />
+            <img
+              src="/assets/herramientas/postgresql.png"
+              alt="PostgreSQL"
+              title="PostgreSQL"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
 
-		<!-- DOCUMENTACIÓN / SERVICIOS (LIGHT AGENCY STYLE) -->
-		<section id="documentacion" class="services-section">
-			<div class="container">
-				<!-- Header -->
-				<div class="services-header">
-					<h2 class="services-title">Desarrollos y soluciones<br />corporativas para ti</h2>
-					<p class="services-desc">Soluciones y documentación personalizada para ayudarte a desarrollar, escalar e iterar en tu software con facilidad.</p>
-				</div>
+    <!-- DOCUMENTACIÓN / SERVICIOS (LIGHT AGENCY STYLE) -->
+    <section id="documentacion" class="services-section">
+      <div class="container">
+        <!-- Header -->
+        <div class="services-header">
+          <h2 class="services-title">
+            Desarrollos y soluciones<br />corporativas para ti
+          </h2>
+          <p class="services-desc">
+            Soluciones y documentación personalizada para ayudarte a
+            desarrollar, escalar e iterar en tu software con facilidad.
+          </p>
+        </div>
 
-				<!-- Grid -->
-				<div class="services-grid">
-					<!-- Card 1 -->
-					<div class="service-card">
-						<div class="service-card-top">
-							<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-								<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
-								<path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
-							</svg>
-							<h3 class="service-card-title">Memoria Técnica<br />del Proyecto</h3>
-						</div>
-						<p class="service-card-desc">Documento oficial de viabilidad, toma de requisitos y diseño conceptual minucioso para garantizar un despliegue seguro.</p>
-						<a href="/documentacion" class="service-card-link">
-							Leer Más <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-								<line x1="7" y1="17" x2="17" y2="7"></line>
-								<polyline points="7 7 17 7 17 17"></polyline>
-							</svg>
-						</a>
-					</div>
+        <!-- Grid -->
+        <div class="services-grid">
+          <!-- Card 1 -->
+          <div class="service-card">
+            <div class="service-card-top">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="28"
+                height="28"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+              </svg>
+              <h3 class="service-card-title">
+                Memoria Técnica<br />del Proyecto
+              </h3>
+            </div>
+            <p class="service-card-desc">
+              Documento oficial de viabilidad, toma de requisitos y diseño
+              conceptual minucioso para garantizar un despliegue seguro.
+            </p>
+            <a href="/documentacion" class="service-card-link">
+              Leer Más <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <line x1="7" y1="17" x2="17" y2="7"></line>
+                <polyline points="7 7 17 7 17 17"></polyline>
+              </svg>
+            </a>
+          </div>
 
-					<!-- Card 2 -->
-					<div class="service-card">
-						<div class="service-card-top">
-							<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-								<path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-								<polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-								<line x1="12" y1="22.08" x2="12" y2="12"></line>
-							</svg>
-							<h3 class="service-card-title">Arquitectura y<br />REST APIs</h3>
-						</div>
-						<p class="service-card-desc">Construcción y consultoría de lógicas robustas usando Java, Spring Boot y bases de datos relacionales eficientes.</p>
-						<a href="/documentacion" class="service-card-link">
-							Leer Más <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-								<line x1="7" y1="17" x2="17" y2="7"></line>
-								<polyline points="7 7 17 7 17 17"></polyline>
-							</svg>
-						</a>
-					</div>
+          <!-- Card 2 -->
+          <div class="service-card">
+            <div class="service-card-top">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="28"
+                height="28"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path
+                  d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"
+                ></path>
+                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                <line x1="12" y1="22.08" x2="12" y2="12"></line>
+              </svg>
+              <h3 class="service-card-title">Arquitectura y<br />REST APIs</h3>
+            </div>
+            <p class="service-card-desc">
+              Construcción y consultoría de lógicas robustas usando Java, Spring
+              Boot y bases de datos relacionales eficientes.
+            </p>
+            <a href="/documentacion" class="service-card-link">
+              Leer Más <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <line x1="7" y1="17" x2="17" y2="7"></line>
+                <polyline points="7 7 17 7 17 17"></polyline>
+              </svg>
+            </a>
+          </div>
 
-					<!-- Card 3 -->
-					<div class="service-card">
-						<div class="service-card-top">
-							<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-								<rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-								<line x1="8" y1="21" x2="16" y2="21"></line>
-								<line x1="12" y1="17" x2="12" y2="21"></line>
-							</svg>
-							<h3 class="service-card-title">Sistemas UI y<br />Diseño Visual</h3>
-						</div>
-						<p class="service-card-desc">Creamos y mantenemos guías de estilo minimalistas enlazadas con los componentes de Capacitor y Angular UI.</p>
-						<a href="/documentacion" class="service-card-link">
-							Leer Más <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-								<line x1="7" y1="17" x2="17" y2="7"></line>
-								<polyline points="7 7 17 7 17 17"></polyline>
-							</svg>
-						</a>
-					</div>
-				</div>
+          <!-- Card 3 -->
+          <div class="service-card">
+            <div class="service-card-top">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="28"
+                height="28"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                <line x1="8" y1="21" x2="16" y2="21"></line>
+                <line x1="12" y1="17" x2="12" y2="21"></line>
+              </svg>
+              <h3 class="service-card-title">
+                Sistemas UI y<br />Diseño Visual
+              </h3>
+            </div>
+            <p class="service-card-desc">
+              Creamos y mantenemos guías de estilo minimalistas enlazadas con
+              los componentes de Capacitor y Angular UI.
+            </p>
+            <a href="/documentacion" class="service-card-link">
+              Leer Más <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <line x1="7" y1="17" x2="17" y2="7"></line>
+                <polyline points="7 7 17 7 17 17"></polyline>
+              </svg>
+            </a>
+          </div>
+        </div>
 
-				<!-- Banner Dark -->
-				<div class="services-banner">
-					<h3 class="services-banner-title">Descubre una infinidad de maneras en las que podemos asistirte.<br />¡Explora todos nuestros servicios ahora!</h3>
-					<a href="#mockup" class="services-banner-btn">
-						Más Servicios <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-							<line x1="7" y1="17" x2="17" y2="7"></line>
-							<polyline points="7 7 17 7 17 17"></polyline>
-						</svg>
-					</a>
-				</div>
-			</div>
-		</section>
+        <!-- Banner Dark -->
+        <div class="services-banner">
+          <h3 class="services-banner-title">
+            Descubre una infinidad de maneras en las que podemos asistirte.<br
+            />¡Explora todos nuestros servicios ahora!
+          </h3>
+          <a href="#mockup" class="services-banner-btn">
+            Más Servicios <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <line x1="7" y1="17" x2="17" y2="7"></line>
+              <polyline points="7 7 17 7 17 17"></polyline>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </section>
 
-		<!-- MOCKUP INTERACTIVO (LIGHT EDITORIAL) -->
-		<section id="mockup" class="feature-section">
-			<div class="container">
-				<!-- Header -->
-				<div class="feature-header">
-					<div class="feature-header-left">
-						<div class="feature-subtitle">Echa un vistazo a</div>
-						<h2 class="feature-title">Prototipo interactivo en alta fidelidad.</h2>
-					</div>
-					<a href="/documentacion#mockup" class="feature-circular-btn">Ver Mockup &nearr;</a>
-				</div>
+    <!-- MOCKUP INTERACTIVO (LIGHT EDITORIAL) -->
+    <section id="mockup" class="feature-section">
+      <div class="container">
+        <!-- Header -->
+        <div class="feature-header">
+          <div class="feature-header-left">
+            <div class="feature-subtitle">Echa un vistazo a</div>
+            <h2 class="feature-title">
+              Prototipo interactivo en alta fidelidad.
+            </h2>
+          </div>
+          <a href="/documentacion#mockup" class="feature-circular-btn"
+            >Ver Mockup &nearr;</a
+          >
+        </div>
 
-				<!-- Body Elements -->
-				<div class="feature-body">
-					<!-- Lista de Características (Izquierda) -->
-					<div class="feature-services">
-						<!-- Item 1 -->
-						<div class="feature-service-item">
-							<div class="feature-service-left">
-								<div class="feature-icon-circle">
-									<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-										<polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
-										<polyline points="2 17 12 22 22 17"></polyline>
-										<polyline points="2 12 12 17 22 12"></polyline>
-									</svg>
-								</div>
-								<h3 class="feature-service-title"><strong>Diseño Centrado</strong><br />en el Usuario</h3>
-							</div>
-							<p class="feature-service-desc">
-								Mejora radicalmente la interacción y retención del usuario mediante técnicas avanzadas y diseño predictivo. Priorizamos las métricas de usabilidad para estructurar nuestra plataforma.
-							</p>
-						</div>
+        <!-- Body Elements -->
+        <div class="feature-body">
+          <!-- Lista de Características (Izquierda) -->
+          <div class="feature-services">
+            <!-- Item 1 -->
+            <div class="feature-service-item">
+              <div class="feature-service-left">
+                <div class="feature-icon-circle">
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                    <polyline points="2 17 12 22 22 17"></polyline>
+                    <polyline points="2 12 12 17 22 12"></polyline>
+                  </svg>
+                </div>
+                <h3 class="feature-service-title">
+                  <strong>Diseño Centrado</strong><br />en el Usuario
+                </h3>
+              </div>
+              <p class="feature-service-desc">
+                Mejora radicalmente la interacción y retención del usuario
+                mediante técnicas avanzadas y diseño predictivo. Priorizamos las
+                métricas de usabilidad para estructurar nuestra plataforma.
+              </p>
+            </div>
 
-						<!-- Item 2 -->
-						<div class="feature-service-item">
-							<div class="feature-service-left">
-								<div class="feature-icon-circle">
-									<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-										<path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
-									</svg>
-								</div>
-								<h3 class="feature-service-title"><strong>Alineación Visual &</strong><br />Sistemas Modulares</h3>
-							</div>
-							<p class="feature-service-desc">
-								Cuidamos de principio a fin los estilos, componentes modulares y tipografías creando un sistema de diseño consistente, moderno y adaptable a ecosistemas móviles (PWA).
-							</p>
-						</div>
-					</div>
+            <!-- Item 2 -->
+            <div class="feature-service-item">
+              <div class="feature-service-left">
+                <div class="feature-icon-circle">
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path
+                      d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"
+                    ></path>
+                  </svg>
+                </div>
+                <h3 class="feature-service-title">
+                  <strong>Alineación Visual &</strong><br />Sistemas Modulares
+                </h3>
+              </div>
+              <p class="feature-service-desc">
+                Cuidamos de principio a fin los estilos, componentes modulares y
+                tipografías creando un sistema de diseño consistente, moderno y
+                adaptable a ecosistemas móviles (PWA).
+              </p>
+            </div>
+          </div>
 
-					<!-- Imagen Principal (Derecha) -->
-					<div class="feature-image-wrapper">
-						<img src="/assets/CEOs/foto_ceos_oficina.png" alt="CEOs de Nexus en la oficina" />
-					</div>
-				</div>
-			</div>
-		</section>
+          <!-- Imagen Principal (Derecha) -->
+          <div class="feature-image-wrapper">
+            <img
+              src="/assets/CEOs/foto_ceos_oficina.png"
+              alt="CEOs de Nexus en la oficina"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
 
-		<!-- APP SHOWCASE SECTION (SKYWAVE STYLE) -->
-		<section id="tecnologias" class="skywave-section">
-			<!-- Background Image Overlay -->
-			<div class="skywave-bg-overlay"></div>
-			<img src="/assets/skywave_bg.png" alt="Skywave background" class="skywave-bg-img" />
+    <!-- APP SHOWCASE SECTION (SKYWAVE STYLE) -->
+    <section id="tecnologias" class="skywave-section">
+      <!-- Background Image Overlay -->
+      <div class="skywave-bg-overlay"></div>
+      <img
+        src="/assets/skywave_bg.png"
+        alt="Skywave background"
+        class="skywave-bg-img"
+      />
 
-			<div class="skywave-inner">
-				<!-- Top: Icon + Label + Headline + CTAs -->
-				<div class="skywave-header">
-					<div class="skywave-icon">
-						<img src="/favicon.ico" alt="Nexus Icon" style="width: 24px; height: 24px; object-fit: contain;" />
-					</div>
-					<span class="skywave-label">Bienvenido a Nexus.</span>
-					<h2 class="skywave-heading">
-						¿Preparado para una Revolución en el<br />
-						Sector Tecnológico? <span class="skywave-accent">Explóranos.</span>
-					</h2>
-					<p class="skywave-desc">
-						En el corazón de cada aplicación tecnológica exitosa se encuentra una fusión de creatividad, funcionalidad y diseño centrado en el usuario. Ya sea simplificando procesos empresariales o mejorando las experiencias de los clientes, Nexus lleva esa visión al siguiente nivel.
-					</p>
-					<div class="skywave-ctas">
-						<!-- App Store style button -->
-						<a href="#mockup" class="app-store-btn">
-							<img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="App Store" />
-						</a>
-						<!-- Google Play style button -->
-						<a href="#mockup" class="google-play-btn">
-							<img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play" />
-						</a>
-					</div>
-				</div>
+      <div class="skywave-inner">
+        <!-- Top: Icon + Label + Headline + CTAs -->
+        <div class="skywave-header">
+          <div class="skywave-icon">
+            <img
+              src="/favicon.ico"
+              alt="Nexus Icon"
+              style="width: 24px; height: 24px; object-fit: contain;"
+            />
+          </div>
+          <span class="skywave-label">Bienvenido a Nexus.</span>
+          <h2 class="skywave-heading">
+            ¿Preparado para una Revolución en el<br />
+            Sector Tecnológico? <span class="skywave-accent">Explóranos.</span>
+          </h2>
+          <p class="skywave-desc">
+            En el corazón de cada aplicación tecnológica exitosa se encuentra
+            una fusión de creatividad, funcionalidad y diseño centrado en el
+            usuario. Ya sea simplificando procesos empresariales o mejorando las
+            experiencias de los clientes, Nexus lleva esa visión al siguiente
+            nivel.
+          </p>
+          <div class="skywave-ctas">
+            <!-- App Store style button -->
+            <a href="#mockup" class="app-store-btn">
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg"
+                alt="App Store"
+              />
+            </a>
+            <!-- Google Play style button -->
+            <a href="#mockup" class="google-play-btn">
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
+                alt="Google Play"
+              />
+            </a>
+          </div>
+        </div>
 
-				<!-- Bottom: Phone Mockups Fan -->
-				<div class="skywave-phones">
-					<div class="phone-mockup phone-left">
-						<img src="/assets/mockup_screen_1_1776375792544.png" alt="Nexus App - Screen 1" />
-					</div>
-					<div class="phone-mockup phone-center">
-						<img src="/assets/mockup_screen_2_1776375811823.png" alt="Nexus App - Main" />
-					</div>
-					<div class="phone-mockup phone-right">
-						<img src="/assets/mockup_screen_3_1776375826134.png" alt="Nexus App - Screen 3" />
-					</div>
-				</div>
-			</div>
-		</section>
+        <!-- Bottom: Phone Mockups Fan -->
+        <div class="skywave-phones">
+          <div class="phone-mockup phone-left">
+            <img
+              src="/assets/mockup_screen_1_1776375792544.png"
+              alt="Nexus App - Screen 1"
+            />
+          </div>
+          <div class="phone-mockup phone-center">
+            <img
+              src="/assets/mockup_screen_2_1776375811823.png"
+              alt="Nexus App - Main"
+            />
+          </div>
+          <div class="phone-mockup phone-right">
+            <img
+              src="/assets/mockup_screen_3_1776375826134.png"
+              alt="Nexus App - Screen 3"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
 
-		<!-- TEAM SECTION -->
-		<section id="equipo" class="team-section">
-			<div class="container">
-				<div class="team-header">
-					<span class="team-subtitle">NUESTRO EQUIPO</span>
-					<h2 class="team-title">Meet The Team</h2>
-				</div>
+    <!-- TEAM SECTION -->
+    <section id="equipo" class="team-section">
+      <div class="container">
+        <div class="team-header">
+          <span class="team-subtitle">NUESTRO EQUIPO</span>
+          <h2 class="team-title">Meet The Team</h2>
+        </div>
 
-				<div class="team-grid">
-					<!-- Miembro 1 -->
-					<div class="team-card">
-						<div class="team-image-wrapper">
-							<img src="/assets/CEOs/kirri_traje.png" alt="José Manuel Jiménez" style="object-position: top;" />
-						</div>
-						<h3 class="team-name">José Manuel Jiménez</h3>
-						<p class="team-role">CEO y Desarrollador</p>
-						<div class="team-social">
-							<a href="https://www.instagram.com/josemajr_6/?hl=es" target="_blank" class="social-btn" aria-label="Instagram">
-								<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-									<rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-									<path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-									<line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-								</svg>
-							</a>
-							<a href="https://www.linkedin.com/in/josemajr6/" target="_blank" class="social-btn" aria-label="LinkedIn">
-								<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-									<path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
-									<rect x="2" y="9" width="4" height="12"></rect>
-									<circle cx="4" cy="4" r="2"></circle>
-								</svg>
-							</a>
-						</div>
-					</div>
+        <div class="team-grid">
+          <!-- Miembro 1 -->
+          <div class="team-card">
+            <div class="team-image-wrapper">
+              <img
+                src="/assets/CEOs/kirri_traje.png"
+                alt="José Manuel Jiménez"
+                style="object-position: top;"
+              />
+            </div>
+            <h3 class="team-name">José Manuel Jiménez</h3>
+            <p class="team-role">CEO y Desarrollador</p>
+            <div class="team-social">
+              <a
+                href="https://www.instagram.com/josemajr_6/?hl=es"
+                target="_blank"
+                class="social-btn"
+                aria-label="Instagram"
+              >
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"
+                  ></path>
+                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                </svg>
+              </a>
+              <a
+                href="https://www.linkedin.com/in/josemajr6/"
+                target="_blank"
+                class="social-btn"
+                aria-label="LinkedIn"
+              >
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"
+                  ></path>
+                  <rect x="2" y="9" width="4" height="12"></rect>
+                  <circle cx="4" cy="4" r="2"></circle>
+                </svg>
+              </a>
+            </div>
+          </div>
 
-					<!-- Miembro 2 -->
-					<div class="team-card">
-						<div class="team-image-wrapper">
-							<img src="/assets/CEOs/rafa_traje.png" alt="Rafael Lázaro" />
-						</div>
-						<h3 class="team-name">Rafael Lázaro</h3>
-						<p class="team-role">CEO y Desarrollador</p>
-						<div class="team-social">
-							<a href="https://www.instagram.com/rafald_10/?hl=es" target="_blank" class="social-btn" aria-label="Instagram">
-								<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-									<rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-									<path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-									<line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-								</svg>
-							</a>
-							<a href="https://www.linkedin.com/in/rafalazarodam/" target="_blank" class="social-btn" aria-label="LinkedIn">
-								<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-									<path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
-									<rect x="2" y="9" width="4" height="12"></rect>
-									<circle cx="4" cy="4" r="2"></circle>
-								</svg>
-							</a>
-						</div>
-					</div>
+          <!-- Miembro 2 -->
+          <div class="team-card">
+            <div class="team-image-wrapper">
+              <img src="/assets/CEOs/rafa_traje.png" alt="Rafael Lázaro" />
+            </div>
+            <h3 class="team-name">Rafael Lázaro</h3>
+            <p class="team-role">CEO y Desarrollador</p>
+            <div class="team-social">
+              <a
+                href="https://www.instagram.com/rafald_10/?hl=es"
+                target="_blank"
+                class="social-btn"
+                aria-label="Instagram"
+              >
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"
+                  ></path>
+                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                </svg>
+              </a>
+              <a
+                href="https://www.linkedin.com/in/rafalazarodam/"
+                target="_blank"
+                class="social-btn"
+                aria-label="LinkedIn"
+              >
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"
+                  ></path>
+                  <rect x="2" y="9" width="4" height="12"></rect>
+                  <circle cx="4" cy="4" r="2"></circle>
+                </svg>
+              </a>
+            </div>
+          </div>
 
-					<!-- Miembro 3 -->
-					<div class="team-card">
-						<div class="team-image-wrapper">
-							<img src="/assets/CEOs/juanjo_traje.png" alt="Juan José Gamero" style="object-position: top;" />
-						</div>
-						<h3 class="team-name">Juan José Gamero</h3>
-						<p class="team-role">CEO y Desarrollador</p>
-						<div class="team-social">
-							<a href="https://www.instagram.com/juuaanjoo_21/?hl=es" target="_blank" class="social-btn" aria-label="Instagram">
-								<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-									<rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-									<path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-									<line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-								</svg>
-							</a>
-							<a href="https://www.linkedin.com/in/juan-jos%C3%A9-gamero-l%C3%B3pez-76326b27a/" target="_blank" class="social-btn" aria-label="LinkedIn">
-								<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-									<path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
-									<rect x="2" y="9" width="4" height="12"></rect>
-									<circle cx="4" cy="4" r="2"></circle>
-								</svg>
-							</a>
-						</div>
-					</div>
-				</div>
-			</div>
-		</section>
+          <!-- Miembro 3 -->
+          <div class="team-card">
+            <div class="team-image-wrapper">
+              <img
+                src="/assets/CEOs/juanjo_traje.png"
+                alt="Juan José Gamero"
+                style="object-position: top;"
+              />
+            </div>
+            <h3 class="team-name">Juan José Gamero</h3>
+            <p class="team-role">CEO y Desarrollador</p>
+            <div class="team-social">
+              <a
+                href="https://www.instagram.com/juuaanjoo_21/?hl=es"
+                target="_blank"
+                class="social-btn"
+                aria-label="Instagram"
+              >
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"
+                  ></path>
+                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                </svg>
+              </a>
+              <a
+                href="https://www.linkedin.com/in/juan-jos%C3%A9-gamero-l%C3%B3pez-76326b27a/"
+                target="_blank"
+                class="social-btn"
+                aria-label="LinkedIn"
+              >
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"
+                  ></path>
+                  <rect x="2" y="9" width="4" height="12"></rect>
+                  <circle cx="4" cy="4" r="2"></circle>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-		<!-- BLOG SECTION -->
-		<section id="blog" class="blog-section">
-			<div class="container">
-				<div class="blog-header">
-					<h2 class="blog-title">Artículos sobre Desarrollo <br /> y UX/UI Design</h2>
-					<a href="/blog" class="btn-outline">
-						Ver todas las publicaciones <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-							<path d="M7 17l9.2-9.2M17 17V7H7"></path>
-						</svg>
-					</a>
-				</div>
+    <!-- BLOG SECTION -->
+    <section id="blog" class="blog-section">
+      <div class="container">
+        <div class="blog-header">
+          <h2 class="blog-title">
+            Artículos sobre Desarrollo <br /> y UX/UI Design
+          </h2>
+          <a href="/blog" class="btn-outline">
+            Ver todas las publicaciones <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+            >
+              <path d="M7 17l9.2-9.2M17 17V7H7"></path>
+            </svg>
+          </a>
+        </div>
 
-				<div class="blog-grid">
-					<!-- Post Destacado (Izquierda) -->
-					<article class="blog-featured">
-						<div class="blog-featured-image">
-							<img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1000&q=80" alt="Featured post" />
-						</div>
-						<div class="blog-meta">
-							<span>05 Ene, 2025</span>
-							<span>&nbsp; 2 min de lectura</span>
-						</div>
-						<h3 class="blog-featured-title">Descubre cómo optimizar al máximo el desarrollo de aplicaciones web</h3>
-						<p class="blog-featured-excerpt">Conoce de primera mano cómo nuestras soluciones en la nube escalables pueden mejorar la vida útil y la rentabilidad de las plataformas a través del código optimizado y buenas métricas corporativas.</p>
-					</article>
+        <div class="blog-grid">
+          <!-- Post Destacado (Izquierda) -->
+          <article class="blog-featured">
+            <div class="blog-featured-image">
+              <img
+                src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1000&q=80"
+                alt="Featured post"
+              />
+            </div>
+            <div class="blog-meta">
+              <span>05 Ene, 2025</span>
+              <span>&nbsp; 2 min de lectura</span>
+            </div>
+            <h3 class="blog-featured-title">
+              Descubre cómo optimizar al máximo el desarrollo de aplicaciones
+              web
+            </h3>
+            <p class="blog-featured-excerpt">
+              Conoce de primera mano cómo nuestras soluciones en la nube
+              escalables pueden mejorar la vida útil y la rentabilidad de las
+              plataformas a través del código optimizado y buenas métricas
+              corporativas.
+            </p>
+          </article>
 
-					<!-- Listado Posts (Derecha) -->
-					<div class="blog-list">
-						<article class="blog-list-item">
-							<div class="blog-list-image">
-								<img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=400&q=80" alt="Post 2" />
-							</div>
-							<div class="blog-list-content">
-								<div class="blog-meta">
-									<span>02 Ene, 2025</span>
-									<span>&nbsp; 4 min de lectura</span>
-								</div>
-								<h4 class="blog-list-title">Consejos para diseñar paletas de colores en modo oscuro sin perder legibilidad</h4>
-							</div>
-						</article>
+          <!-- Listado Posts (Derecha) -->
+          <div class="blog-list">
+            <article class="blog-list-item">
+              <div class="blog-list-image">
+                <img
+                  src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=400&q=80"
+                  alt="Post 2"
+                />
+              </div>
+              <div class="blog-list-content">
+                <div class="blog-meta">
+                  <span>02 Ene, 2025</span>
+                  <span>&nbsp; 4 min de lectura</span>
+                </div>
+                <h4 class="blog-list-title">
+                  Consejos para diseñar paletas de colores en modo oscuro sin
+                  perder legibilidad
+                </h4>
+              </div>
+            </article>
 
-						<article class="blog-list-item">
-							<div class="blog-list-image">
-								<img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=400&q=80" alt="Post 3" />
-							</div>
-							<div class="blog-list-content">
-								<div class="blog-meta">
-									<span>15 Feb, 2025</span>
-									<span>&nbsp; 3 min de lectura</span>
-								</div>
-								<h4 class="blog-list-title">Inspiración funcional en la arquitectura minimalista de microservicios</h4>
-							</div>
-						</article>
+            <article class="blog-list-item">
+              <div class="blog-list-image">
+                <img
+                  src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=400&q=80"
+                  alt="Post 3"
+                />
+              </div>
+              <div class="blog-list-content">
+                <div class="blog-meta">
+                  <span>15 Feb, 2025</span>
+                  <span>&nbsp; 3 min de lectura</span>
+                </div>
+                <h4 class="blog-list-title">
+                  Inspiración funcional en la arquitectura minimalista de
+                  microservicios
+                </h4>
+              </div>
+            </article>
 
-						<article class="blog-list-item border-none">
-							<div class="blog-list-image">
-								<img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=400&q=80" alt="Post 4" />
-							</div>
-							<div class="blog-list-content">
-								<div class="blog-meta">
-									<span>27 Mar, 2025</span>
-									<span>&nbsp; 5 min de lectura</span>
-								</div>
-								<h4 class="blog-list-title">Errores comunes a prever para evitar la sobrecarga del hilo principal</h4>
-							</div>
-						</article>
-					</div>
-				</div>
-			</div>
-		</section>
-	</main>
+            <article class="blog-list-item border-none">
+              <div class="blog-list-image">
+                <img
+                  src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=400&q=80"
+                  alt="Post 4"
+                />
+              </div>
+              <div class="blog-list-content">
+                <div class="blog-meta">
+                  <span>27 Mar, 2025</span>
+                  <span>&nbsp; 5 min de lectura</span>
+                </div>
+                <h4 class="blog-list-title">
+                  Errores comunes a prever para evitar la sobrecarga del hilo
+                  principal
+                </h4>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
 </Layout>
