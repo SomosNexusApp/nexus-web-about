@@ -1,728 +1,1248 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-
+import BaseHead from "../components/BaseHead.astro";
 
 interface Props {
-	title: string;
-	description?: string;
-	image?: string;
+  title: string;
+  description?: string;
+  image?: string;
 }
 
-const { 
-    title, 
-    description = "Documentación técnica detallada de Nexus App: arquitectura, diseño y manual de usuario.",
-    image = "/assets/identidad/logotipo.webp" 
+const {
+  title,
+  description = "Documentación técnica detallada de Nexus App: arquitectura, diseño y manual de usuario.",
+  image = "/assets/identidad/logotipo.webp",
 } = Astro.props;
 const currentYear = new Date().getFullYear();
 
 // Documentos para el panel lateral
 const docs = [
-    {
-        title: "Documento General",
-        items: [
-            { name: "Introducción y Contexto", id: "introduccion" },
-            { name: "Análisis y Requisitos", id: "analisis" },
-            { name: "Diseño", id: "diseno" },
-            { name: "Implementación", id: "implementacion" },
-            { name: "Pruebas y Evaluación", id: "pruebas" },
-            { name: "Conclusiones y Mejoras", id: "conclusiones" },
-            { name: "Bibliografía", id: "bibliografia" },
-            { name: "Anexos", id: "anexos" }
-        ]
-    },
-    {
-        title: "Otros Documentos",
-        items: [
-            { name: "Plan de Proyecto", id: "plan-proyecto" },
-            { name: "Estudio de Viabilidad", id: "viabilidad" },
-            { name: "Requisitos del Sistema", id: "requisitos-sistema" },
-            { name: "Diagrama UML", id: "uml" },
-            { name: "Mockup Interactivo", id: "mockup", icon: "/assets/herramientas/figma.png" }
-        ]
-    }
+  {
+    title: "Documento General",
+    items: [
+      { name: "Introducción y Contexto", id: "introduccion" },
+      { name: "Análisis y Requisitos", id: "analisis" },
+      { name: "Diseño", id: "diseno" },
+      { name: "Implementación", id: "implementacion" },
+      { name: "Pruebas y Evaluación", id: "pruebas" },
+      { name: "Conclusiones y Mejoras", id: "conclusiones" },
+      { name: "Bibliografía", id: "bibliografia" },
+      { name: "Anexos", id: "anexos" },
+    ],
+  },
+  {
+    title: "Otros Documentos",
+    items: [
+      { name: "Plan de Proyecto", id: "plan-proyecto" },
+      { name: "Estudio de Viabilidad", id: "viabilidad" },
+      { name: "Requisitos del Sistema", id: "requisitos-sistema" },
+      { name: "Diagrama UML", id: "uml" },
+      {
+        name: "Mockup Interactivo",
+        id: "mockup",
+        icon: "/assets/herramientas/figma.png",
+      },
+    ],
+  },
 ];
 ---
 
 <!doctype html>
 <html lang="es">
-	<head>
-		<BaseHead title={title} description={description} image={image} />
-		<link
-			href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
-			rel="stylesheet"
-		/>
-	</head>
-	<body class="light-theme">
-		<nav class="doc-nav">
-			<div class="nav-container">
-				<a href="/" class="brand">
-					<img src="/assets/identidad/logotipo.webp" alt="Nexus Logo" class="logo" />
-				</a>
-				<div class="nav-links">
-					<a href="/">Volver a la Web</a>
-					<a href="https://github.com/SomosNexusApp/" target="_blank" class="github-btn">
-						<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-							<path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-						</svg>
-					</a>
-				</div>
-			</div>
-		</nav>
-
-		<!-- NAVEGACIÓN MÓVIL (ADAPTADA DE LAYOUT) -->
-		<nav class="site-nav mobile-nav">
-			<div class="nav-brand">
-				<a href="/">
-					<img src="/assets/identidad/logotipo.webp" alt="Nexus Logo" class="brand-logo" style="height: 48px; width: auto;" />
-				</a>
-			</div>
-
-			<div class="mobile-actions">
-				<button class="index-btn" id="index-toggle">
-					<span>Índice</span>
-				</button>
-
-				<button class="hamburger" id="menu-toggle" aria-label="Menu">
-					<span class="hamburger-line"></span>
-					<span class="hamburger-line"></span>
-					<span class="hamburger-line"></span>
-				</button>
-			</div>
-
-			<div class="nav-links header-inline-nav" id="nav-links">
-				<a href="/#hero">Inicio</a>
-				<a href="/documentacion">Documentación</a>
-				<a href="/tecnologias">Tecnologías</a>
-				<a href="/blog">Blog</a>
-			</div>
-
-			<!-- Cajón de Índice para Móvil -->
-			<div class="mobile-index-drawer" id="index-drawer">
-				<div class="drawer-header">
-					<h3>Tabla de Contenidos</h3>
-					<button id="close-index" class="close-drawer">&times;</button>
-				</div>
-				<div class="drawer-body">
-					{docs.map(section => (
-						<div class="sidebar-section">
-							<h3>{section.title}</h3>
-							<ul>
-								{section.items.map(item => (
-									<li>
-										<a href={`#${item.id}`} class="drawer-link">
-											{item.name}
-										</a>
-									</li>
-								))}
-							</ul>
-						</div>
-					))}
-				</div>
-			</div>
-			<div class="drawer-overlay" id="drawer-overlay"></div>
-		</nav>
-
-		<div class="doc-layout">
-			<aside class="sidebar">
-				<div class="sidebar-content">
-					{docs.map(section => (
-						<div class="sidebar-section">
-							<h3>{section.title}</h3>
-							<ul>
-								{section.items.map(item => (
-									<li>
-										<a href={`#${item.id}`} class="sidebar-link">
-											{item.name}
-											{(item as any).icon && <img src={(item as any).icon} alt={item.name} class="sidebar-icon" />}
-										</a>
-									</li>
-								))}
-							</ul>
-						</div>
-					))}
-				</div>
-			</aside>
-
-			<main class="content">
-				<slot />
-				<footer class="doc-footer">
-					<p>&copy; {currentYear} Nexus App - Documentación Técnica | <a href="/legal/aviso-legal" style="color: inherit; text-decoration: underline;">Legal</a> | <a href="/legal/privacidad" style="color: inherit; text-decoration: underline;">Privacidad</a> | <a href="/legal/terminos" style="color: inherit; text-decoration: underline;">Términos</a> | <a href="/legal/cookies" style="color: inherit; text-decoration: underline;">Cookies</a> | <a href="/legal/accesibilidad" style="color: inherit; text-decoration: underline;">Accesibilidad</a></p>
-				</footer>
-			</main>
-		</div>
-
-		<style is:global>
-			:root {
-				--doc-bg: #ffffff;
-				--doc-sidebar-bg: #f8f9fa;
-				--doc-text: #1a1a1a;
-				--doc-text-muted: #666666;
-				--doc-accent: #9d5ae5; /* Slightly darker purple for better contrast on white */
-				--doc-accent-soft: rgba(157, 90, 229, 0.1);
-				--doc-border: #eef0f2;
-				--doc-shadow: 0 4px 20px rgba(0,0,0,0.05);
-			}
-
-			* {
-				box-sizing: border-box;
-				margin: 0;
-				padding: 0;
-			}
-
-			body.light-theme {
-				background-color: var(--doc-bg);
-				color: var(--doc-text);
-				font-family: 'Inter', sans-serif;
-				line-height: 1.6;
-				overflow-x: hidden;
-			}
-
-			/* Navigation */
-			.doc-nav {
-				position: fixed;
-				top: 0;
-				left: 0;
-				right: 0;
-				height: 70px;
-				background: rgba(255, 255, 255, 0.8);
-				backdrop-filter: blur(10px);
-				border-bottom: 1px solid var(--doc-border);
-				z-index: 1000;
-				display: flex;
-				align-items: center;
-			}
-
-			.nav-container {
-				width: 100%;
-				max-width: 1400px;
-				margin: 0 auto;
-				padding: 0 2rem;
-				display: flex;
-				justify-content: space-between;
-				align-items: center;
-			}
-
-			.brand {
-				display: flex;
-				align-items: center;
-				gap: 12px;
-				text-decoration: none;
-				color: var(--doc-text);
-				font-weight: 800;
-				font-size: 1.2rem;
-			}
-
-			.logo {
-				height: 32px;
-				width: auto;
-			}
-
-			.dot {
-				color: var(--doc-accent);
-			}
-
-			.nav-links {
-				display: flex;
-				align-items: center;
-				gap: 24px;
-			}
-
-			.nav-links a {
-				text-decoration: none;
-				color: var(--doc-text-muted);
-				font-size: 0.9rem;
-				font-weight: 500;
-				transition: color 0.3s;
-			}
-
-			.nav-links a:hover {
-				color: var(--doc-accent);
-			}
-
-			.github-btn {
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				color: var(--doc-text) !important;
-			}
-
-			/* Layout */
-			.doc-layout {
-				display: flex;
-				min-height: 100vh;
-				padding-top: 70px;
-				max-width: 1400px;
-				margin: 0 auto;
-			}
-
-			/* Sidebar */
-			.sidebar {
-				width: 280px;
-				height: calc(100vh - 70px);
-				position: sticky;
-				top: 70px;
-				background: var(--doc-sidebar-bg);
-				border-right: 1px solid var(--doc-border);
-				padding: 2rem;
-				overflow-y: auto;
-			}
-
-			.sidebar-section {
-				margin-bottom: 2rem;
-			}
-
-			.sidebar-section h3 {
-				font-size: 0.75rem;
-				text-transform: uppercase;
-				letter-spacing: 0.05em;
-				color: var(--doc-text-muted);
-				margin-bottom: 1rem;
-				font-weight: 700;
-			}
-
-			.sidebar-section ul {
-				list-style: none;
-			}
-
-			.sidebar-link {
-				display: flex;
-				align-items: center;
-				gap: 8px;
-				padding: 0.5rem 0;
-				color: var(--doc-text);
-				text-decoration: none;
-				font-size: 0.95rem;
-				transition: all 0.3s;
-				border-left: 2px solid transparent;
-				padding-left: 12px;
-				margin-left: -12px;
-			}
-
-			.sidebar-icon {
-				width: 16px;
-				height: 16px;
-				object-fit: contain;
-			}
-
-			.sidebar-link:hover {
-				color: var(--doc-accent);
-				padding-left: 16px;
-			}
-
-			.sidebar-link.active {
-				color: var(--doc-accent);
-				font-weight: 600;
-				border-left-color: var(--doc-accent);
-				background: var(--doc-accent-soft);
-			}
-
-			/* Main Content */
-			.content {
-				flex: 1;
-				padding: 3rem 4rem;
-				max-width: 900px;
-			}
-
-			.content h1 {
-				font-size: 3rem;
-				font-weight: 800;
-				margin-bottom: 1.5rem;
-				letter-spacing: -0.02em;
-			}
-
-			.content h2 {
-				font-size: 2rem;
-				font-weight: 700;
-				margin: 3rem 0 1.5rem;
-				scroll-margin-top: 100px;
-			}
-
-			.content p {
-				font-size: 1.1rem;
-				color: #444;
-				margin-bottom: 1.5rem;
-				line-height: 1.8;
-			}
-
-			.content .lead {
-				font-size: 1.25rem;
-				color: var(--doc-text-muted);
-				margin-bottom: 2rem;
-			}
-
-			/* Cards and elements */
-			.doc-card {
-				background: white;
-				border: 1px solid var(--doc-border);
-				border-radius: 12px;
-				padding: 2rem;
-				margin-bottom: 2rem;
-				transition: transform 0.3s, box-shadow 0.3s;
-				box-shadow: var(--doc-shadow);
-			}
-
-			.doc-card:hover {
-				transform: translateY(-5px);
-				box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-			}
-
-			.doc-footer {
-				margin-top: 4rem;
-				padding-top: 2rem;
-				border-top: 1px solid var(--doc-border);
-				color: var(--doc-text-muted);
-				font-size: 0.9rem;
-			}
-
-			/* Responsive */
-			.mobile-nav {
-				display: none;
-			}
-
-			.hamburger {
-				display: none;
-				background: none;
-				border: none;
-				cursor: pointer;
-				padding: 10px;
-				position: relative;
-				z-index: 3000;
-			}
-
-			.hamburger-line {
-				display: block;
-				width: 28px;
-				height: 3px;
-				background-color: #000;
-				margin: 5px 0;
-				transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-				border-radius: 2px;
-			}
-
-			@media (max-width: 1024px) {
-				.doc-nav {
-					display: none;
-				}
-
-				.mobile-nav {
-					display: flex !important;
-					position: fixed;
-					top: 0;
-					left: 0;
-					width: 100%;
-					z-index: 2000;
-					background: rgba(255, 255, 255, 0.9) !important;
-					backdrop-filter: blur(10px);
-					border-bottom: 1px solid #eee;
-					justify-content: space-between;
-					align-items: center;
-					padding: 10px 20px;
-					height: 70px;
-				}
-
-				.mobile-nav .nav-brand {
-					padding: 0;
-					border: none;
-					display: flex;
-					align-items: center;
-				}
-
-				.mobile-actions {
-					display: flex;
-					align-items: center;
-					gap: 12px;
-				}
-
-				.index-btn {
-					display: flex;
-					align-items: center;
-					gap: 8px;
-					padding: 8px 16px;
-					background: #f0f0f0;
-					border: 1px solid #ddd;
-					border-radius: 8px;
-					font-size: 14px;
-					font-weight: 700;
-					color: #333;
-					cursor: pointer;
-					transition: all 0.3s;
-				}
-
-				.index-btn:hover {
-					background: #e5e5e5;
-				}
-
-				.header-inline-nav {
-					display: none !important; /* Ocultar por defecto en móvil */
-				}
-
-				.mobile-nav .hamburger {
-					display: block !important;
-				}
-
-				.is-menu-open .header-inline-nav {
-					display: flex !important;
-					flex-direction: column;
-					position: fixed;
-					top: 0;
-					left: 0;
-					width: 100%;
-					height: 100vh;
-					background: rgba(255, 255, 255, 0.98) !important;
-					backdrop-filter: blur(15px);
-					padding: 100px 40px;
-					gap: 30px;
-					z-index: 2500;
-					align-items: center;
-					justify-content: flex-start;
-					overflow-y: auto;
-				}
-
-				.is-menu-open .header-inline-nav a {
-					color: #000 !important;
-					font-size: 24px;
-					font-weight: 700;
-					text-transform: uppercase;
-					letter-spacing: 1px;
-					text-decoration: none;
-				}
-
-				/* Cajón de Índice */
-				.mobile-index-drawer {
-					position: fixed;
-					top: 0;
-					right: -100%;
-					width: 85%;
-					max-width: 320px;
-					height: 100vh;
-					background: #fff;
-					z-index: 3000;
-					transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-					display: flex;
-					flex-direction: column;
-					box-shadow: -10px 0 30px rgba(0,0,0,0.1);
-				}
-
-				.mobile-index-drawer.open {
-					right: 0;
-				}
-
-				.drawer-header {
-					padding: 20px;
-					border-bottom: 1px solid #eee;
-					display: flex;
-					justify-content: space-between;
-					align-items: center;
-					background: #fafafa;
-				}
-
-				.drawer-header h3 {
-					font-size: 1rem;
-					font-weight: 800;
-					margin: 0;
-					text-transform: uppercase;
-					letter-spacing: 0.5px;
-				}
-
-				.close-drawer {
-					background: none;
-					border: none;
-					font-size: 28px;
-					color: #888;
-					cursor: pointer;
-					line-height: 1;
-				}
-
-				.drawer-body {
-					padding: 20px;
-					overflow-y: auto;
-					flex: 1;
-				}
-
-				.drawer-link {
-					display: block;
-					padding: 12px 15px;
-					color: #444;
-					text-decoration: none;
-					font-size: 0.95rem;
-					border-radius: 8px;
-					margin-bottom: 4px;
-					transition: all 0.2s;
-				}
-
-				.drawer-link:active, .drawer-link:hover {
-					background: var(--doc-accent-soft);
-					color: var(--doc-accent);
-				}
-
-				.drawer-overlay {
-					position: fixed;
-					top: 0;
-					left: 0;
-					width: 100%;
-					height: 100%;
-					background: rgba(0,0,0,0.5);
-					backdrop-filter: blur(4px);
-					z-index: 2900;
-					opacity: 0;
-					visibility: hidden;
-					transition: all 0.3s;
-				}
-
-				.drawer-overlay.visible {
-					opacity: 1;
-					visibility: visible;
-				}
-
-				/* Hamburger Active Animation */
-				.hamburger.active .hamburger-line:nth-child(1) {
-					transform: translateY(8px) rotate(45deg);
-				}
-				.hamburger.active .hamburger-line:nth-child(2) {
-					opacity: 0;
-					transform: translateX(10px);
-				}
-				.hamburger.active .hamburger-line:nth-child(3) {
-					transform: translateY(-8px) rotate(-45deg);
-				}
-
-				.sidebar {
-					display: none;
-				}
-				.content {
-					padding: 2rem 1.5rem;
-				}
-				.doc-layout {
-					padding-top: 70px;
-					display: block;
-				}
-			}
-		</style>
-		<script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-		<script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-
-		<script>
-			// GSAP Animations
-			document.addEventListener('DOMContentLoaded', () => {
-				// @ts-ignore
-				if (typeof gsap !== 'undefined') {
-					// @ts-ignore
-					gsap.from('.sidebar', {
-						x: -100,
-						opacity: 0,
-						duration: 1,
-						ease: 'power4.out'
-					});
-
-					// @ts-ignore
-					gsap.from('.content section', {
-						y: 50,
-						opacity: 0,
-						duration: 0.8,
-						stagger: 0.2,
-						ease: 'power3.out'
-					});
-				}
-			});
-
-			// Scroll Spy Logic
-			const sections = document.querySelectorAll('section[id]');
-			const navLinks = document.querySelectorAll('.sidebar-link');
-
-			window.addEventListener('scroll', () => {
-				let current = '';
-				sections.forEach(section => {
-					const htmlSection = section as HTMLElement;
-					const sectionTop = htmlSection.offsetTop;
-					if (window.scrollY >= (sectionTop - 150)) {
-						current = section.getAttribute('id') || '';
-					}
-				});
-
-				navLinks.forEach(link => {
-					link.classList.remove('active');
-					const href = link.getAttribute('href');
-					if (href && current && href.includes(current)) {
-						link.classList.add('active');
-					}
-				});
-			});
-
-			// Mobile Menu Logic
-			function initMenu() {
-				const menuToggle = document.getElementById('menu-toggle');
-				const navLinksMobile = document.getElementById('nav-links');
-				const siteNav = document.querySelector('.site-nav.mobile-nav');
-
-				// Index Drawer Elements
-				const indexToggle = document.getElementById('index-toggle');
-				const indexDrawer = document.getElementById('index-drawer');
-				const closeIndex = document.getElementById('close-index');
-				const drawerOverlay = document.getElementById('drawer-overlay');
-
-				if (!menuToggle || !navLinksMobile || !siteNav) return;
-
-				// Toggle Principal (Hamburguesa)
-				const toggleMenu = (e: any) => {
-					if (e) e.preventDefault();
-					const isOpen = siteNav.classList.toggle('is-menu-open');
-					menuToggle.classList.toggle('active');
-					
-					// Cerrar el índice si se abre el menú principal
-					if (indexDrawer) {
-						indexDrawer.classList.remove('open');
-						if (drawerOverlay) drawerOverlay.classList.remove('visible');
-					}
-					
-					document.body.style.overflow = isOpen ? 'hidden' : '';
-				};
-
-				const closeMenu = () => {
-					siteNav.classList.remove('is-menu-open');
-					menuToggle.classList.remove('active');
-					document.body.style.overflow = '';
-				};
-
-				(menuToggle as any).onclick = toggleMenu;
-
-				const links = navLinksMobile.querySelectorAll('a');
-				links.forEach(link => {
-					(link as any).onclick = closeMenu;
-				});
-
-				// Lógica del Índice
-				if (indexToggle && indexDrawer) {
-					indexToggle.onclick = () => {
-						indexDrawer.classList.add('open');
-						if (drawerOverlay) drawerOverlay.classList.add('visible');
-						document.body.style.overflow = 'hidden';
-						
-						// Cerrar menú principal si se abre el índice
-						closeMenu();
-					};
-
-					const closeDrawerFunc = () => {
-						indexDrawer.classList.remove('open');
-						if (drawerOverlay) drawerOverlay.classList.remove('visible');
-						document.body.style.overflow = '';
-					};
-
-					if (closeIndex) closeIndex.onclick = closeDrawerFunc;
-					if (drawerOverlay) drawerOverlay.onclick = closeDrawerFunc;
-
-					// Cerrar al pulsar un enlace del índice
-					const drawerLinks = indexDrawer.querySelectorAll('.drawer-link');
-					drawerLinks.forEach(link => {
-						(link as any).onclick = closeDrawerFunc;
-					});
-				}
-			}
-
-			// Inicializar
-			initMenu();
-			
-			// Compatibilidad con transiciones de Astro
-			document.addEventListener('astro:after-swap', initMenu);
-		</script>
-	</body>
+  <head>
+    <BaseHead title={title} description={description} image={image} />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="light-theme">
+    <nav class="doc-nav">
+      <div class="nav-container">
+        <a href="/" class="brand">
+          <img
+            src="/assets/identidad/logotipo.webp"
+            alt="Nexus Logo"
+            class="logo"
+          />
+        </a>
+        <div class="nav-links">
+          <a href="/">Volver a la Web</a>
+          <a
+            href="https://github.com/SomosNexusApp/"
+            target="_blank"
+            class="github-btn"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"
+              ></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- NAVEGACIÓN MÓVIL (ADAPTADA DE LAYOUT) -->
+    <nav class="site-nav mobile-nav">
+      <div class="nav-brand">
+        <a href="/">
+          <img
+            src="/assets/identidad/logotipo.webp"
+            alt="Nexus Logo"
+            class="brand-logo"
+            style="height: 48px; width: auto;"
+          />
+        </a>
+      </div>
+
+      <div class="mobile-actions">
+        <button class="index-btn" id="index-toggle">
+          <span>Índice</span>
+        </button>
+
+        <button class="hamburger" id="menu-toggle" aria-label="Menu">
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+        </button>
+      </div>
+
+      <div class="nav-links header-inline-nav" id="nav-links">
+        <a href="/#hero">Inicio</a>
+        <a href="/documentacion">Documentación</a>
+        <a href="/tecnologias">Tecnologías</a>
+        <a href="/blog">Blog</a>
+      </div>
+
+      <!-- Cajón de Índice para Móvil -->
+      <div class="mobile-index-drawer" id="index-drawer">
+        <div class="drawer-header">
+          <h3>Tabla de Contenidos</h3>
+          <button id="close-index" class="close-drawer">&times;</button>
+        </div>
+        <div class="drawer-body">
+          {
+            docs.map((section) => (
+              <div class="sidebar-section">
+                <h3>{section.title}</h3>
+                <ul>
+                  {section.items.map((item) => (
+                    <li>
+                      <a href={`#${item.id}`} class="drawer-link">
+                        {item.name}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+      <div class="drawer-overlay" id="drawer-overlay"></div>
+    </nav>
+
+    <div class="doc-layout">
+      <aside class="sidebar">
+        <div class="sidebar-content">
+          {
+            docs.map((section) => (
+              <div class="sidebar-section">
+                <h3>{section.title}</h3>
+                <ul>
+                  {section.items.map((item) => (
+                    <li>
+                      <a href={`#${item.id}`} class="sidebar-link">
+                        {item.name}
+                        {(item as any).icon && (
+                          <img
+                            src={(item as any).icon}
+                            alt={item.name}
+                            class="sidebar-icon"
+                          />
+                        )}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))
+          }
+        </div>
+      </aside>
+
+      <main class="content">
+        <slot />
+        <footer class="doc-footer">
+          <p>
+            &copy; {currentYear} Nexus App - Documentación Técnica | <a
+              href="/legal/aviso-legal"
+              style="color: inherit; text-decoration: underline;">Legal</a
+            > | <a
+              href="/legal/privacidad"
+              style="color: inherit; text-decoration: underline;">Privacidad</a
+            > | <a
+              href="/legal/terminos"
+              style="color: inherit; text-decoration: underline;">Términos</a
+            > | <a
+              href="/legal/cookies"
+              style="color: inherit; text-decoration: underline;">Cookies</a
+            > | <a
+              href="/legal/accesibilidad"
+              style="color: inherit; text-decoration: underline;"
+              >Accesibilidad</a>
+          </p>
+        </footer>
+      </main>
+    </div>
+
+    <style is:global>
+      :root {
+        --doc-bg: #ffffff;
+        --doc-sidebar-bg: #f8f9fa;
+        --doc-text: #1a1a1a;
+        --doc-text-muted: #666666;
+        --doc-accent: #9d5ae5; /* Slightly darker purple for better contrast on white */
+        --doc-accent-soft: rgba(157, 90, 229, 0.1);
+        --doc-border: #eef0f2;
+        --doc-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body.light-theme {
+        background-color: var(--doc-bg);
+        color: var(--doc-text);
+        font-family: "Inter", sans-serif;
+        line-height: 1.6;
+        overflow-x: hidden;
+      }
+
+      /* Navigation */
+      .doc-nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 70px;
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid var(--doc-border);
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+      }
+
+      .nav-container {
+        width: 100%;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        text-decoration: none;
+        color: var(--doc-text);
+        font-weight: 800;
+        font-size: 1.2rem;
+      }
+
+      .logo {
+        height: 32px;
+        width: auto;
+      }
+
+      .dot {
+        color: var(--doc-accent);
+      }
+
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+      }
+
+      .nav-links a {
+        text-decoration: none;
+        color: var(--doc-text-muted);
+        font-size: 0.9rem;
+        font-weight: 500;
+        transition: color 0.3s;
+      }
+
+      .nav-links a:hover {
+        color: var(--doc-accent);
+      }
+
+      .github-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--doc-text) !important;
+      }
+
+      /* Layout */
+      .doc-layout {
+        display: flex;
+        min-height: 100vh;
+        padding-top: 70px;
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+
+      /* Sidebar */
+      .sidebar {
+        width: 280px;
+        height: calc(100vh - 70px);
+        position: sticky;
+        top: 70px;
+        background: var(--doc-sidebar-bg);
+        border-right: 1px solid var(--doc-border);
+        padding: 2rem;
+        overflow-y: auto;
+      }
+
+      .sidebar-section {
+        margin-bottom: 2rem;
+      }
+
+      .sidebar-section h3 {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--doc-text-muted);
+        margin-bottom: 1rem;
+        font-weight: 700;
+      }
+
+      .sidebar-section ul {
+        list-style: none;
+      }
+
+      .sidebar-link {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 0.5rem 0;
+        color: var(--doc-text);
+        text-decoration: none;
+        font-size: 0.95rem;
+        transition: all 0.3s;
+        border-left: 2px solid transparent;
+        padding-left: 12px;
+        margin-left: -12px;
+      }
+
+      .sidebar-icon {
+        width: 16px;
+        height: 16px;
+        object-fit: contain;
+      }
+
+      .sidebar-link:hover {
+        color: var(--doc-accent);
+        padding-left: 16px;
+      }
+
+      .sidebar-link.active {
+        color: var(--doc-accent);
+        font-weight: 600;
+        border-left-color: var(--doc-accent);
+        background: var(--doc-accent-soft);
+      }
+
+      /* Main Content */
+      .content {
+        flex: 1;
+        padding: 3rem 4rem;
+        max-width: 900px;
+      }
+
+      .content h1 {
+        font-size: 3rem;
+        font-weight: 800;
+        margin-bottom: 1.5rem;
+        letter-spacing: -0.02em;
+      }
+
+      .content h2 {
+        font-size: 2rem;
+        font-weight: 700;
+        margin: 3rem 0 1.5rem;
+        scroll-margin-top: 100px;
+      }
+
+      .content p {
+        font-size: 1.1rem;
+        color: #444;
+        margin-bottom: 1.5rem;
+        line-height: 1.8;
+      }
+
+      .content .lead {
+        font-size: 1.25rem;
+        color: var(--doc-text-muted);
+        margin-bottom: 2rem;
+      }
+
+      /* Cards and elements */
+      .doc-card {
+        background: white;
+        border: 1px solid var(--doc-border);
+        border-radius: 12px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        transition:
+          transform 0.3s,
+          box-shadow 0.3s;
+        box-shadow: var(--doc-shadow);
+      }
+
+      .doc-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      }
+
+      .doc-footer {
+        margin-top: 4rem;
+        padding-top: 2rem;
+        border-top: 1px solid var(--doc-border);
+        color: var(--doc-text-muted);
+        font-size: 0.9rem;
+      }
+
+      /* Responsive */
+      .mobile-nav {
+        display: none;
+      }
+
+      .hamburger {
+        display: none;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 10px;
+        position: relative;
+        z-index: 3000;
+      }
+
+      .hamburger-line {
+        display: block;
+        width: 28px;
+        height: 3px;
+        background-color: #000;
+        margin: 5px 0;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border-radius: 2px;
+      }
+
+      @media (max-width: 1024px) {
+        .doc-nav {
+          display: none;
+        }
+
+        .mobile-nav {
+          display: flex !important;
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          z-index: 2000;
+          background: rgba(255, 255, 255, 0.9) !important;
+          backdrop-filter: blur(10px);
+          border-bottom: 1px solid #eee;
+          justify-content: space-between;
+          align-items: center;
+          padding: 10px 20px;
+          height: 70px;
+        }
+
+        .mobile-nav .nav-brand {
+          padding: 0;
+          border: none;
+          display: flex;
+          align-items: center;
+        }
+
+        .mobile-actions {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+        }
+
+        .index-btn {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          padding: 8px 16px;
+          background: #f0f0f0;
+          border: 1px solid #ddd;
+          border-radius: 8px;
+          font-size: 14px;
+          font-weight: 700;
+          color: #333;
+          cursor: pointer;
+          transition: all 0.3s;
+        }
+
+        .index-btn:hover {
+          background: #e5e5e5;
+        }
+
+        .header-inline-nav {
+          display: none !important; /* Ocultar por defecto en móvil */
+        }
+
+        .mobile-nav .hamburger {
+          display: block !important;
+        }
+
+        .is-menu-open .header-inline-nav {
+          display: flex !important;
+          flex-direction: column;
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100vh;
+          background: rgba(255, 255, 255, 0.98) !important;
+          backdrop-filter: blur(15px);
+          padding: 100px 40px;
+          gap: 30px;
+          z-index: 2500;
+          align-items: center;
+          justify-content: flex-start;
+          overflow-y: auto;
+        }
+
+        .is-menu-open .header-inline-nav a {
+          color: #000 !important;
+          font-size: 24px;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          text-decoration: none;
+        }
+
+        /* Cajón de Índice */
+        .mobile-index-drawer {
+          position: fixed;
+          top: 0;
+          right: -100%;
+          width: 85%;
+          max-width: 320px;
+          height: 100vh;
+          background: #fff;
+          z-index: 3000;
+          transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+          display: flex;
+          flex-direction: column;
+          box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .mobile-index-drawer.open {
+          right: 0;
+        }
+
+        .drawer-header {
+          padding: 20px;
+          border-bottom: 1px solid #eee;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          background: #fafafa;
+        }
+
+        .drawer-header h3 {
+          font-size: 1rem;
+          font-weight: 800;
+          margin: 0;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+
+        .close-drawer {
+          background: none;
+          border: none;
+          font-size: 28px;
+          color: #888;
+          cursor: pointer;
+          line-height: 1;
+        }
+
+        .drawer-body {
+          padding: 20px;
+          overflow-y: auto;
+          flex: 1;
+        }
+
+        .drawer-link {
+          display: block;
+          padding: 12px 15px;
+          color: #444;
+          text-decoration: none;
+          font-size: 0.95rem;
+          border-radius: 8px;
+          margin-bottom: 4px;
+          transition: all 0.2s;
+        }
+
+        .drawer-link:active,
+        .drawer-link:hover {
+          background: var(--doc-accent-soft);
+          color: var(--doc-accent);
+        }
+
+        .drawer-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.5);
+          backdrop-filter: blur(4px);
+          z-index: 2900;
+          opacity: 0;
+          visibility: hidden;
+          transition: all 0.3s;
+        }
+
+        .drawer-overlay.visible {
+          opacity: 1;
+          visibility: visible;
+        }
+
+        /* Hamburger Active Animation */
+        .hamburger.active .hamburger-line:nth-child(1) {
+          transform: translateY(8px) rotate(45deg);
+        }
+        .hamburger.active .hamburger-line:nth-child(2) {
+          opacity: 0;
+          transform: translateX(10px);
+        }
+        .hamburger.active .hamburger-line:nth-child(3) {
+          transform: translateY(-8px) rotate(-45deg);
+        }
+
+        .sidebar {
+          display: none;
+        }
+        .content {
+          padding: 2rem 1.5rem;
+        }
+        .doc-layout {
+          padding-top: 70px;
+          display: block;
+        }
+      }
+    </style>
+    <script
+      is:inline
+      src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"
+    ></script>
+    <script
+      is:inline
+      src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"
+    ></script>
+
+    <script>
+      // GSAP Animations
+      document.addEventListener("DOMContentLoaded", () => {
+        // @ts-ignore
+        if (typeof gsap !== "undefined") {
+          // @ts-ignore
+          gsap.from(".sidebar", {
+            x: -100,
+            opacity: 0,
+            duration: 1,
+            ease: "power4.out",
+          });
+
+          // @ts-ignore
+          gsap.from(".content section", {
+            y: 50,
+            opacity: 0,
+            duration: 0.8,
+            stagger: 0.2,
+            ease: "power3.out",
+          });
+        }
+      });
+
+      // Scroll Spy Logic
+      const sections = document.querySelectorAll("section[id]");
+      const navLinks = document.querySelectorAll(".sidebar-link");
+
+      window.addEventListener("scroll", () => {
+        let current = "";
+        sections.forEach((section) => {
+          const htmlSection = section as HTMLElement;
+          const sectionTop = htmlSection.offsetTop;
+          if (window.scrollY >= sectionTop - 150) {
+            current = section.getAttribute("id") || "";
+          }
+        });
+
+        navLinks.forEach((link) => {
+          link.classList.remove("active");
+          const href = link.getAttribute("href");
+          if (href && current && href.includes(current)) {
+            link.classList.add("active");
+          }
+        });
+      });
+
+      // Mobile Menu Logic
+      function initMenu() {
+        const menuToggle = document.getElementById("menu-toggle");
+        const navLinksMobile = document.getElementById("nav-links");
+        const siteNav = document.querySelector(".site-nav.mobile-nav");
+
+        // Index Drawer Elements
+        const indexToggle = document.getElementById("index-toggle");
+        const indexDrawer = document.getElementById("index-drawer");
+        const closeIndex = document.getElementById("close-index");
+        const drawerOverlay = document.getElementById("drawer-overlay");
+
+        if (!menuToggle || !navLinksMobile || !siteNav) return;
+
+        // Toggle Principal (Hamburguesa)
+        const toggleMenu = (e: any) => {
+          if (e) e.preventDefault();
+          const isOpen = siteNav.classList.toggle("is-menu-open");
+          menuToggle.classList.toggle("active");
+
+          // Cerrar el índice si se abre el menú principal
+          if (indexDrawer) {
+            indexDrawer.classList.remove("open");
+            if (drawerOverlay) drawerOverlay.classList.remove("visible");
+          }
+
+          document.body.style.overflow = isOpen ? "hidden" : "";
+        };
+
+        const closeMenu = () => {
+          siteNav.classList.remove("is-menu-open");
+          menuToggle.classList.remove("active");
+          document.body.style.overflow = "";
+        };
+
+        (menuToggle as any).onclick = toggleMenu;
+
+        const links = navLinksMobile.querySelectorAll("a");
+        links.forEach((link) => {
+          (link as any).onclick = closeMenu;
+        });
+
+        // Lógica del Índice
+        if (indexToggle && indexDrawer) {
+          indexToggle.onclick = () => {
+            indexDrawer.classList.add("open");
+            if (drawerOverlay) drawerOverlay.classList.add("visible");
+            document.body.style.overflow = "hidden";
+
+            // Cerrar menú principal si se abre el índice
+            closeMenu();
+          };
+
+          const closeDrawerFunc = () => {
+            indexDrawer.classList.remove("open");
+            if (drawerOverlay) drawerOverlay.classList.remove("visible");
+            document.body.style.overflow = "";
+          };
+
+          if (closeIndex) closeIndex.onclick = closeDrawerFunc;
+          if (drawerOverlay) drawerOverlay.onclick = closeDrawerFunc;
+
+          // Cerrar al pulsar un enlace del índice
+          const drawerLinks = indexDrawer.querySelectorAll(".drawer-link");
+          drawerLinks.forEach((link) => {
+            (link as any).onclick = closeDrawerFunc;
+          });
+        }
+      }
+
+      // Inicializar
+      initMenu();
+
+      // Compatibilidad con transiciones de Astro
+      document.addEventListener("astro:after-swap", initMenu);
+    </script>
+    <script is:inline>
+      (function () {
+        const hierEl = document.getElementById("uml-hier");
+        const erEl = document.getElementById("uml-er");
+        if (!hierEl && !erEl) return;
+
+        if (hierEl) {
+          hierEl.innerHTML = `
+    <div style="overflow-x:auto;padding:24px 16px;">
+      <div style="min-width:620px;font-family:'Inter',sans-serif;display:flex;flex-direction:column;align-items:center;">
+
+        <!-- DomainEntity -->
+        <div style="border:1.5px solid #9d5ae5;border-radius:10px;background:#f9f5ff;width:260px;text-align:center;">
+          <div style="background:#9d5ae5;color:#fff;font-size:11px;font-weight:700;padding:4px 12px;border-radius:8px 8px 0 0;letter-spacing:.06em;">MappedSuperclass</div>
+          <div style="font-weight:700;font-size:14px;color:#3C3489;padding:8px 16px 4px;">DomainEntity</div>
+          <div style="border-top:1px solid #d9c8f8;margin:0 12px;"></div>
+          <div style="font-size:12px;color:#6b46c1;padding:6px 16px 10px;text-align:left;"># Integer id</div>
+        </div>
+
+        <!-- flecha vertical -->
+        <div style="width:2px;height:36px;background:#9d5ae5;position:relative;">
+          <div style="position:absolute;bottom:-8px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;border-top:10px solid #9d5ae5;"></div>
+        </div>
+
+        <!-- ActorLogin -->
+        <div style="border:1.5px solid #9d5ae5;border-radius:10px;background:#f9f5ff;width:300px;text-align:center;">
+          <div style="background:#9d5ae5;color:#fff;font-size:11px;font-weight:700;padding:4px 12px;border-radius:8px 8px 0 0;letter-spacing:.06em;">MappedSuperclass</div>
+          <div style="font-weight:700;font-size:14px;color:#3C3489;padding:8px 16px 4px;">ActorLogin</div>
+          <div style="border-top:1px solid #d9c8f8;margin:0 12px;"></div>
+          <div style="font-size:12px;color:#6b46c1;padding:6px 16px 10px;text-align:left;line-height:1.8;"># String user<br/># String email<br/># String password</div>
+        </div>
+
+        <!-- flecha vertical -->
+        <div style="width:2px;height:36px;background:#9d5ae5;position:relative;">
+          <div style="position:absolute;bottom:-8px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;border-top:10px solid #9d5ae5;"></div>
+        </div>
+
+        <!-- Actor -->
+        <div style="border:2px solid #7c3aed;border-radius:10px;background:#ede9fe;width:360px;text-align:center;">
+          <div style="background:#7c3aed;color:#fff;font-size:11px;font-weight:700;padding:4px 12px;border-radius:8px 8px 0 0;letter-spacing:.06em;">Entity</div>
+          <div style="font-weight:700;font-size:15px;color:#3C3489;padding:8px 16px 4px;">Actor</div>
+          <div style="border-top:1px solid #c4b5fd;margin:0 12px;"></div>
+          <div style="font-size:12px;color:#5b21b6;padding:6px 16px 10px;text-align:left;line-height:1.9;">
+            + String nombre<br/>+ String avatarUrl<br/>+ String telefono<br/>
+            + TipoCuenta tipoCuenta<br/>+ boolean cuentaVerificada<br/>
+            + boolean cuentaEliminada<br/>+ String stripeCustomerId<br/>
+            + String twoFactorSecret<br/>+ boolean twoFactorEnabled<br/>
+            + LocalDateTime creadoEn
+          </div>
+        </div>
+
+        <!-- conector en T hacia los 3 hijos usando SVG -->
+        <svg width="620" height="60" style="display:block;overflow:visible;">
+          <!-- línea vertical desde Actor hacia la barra horizontal -->
+          <line x1="310" y1="0" x2="310" y2="30" stroke="#9d5ae5" stroke-width="2"/>
+          <!-- barra horizontal -->
+          <line x1="100" y1="30" x2="520" y2="30" stroke="#9d5ae5" stroke-width="2"/>
+          <!-- líneas verticales hacia cada hijo -->
+          <line x1="100" y1="30" x2="100" y2="60" stroke="#9d5ae5" stroke-width="2"/>
+          <line x1="310" y1="30" x2="310" y2="60" stroke="#9d5ae5" stroke-width="2"/>
+          <line x1="520" y1="30" x2="520" y2="60" stroke="#9d5ae5" stroke-width="2"/>
+          <!-- flechas -->
+          <polygon points="93,56 107,56 100,66" fill="#9d5ae5"/>
+          <polygon points="303,56 317,56 310,66" fill="#9d5ae5"/>
+          <polygon points="513,56 527,56 520,66" fill="#9d5ae5"/>
+        </svg>
+
+        <!-- los 3 hijos alineados -->
+        <div style="display:flex;gap:0;width:620px;justify-content:space-between;align-items:flex-start;">
+
+          <!-- Usuario -->
+          <div style="border:1.5px solid #7c3aed;border-radius:10px;background:#fff;width:185px;text-align:center;">
+            <div style="background:#7c3aed;color:#fff;font-size:10px;font-weight:700;padding:3px 10px;border-radius:8px 8px 0 0;">Entity</div>
+            <div style="font-weight:700;font-size:13px;color:#3C3489;padding:7px 12px 3px;">Usuario</div>
+            <div style="border-top:1px solid #e0d9f8;margin:0 10px;"></div>
+            <div style="font-size:11px;color:#6b46c1;padding:5px 12px 8px;text-align:left;line-height:1.8;">
+              + Double reputacion<br/>+ Integer totalVentas<br/>+ String ubicacion<br/>+ String bio
+            </div>
+          </div>
+
+          <!-- Empresa -->
+          <div style="border:1.5px solid #7c3aed;border-radius:10px;background:#fff;width:185px;text-align:center;">
+            <div style="background:#7c3aed;color:#fff;font-size:10px;font-weight:700;padding:3px 10px;border-radius:8px 8px 0 0;">Entity</div>
+            <div style="font-weight:700;font-size:13px;color:#3C3489;padding:7px 12px 3px;">Empresa</div>
+            <div style="border-top:1px solid #e0d9f8;margin:0 10px;"></div>
+            <div style="font-size:11px;color:#6b46c1;padding:5px 12px 8px;text-align:left;line-height:1.8;">
+              + String nombreEmpresa<br/>+ String cif<br/>+ String sectorEmpresarial<br/>+ String webEmpresa<br/>+ String logoUrl
+            </div>
+          </div>
+
+          <!-- Admin -->
+          <div style="border:1.5px solid #7c3aed;border-radius:10px;background:#fff;width:185px;text-align:center;">
+            <div style="background:#7c3aed;color:#fff;font-size:10px;font-weight:700;padding:3px 10px;border-radius:8px 8px 0 0;">Entity</div>
+            <div style="font-weight:700;font-size:13px;color:#3C3489;padding:7px 12px 3px;">Admin</div>
+            <div style="border-top:1px solid #e0d9f8;margin:0 10px;"></div>
+            <div style="font-size:11px;color:#6b46c1;padding:5px 12px 8px;text-align:left;line-height:1.8;">
+              + String nivel
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>`;
+        }
+
+        if (erEl) {
+          const groups = [
+            {
+              label: "Actores y sesiones",
+              color: "#7c3aed",
+              border: "#c4b5fd",
+              entities: [
+                {
+                  name: "Actor",
+                  fields: [
+                    "Integer id PK",
+                    "String user",
+                    "String email",
+                    "String nombre",
+                    "TipoCuenta tipoCuenta",
+                    "boolean cuentaVerificada",
+                    "String stripeCustomerId",
+                    "boolean twoFactorEnabled",
+                    "LocalDateTime creadoEn",
+                  ],
+                },
+                {
+                  name: "Usuario",
+                  fields: [
+                    "Integer id PK",
+                    "Double reputacion",
+                    "Integer totalVentas",
+                    "String ubicacion",
+                    "String bio",
+                  ],
+                },
+                {
+                  name: "Empresa",
+                  fields: [
+                    "Integer id PK",
+                    "String nombreEmpresa",
+                    "String cif",
+                    "String webEmpresa",
+                    "String logoUrl",
+                  ],
+                },
+                { name: "Admin", fields: ["Integer id PK", "String nivel"] },
+                {
+                  name: "SesionDispositivo",
+                  fields: [
+                    "Integer id PK",
+                    "String deviceName",
+                    "String ipAddress",
+                    "boolean activa",
+                    "LocalDateTime ultimaActividad",
+                    "Integer actorId FK",
+                  ],
+                },
+                {
+                  name: "Bloqueo",
+                  fields: [
+                    "Integer id PK",
+                    "String motivo",
+                    "LocalDateTime creadoEn",
+                    "Integer bloqueadorId FK",
+                    "Integer bloqueadoId FK",
+                  ],
+                },
+              ],
+            },
+            {
+              label: "Catalogo",
+              color: "#0369a1",
+              border: "#bae6fd",
+              entities: [
+                {
+                  name: "Categoria",
+                  fields: [
+                    "Integer id PK",
+                    "String nombre",
+                    "String slug",
+                    "String icono",
+                    "Integer padreId FK",
+                  ],
+                },
+                {
+                  name: "Producto",
+                  fields: [
+                    "Integer id PK",
+                    "String titulo",
+                    "Double precio",
+                    "EstadoProducto estado",
+                    "CondicionProducto condicion",
+                    "String imagenPrincipal",
+                    "Boolean admiteEnvio",
+                    "Double precioEnvio",
+                    "boolean patrocinado",
+                    "Integer actorId FK",
+                    "Integer categoriaId FK",
+                  ],
+                },
+                {
+                  name: "Vehiculo",
+                  fields: [
+                    "Integer id PK",
+                    "String titulo",
+                    "String marca",
+                    "String modelo",
+                    "Integer anio",
+                    "Integer km",
+                    "Double precio",
+                    "TipoVehiculo tipoVehiculo",
+                    "EstadoVehiculo estado",
+                    "boolean patrocinado",
+                    "Integer publicadorId FK",
+                  ],
+                },
+                {
+                  name: "Oferta",
+                  fields: [
+                    "Integer id PK",
+                    "String titulo",
+                    "Double precioOferta",
+                    "Double precioOriginal",
+                    "String tienda",
+                    "BadgeOferta badge",
+                    "EstadoOferta estado",
+                    "Integer sparks",
+                    "Integer drips",
+                    "boolean patrocinado",
+                    "Integer actorId FK",
+                    "Integer categoriaId FK",
+                  ],
+                },
+              ],
+            },
+            {
+              label: "Comercio y logistica",
+              color: "#065f46",
+              border: "#86efac",
+              entities: [
+                {
+                  name: "Compra",
+                  fields: [
+                    "Integer id PK",
+                    "EstadoCompra estado",
+                    "Double precioFinal",
+                    "Double comisionNexus",
+                    "MetodoEntrega metodoEntrega",
+                    "String stripePaymentIntentId",
+                    "LocalDateTime fechaCompra",
+                    "Integer compradorId FK",
+                    "Integer productoId FK",
+                  ],
+                },
+                {
+                  name: "Envio",
+                  fields: [
+                    "Integer id PK",
+                    "EstadoEnvio estado",
+                    "String codigoEnvio",
+                    "String numeroSeguimiento",
+                    "Double pesoKg",
+                    "LocalDateTime fechaLimiteEnvio",
+                    "Integer compraId FK",
+                  ],
+                },
+                {
+                  name: "Devolucion",
+                  fields: [
+                    "Integer id PK",
+                    "MotivoDevolucion motivo",
+                    "EstadoDevolucion estado",
+                    "Double importeDevolucion",
+                    "LocalDateTime fechaSolicitud",
+                    "Integer compraId FK",
+                  ],
+                },
+                {
+                  name: "Valoracion",
+                  fields: [
+                    "Integer id PK",
+                    "Integer puntuacion",
+                    "String comentario",
+                    "String respuestaVendedor",
+                    "LocalDateTime fecha",
+                    "Integer compradorId FK",
+                    "Integer vendedorId FK",
+                    "Integer compraId FK",
+                  ],
+                },
+              ],
+            },
+            {
+              label: "Social y mensajeria",
+              color: "#b45309",
+              border: "#fde68a",
+              entities: [
+                {
+                  name: "ChatMensaje",
+                  fields: [
+                    "Integer id PK",
+                    "TipoMensaje tipo",
+                    "String contenido",
+                    "boolean leidoPorComprador",
+                    "boolean leidoPorVendedor",
+                    "LocalDateTime enviadoEn",
+                    "Integer remitenteId FK",
+                    "Integer receptorId FK",
+                    "Integer productoId FK",
+                  ],
+                },
+                {
+                  name: "Comentario",
+                  fields: [
+                    "Integer id PK",
+                    "String contenido",
+                    "LocalDateTime fecha",
+                    "Integer autorId FK",
+                    "Integer ofertaId FK",
+                  ],
+                },
+                {
+                  name: "SparkVoto",
+                  fields: [
+                    "Integer id PK",
+                    "boolean esSpark",
+                    "Integer actorId FK",
+                    "Integer ofertaId FK",
+                  ],
+                },
+                {
+                  name: "Favorito",
+                  fields: [
+                    "Integer id PK",
+                    "Integer actorId FK",
+                    "Integer productoId FK",
+                    "Integer ofertaId FK",
+                    "Integer vehiculoId FK",
+                  ],
+                },
+                {
+                  name: "NotificacionInApp",
+                  fields: [
+                    "Integer id PK",
+                    "TipoNotificacion tipo",
+                    "String titulo",
+                    "String mensaje",
+                    "boolean leida",
+                    "LocalDateTime fecha",
+                    "Integer actorId FK",
+                  ],
+                },
+              ],
+            },
+            {
+              label: "Negocio y administracion",
+              color: "#9f1239",
+              border: "#fecdd3",
+              entities: [
+                {
+                  name: "Contrato",
+                  fields: [
+                    "Integer id PK",
+                    "TipoContrato tipoContrato",
+                    "EstadoContrato estado",
+                    "Double monto",
+                    "LocalDateTime fechaInicio",
+                    "LocalDateTime fechaFin",
+                    "Integer empresaId FK",
+                  ],
+                },
+                {
+                  name: "Cupon",
+                  fields: [
+                    "Integer id PK",
+                    "String codigo",
+                    "TipoDescuento tipoDescuento",
+                    "Double valor",
+                    "AlcanceCupon alcance",
+                    "Integer usoMaximo",
+                    "Integer usoActual",
+                    "Integer categoriaId FK",
+                  ],
+                },
+                {
+                  name: "Reporte",
+                  fields: [
+                    "Integer id PK",
+                    "TipoReporte tipo",
+                    "MotivoReporte motivo",
+                    "EstadoReporte estado",
+                    "LocalDateTime fecha",
+                    "Integer reportadorId FK",
+                  ],
+                },
+                {
+                  name: "AuditLog",
+                  fields: [
+                    "Integer id PK",
+                    "String entidad",
+                    "String accion",
+                    "String adminUsername",
+                    "LocalDateTime timestamp",
+                  ],
+                },
+                {
+                  name: "NewsletterSuscripcion",
+                  fields: [
+                    "Integer id PK",
+                    "String email",
+                    "EstadoSuscripcion estado",
+                    "String tokenBaja",
+                    "LocalDateTime fechaConsentimiento",
+                  ],
+                },
+              ],
+            },
+          ];
+
+          function card(e, color, border) {
+            const rows = e.fields
+              .map((f) => {
+                const isPK = f.includes("PK");
+                const isFK = f.includes("FK");
+                const clean = f.replace(" PK", "").replace(" FK", "");
+                const bg = isPK ? "#faf5ff" : isFK ? "#f8fafc" : "transparent";
+                const tc = isPK ? "#6d28d9" : isFK ? "#64748b" : "#374151";
+                const fw = isPK ? "600" : "400";
+                const badge = isPK
+                  ? '<span style="font-size:9px;font-weight:700;color:#7c3aed;background:#ede9fe;padding:1px 5px;border-radius:3px;margin-left:5px;">PK</span>'
+                  : isFK
+                    ? '<span style="font-size:9px;font-weight:700;color:#0369a1;background:#e0f2fe;padding:1px 5px;border-radius:3px;margin-left:5px;">FK</span>'
+                    : "";
+                return `<tr style="background:${bg};border-bottom:1px solid #f1f5f9;">
+          <td style="padding:4px 12px;font-size:11.5px;font-weight:${fw};color:${tc};font-family:monospace;white-space:nowrap;">${clean}${badge}</td>
+        </tr>`;
+              })
+              .join("");
+            return `<div style="border:1.5px solid ${border};border-radius:10px;overflow:hidden;background:#fff;min-width:190px;flex:1 1 180px;box-shadow:0 1px 4px rgba(0,0,0,0.05);">
+        <div style="background:${color};color:#fff;font-size:12px;font-weight:700;padding:7px 12px;">${e.name}</div>
+        <table style="width:100%;border-collapse:collapse;">${rows}</table>
+      </div>`;
+          }
+
+          erEl.innerHTML =
+            `<div style="padding:8px 0;font-family:'Inter',sans-serif;">` +
+            groups
+              .map(
+                (g) => `
+        <div style="margin-bottom:28px;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+            <div style="width:4px;height:18px;background:${g.color};border-radius:2px;flex-shrink:0;"></div>
+            <span style="font-size:12px;font-weight:700;color:${g.color};text-transform:uppercase;letter-spacing:.08em;">${g.label}</span>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:flex-start;">
+            ${g.entities.map((e) => card(e, g.color, g.border)).join("")}
+          </div>
+        </div>`,
+              )
+              .join("") +
+            `</div>`;
+        }
+      })();
+    </script>
+  </body>
 </html>
