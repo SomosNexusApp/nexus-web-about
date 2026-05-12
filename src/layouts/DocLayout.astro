@@ -51,57 +51,55 @@ const docs = [
   <head>
     <BaseHead title={title} description={description} image={image} />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Caveat:wght@700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
   </head>
   <body class="light-theme">
-    
-    <nav class="site-nav">
+    <nav class="doc-nav">
+      <div class="nav-container">
+        <a href="/" class="brand">
+          <img
+            src="/assets/identidad/logotipo.webp"
+            alt="Nexus Logo"
+            class="logo"
+          />
+        </a>
+        <div class="nav-links">
+          <a href="/">Volver a la Web</a>
+          <a
+            href="https://github.com/SomosNexusApp/"
+            target="_blank"
+            class="github-btn"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"
+              ></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- NAVEGACIÓN MÓVIL (ADAPTADA DE LAYOUT) -->
+    <nav class="site-nav mobile-nav">
       <div class="nav-brand">
         <a href="/">
-          <img src="/assets/identidad/logotipo.webp" alt="Nexus Logo" class="brand-logo" style="height: 48px; width: auto;" />
-        </a>
-      </div>
-
-      <div class="nav-contact doc-hide-mobile">
-        <span style="font-weight: 700; font-size: 14px;">Contáctanos</span>
-        <span class="nav-line"></span>
-        <span style="color: var(--text-secondary); font-size: 14px;">somosnexusapp@gmail.com</span>
-      </div>
-
-      <div class="nav-socials doc-hide-mobile">
-        <a href="https://www.instagram.com/nexusapp_es/" target="_blank" class="social-icon" aria-label="Instagram">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-          </svg>
-        </a>
-        <a href="https://x.com/somosnexusapp" target="_blank" class="social-icon" aria-label="X (Twitter)">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M4 4l11.733 16h4.267l-11.733 -16z"></path>
-            <path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"></path>
-          </svg>
-        </a>
-        <a href="https://www.linkedin.com/company/ecentia-marketing/" target="_blank" class="social-icon" aria-label="LinkedIn">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
-            <rect x="2" y="9" width="4" height="12"></rect>
-            <circle cx="4" cy="4" r="2"></circle>
-          </svg>
-        </a>
-        <a href="https://github.com/SomosNexusApp/" target="_blank" class="social-icon" aria-label="GitHub">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
-          </svg>
+          <img
+            src="/assets/identidad/logotipo.webp"
+            alt="Nexus Logo"
+            class="brand-logo"
+            style="height: 48px; width: auto;"
+          />
         </a>
       </div>
 
       <div class="mobile-actions">
-        <button class="index-btn" id="index-toggle" style="display: none;">
+        <button class="index-btn" id="index-toggle">
           <span>Índice</span>
         </button>
+
         <button class="hamburger" id="menu-toggle" aria-label="Menu">
           <span class="hamburger-line"></span>
           <span class="hamburger-line"></span>
@@ -114,9 +112,9 @@ const docs = [
         <a href="/documentacion">Documentación</a>
         <a href="/tecnologias">Tecnologías</a>
         <a href="/blog">Blog</a>
-        <a href="/ayuda">Ayuda</a>
       </div>
 
+      <!-- Cajón de Índice para Móvil -->
       <div class="mobile-index-drawer" id="index-drawer">
         <div class="drawer-header">
           <h3>Tabla de Contenidos</h3>
@@ -143,6 +141,7 @@ const docs = [
       </div>
       <div class="drawer-overlay" id="drawer-overlay"></div>
     </nav>
+
     <div class="doc-layout">
       <aside class="sidebar">
         <div class="sidebar-content">
@@ -198,17 +197,12 @@ const docs = [
     </div>
 
     <style is:global>
-      /* IMPORTAMOS TUS ESTILOS GLOBALES PARA QUE EL NAV SE VEA BIEN */
-      @import "../styles/variables.css";
-      @import "../styles/base.css";
-      @import "../styles/components.css";
-
       :root {
         --doc-bg: #ffffff;
         --doc-sidebar-bg: #f8f9fa;
         --doc-text: #1a1a1a;
         --doc-text-muted: #666666;
-        --doc-accent: #9d5ae5;
+        --doc-accent: #9d5ae5; /* Slightly darker purple for better contrast on white */
         --doc-accent-soft: rgba(157, 90, 229, 0.1);
         --doc-border: #eef0f2;
         --doc-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
@@ -228,11 +222,80 @@ const docs = [
         overflow-x: hidden;
       }
 
+      /* Navigation */
+      .doc-nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 70px;
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid var(--doc-border);
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+      }
+
+      .nav-container {
+        width: 100%;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        text-decoration: none;
+        color: var(--doc-text);
+        font-weight: 800;
+        font-size: 1.2rem;
+      }
+
+      .logo {
+        height: 32px;
+        width: auto;
+      }
+
+      .dot {
+        color: var(--doc-accent);
+      }
+
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+      }
+
+      .nav-links a {
+        text-decoration: none;
+        color: var(--doc-text-muted);
+        font-size: 0.9rem;
+        font-weight: 500;
+        transition: color 0.3s;
+      }
+
+      .nav-links a:hover {
+        color: var(--doc-accent);
+      }
+
+      .github-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--doc-text) !important;
+      }
+
       /* Layout */
       .doc-layout {
         display: flex;
         min-height: 100vh;
-        padding-top: 70px; /* Margen para el nav */
+        padding-top: 70px;
         max-width: 1400px;
         margin: 0 auto;
       }
@@ -358,31 +421,74 @@ const docs = [
         font-size: 0.9rem;
       }
 
-      /* Ajustes Responsivos Nav + Docs */
-      .mobile-actions {
-        display: flex;
-        align-items: center;
-        gap: 12px;
+      /* Responsive */
+      .mobile-nav {
+        display: none;
+      }
+
+      .hamburger {
+        display: none;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 10px;
+        position: relative;
+        z-index: 3000;
+      }
+
+      .hamburger-line {
+        display: block;
+        width: 28px;
+        height: 3px;
+        background-color: #000;
+        margin: 5px 0;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border-radius: 2px;
       }
 
       @media (max-width: 1024px) {
-        .doc-hide-mobile {
-          display: none !important;
+        .doc-nav {
+          display: none;
         }
 
-        #index-toggle {
+        .mobile-nav {
           display: flex !important;
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          z-index: 2000;
+          background: rgba(255, 255, 255, 0.9) !important;
+          backdrop-filter: blur(10px);
+          border-bottom: 1px solid #eee;
+          justify-content: space-between;
+          align-items: center;
+          padding: 10px 20px;
+          height: 70px;
+        }
+
+        .mobile-nav .nav-brand {
+          padding: 0;
+          border: none;
+          display: flex;
+          align-items: center;
+        }
+
+        .mobile-actions {
+          display: flex;
+          align-items: center;
+          gap: 12px;
         }
 
         .index-btn {
           display: flex;
           align-items: center;
           gap: 8px;
-          padding: 6px 12px;
+          padding: 8px 16px;
           background: #f0f0f0;
           border: 1px solid #ddd;
           border-radius: 8px;
-          font-size: 13px;
+          font-size: 14px;
           font-weight: 700;
           color: #333;
           cursor: pointer;
@@ -394,10 +500,10 @@ const docs = [
         }
 
         .header-inline-nav {
-          display: none !important; 
+          display: none !important; /* Ocultar por defecto en móvil */
         }
 
-        .site-nav .hamburger {
+        .mobile-nav .hamburger {
           display: block !important;
         }
 
@@ -535,11 +641,11 @@ const docs = [
           padding: 2rem 1.5rem;
         }
         .doc-layout {
+          padding-top: 70px;
           display: block;
         }
       }
     </style>
-    
     <script
       is:inline
       src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"
@@ -596,11 +702,11 @@ const docs = [
         });
       });
 
-      // Menu & Index Logic combinada
+      // Mobile Menu Logic
       function initMenu() {
         const menuToggle = document.getElementById("menu-toggle");
         const navLinksMobile = document.getElementById("nav-links");
-        const siteNav = document.querySelector(".site-nav");
+        const siteNav = document.querySelector(".site-nav.mobile-nav");
 
         // Index Drawer Elements
         const indexToggle = document.getElementById("index-toggle");
@@ -683,6 +789,7 @@ const docs = [
     <div style="overflow-x:auto;padding:24px 16px;">
       <div style="min-width:620px;font-family:'Inter',sans-serif;display:flex;flex-direction:column;align-items:center;">
 
+        <!-- DomainEntity -->
         <div style="border:1.5px solid #9d5ae5;border-radius:10px;background:#f9f5ff;width:260px;text-align:center;">
           <div style="background:#9d5ae5;color:#fff;font-size:11px;font-weight:700;padding:4px 12px;border-radius:8px 8px 0 0;letter-spacing:.06em;">MappedSuperclass</div>
           <div style="font-weight:700;font-size:14px;color:#3C3489;padding:8px 16px 4px;">DomainEntity</div>
@@ -690,10 +797,12 @@ const docs = [
           <div style="font-size:12px;color:#6b46c1;padding:6px 16px 10px;text-align:left;"># Integer id</div>
         </div>
 
+        <!-- flecha vertical -->
         <div style="width:2px;height:36px;background:#9d5ae5;position:relative;">
           <div style="position:absolute;bottom:-8px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;border-top:10px solid #9d5ae5;"></div>
         </div>
 
+        <!-- ActorLogin -->
         <div style="border:1.5px solid #9d5ae5;border-radius:10px;background:#f9f5ff;width:300px;text-align:center;">
           <div style="background:#9d5ae5;color:#fff;font-size:11px;font-weight:700;padding:4px 12px;border-radius:8px 8px 0 0;letter-spacing:.06em;">MappedSuperclass</div>
           <div style="font-weight:700;font-size:14px;color:#3C3489;padding:8px 16px 4px;">ActorLogin</div>
@@ -701,10 +810,12 @@ const docs = [
           <div style="font-size:12px;color:#6b46c1;padding:6px 16px 10px;text-align:left;line-height:1.8;"># String user<br/># String email<br/># String password</div>
         </div>
 
+        <!-- flecha vertical -->
         <div style="width:2px;height:36px;background:#9d5ae5;position:relative;">
           <div style="position:absolute;bottom:-8px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;border-top:10px solid #9d5ae5;"></div>
         </div>
 
+        <!-- Actor -->
         <div style="border:2px solid #7c3aed;border-radius:10px;background:#ede9fe;width:360px;text-align:center;">
           <div style="background:#7c3aed;color:#fff;font-size:11px;font-weight:700;padding:4px 12px;border-radius:8px 8px 0 0;letter-spacing:.06em;">Entity</div>
           <div style="font-weight:700;font-size:15px;color:#3C3489;padding:8px 16px 4px;">Actor</div>
@@ -718,19 +829,26 @@ const docs = [
           </div>
         </div>
 
+        <!-- conector en T hacia los 3 hijos usando SVG -->
         <svg width="620" height="60" style="display:block;overflow:visible;">
+          <!-- línea vertical desde Actor hacia la barra horizontal -->
           <line x1="310" y1="0" x2="310" y2="30" stroke="#9d5ae5" stroke-width="2"/>
+          <!-- barra horizontal -->
           <line x1="100" y1="30" x2="520" y2="30" stroke="#9d5ae5" stroke-width="2"/>
+          <!-- líneas verticales hacia cada hijo -->
           <line x1="100" y1="30" x2="100" y2="60" stroke="#9d5ae5" stroke-width="2"/>
           <line x1="310" y1="30" x2="310" y2="60" stroke="#9d5ae5" stroke-width="2"/>
           <line x1="520" y1="30" x2="520" y2="60" stroke="#9d5ae5" stroke-width="2"/>
+          <!-- flechas -->
           <polygon points="93,56 107,56 100,66" fill="#9d5ae5"/>
           <polygon points="303,56 317,56 310,66" fill="#9d5ae5"/>
           <polygon points="513,56 527,56 520,66" fill="#9d5ae5"/>
         </svg>
 
+        <!-- los 3 hijos alineados -->
         <div style="display:flex;gap:0;width:620px;justify-content:space-between;align-items:flex-start;">
 
+          <!-- Usuario -->
           <div style="border:1.5px solid #7c3aed;border-radius:10px;background:#fff;width:185px;text-align:center;">
             <div style="background:#7c3aed;color:#fff;font-size:10px;font-weight:700;padding:3px 10px;border-radius:8px 8px 0 0;">Entity</div>
             <div style="font-weight:700;font-size:13px;color:#3C3489;padding:7px 12px 3px;">Usuario</div>
@@ -740,6 +858,7 @@ const docs = [
             </div>
           </div>
 
+          <!-- Empresa -->
           <div style="border:1.5px solid #7c3aed;border-radius:10px;background:#fff;width:185px;text-align:center;">
             <div style="background:#7c3aed;color:#fff;font-size:10px;font-weight:700;padding:3px 10px;border-radius:8px 8px 0 0;">Entity</div>
             <div style="font-weight:700;font-size:13px;color:#3C3489;padding:7px 12px 3px;">Empresa</div>
@@ -749,6 +868,7 @@ const docs = [
             </div>
           </div>
 
+          <!-- Admin -->
           <div style="border:1.5px solid #7c3aed;border-radius:10px;background:#fff;width:185px;text-align:center;">
             <div style="background:#7c3aed;color:#fff;font-size:10px;font-weight:700;padding:3px 10px;border-radius:8px 8px 0 0;">Entity</div>
             <div style="font-weight:700;font-size:13px;color:#3C3489;padding:7px 12px 3px;">Admin</div>
@@ -1098,7 +1218,6 @@ const docs = [
         </tr>`;
               })
               .join("");
-
             return `<div style="border:1.5px solid ${border};border-radius:10px;overflow:hidden;background:#fff;min-width:190px;flex:1 1 180px;box-shadow:0 1px 4px rgba(0,0,0,0.05);">
         <div style="background:${color};color:#fff;font-size:12px;font-weight:700;padding:7px 12px;">${e.name}</div>
         <table style="width:100%;border-collapse:collapse;">${rows}</table>
