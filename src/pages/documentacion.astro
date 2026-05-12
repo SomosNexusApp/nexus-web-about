@@ -33,36 +33,803 @@ import DocLayout from "../layouts/DocLayout.astro";
     <span class="badge">Documento General</span>
     <h1>Introducción y Contexto</h1>
     <p class="lead">
-      Espacio para la introducción y contexto del proyecto Nexus.
+      Nexus es una plataforma digital multiplataforma que unifica tres grandes módulos de comercio y comunidad en un único ecosistema: un <strong>marketplace de segunda mano</strong>, un <strong>chollometro comunitario</strong> y un <strong>sistema de publicidad B2B</strong> para empresas, con el objetivo de convertirse en la herramienta de ahorro de referencia para el usuario español.
     </p>
-    <div class="placeholder-box">Contenido pendiente de redactar...</div>
+
+    <h3 class="subsection-title">Descripción del Proyecto</h3>
+    <p>
+      El proyecto Nexus nace de la necesidad de centralizar en una sola aplicación todas las herramientas que un usuario necesita para ahorrar dinero en sus compras cotidianas. Actualmente, los usuarios deben consultar múltiples plataformas para comparar precios de productos nuevos (en tiendas físicas y online), encontrar ofertas publicadas por la comunidad y acceder al mercado de segunda mano. Nexus elimina esa fragmentación ofreciendo una experiencia unificada y coherente.
+    </p>
+    <p>
+      La plataforma se desarrolla como Proyecto Final de Ciclo Formativo de Grado Superior en <strong>Desarrollo de Aplicaciones Multiplataforma (DAM)</strong>, en el IES Francisco Rodríguez Marín, y forma parte del ecosistema de la empresa ficticia <strong>Ecentia</strong>, utilizada como entidad organizativa del proyecto. El equipo de desarrollo está formado por tres integrantes que asumen conjuntamente las responsabilidades de diseño, arquitectura y programación.
+    </p>
+    <p>
+      El nombre <strong>Nexus</strong> (del latín <em>nexus</em>: conexión, vínculo) refleja la propuesta central de la plataforma: conectar compradores y vendedores particulares, conectar usuarios con las mejores ofertas del momento y conectar empresas con su audiencia objetivo, todo en un único punto de acceso.
+    </p>
+
+    <h3 class="subsection-title">Motivación</h3>
+    <p>
+      El mercado de aplicaciones de ahorro y segunda mano en España está dominado por plataformas especializadas en nichos concretos: Wallapop y Vinted para segunda mano, Chollometro y Letsbonus para ofertas, Autocasion y Coches.net para vehículos. Ninguna de estas plataformas ofrece una experiencia integrada que permita al usuario buscar simultáneamente entre productos nuevos con descuento, artículos de segunda mano entre particulares y vehículos de ocasión.
+    </p>
+    <p>
+      Nexus propone una solución diferente: un <em>buscador unificado</em> con expansión de sinónimos que indexa en tiempo real productos, ofertas y vehículos, combinado con una capa social basada en el sistema de votación <strong>Spark/Drip</strong> (similar al upvote/downvote de Reddit pero aplicado al ámbito del ahorro), que permite a la comunidad destacar las mejores oportunidades de forma orgánica.
+    </p>
+    <p>
+      El sistema de publicidad integrado para empresas (contratos de banner y patrocinio de productos pagados con Stripe) añade una vía de monetización sostenible que no depende exclusivamente de publicidad invasiva, sino de visibilidad genuina dentro del catálogo donde el usuario ya está buscando.
+    </p>
+
+    <h3 class="subsection-title">Objetivos Generales</h3>
+    <ul>
+      <li>Desarrollar una plataforma web y móvil multiplataforma con un único backend compartido que sirva a todas las aplicaciones cliente.</li>
+      <li>Implementar un marketplace de compraventa entre particulares con pagos seguros mediante Stripe (modelo escrow) y gestión de envíos con generación de QR y seguimiento.</li>
+      <li>Crear un sistema comunitario de publicación y votación de ofertas/chollos con métricas de popularidad (sistema Spark/Drip) y secciones especializadas (flash, gratis, viajes).</li>
+      <li>Ofrecer un canal de publicidad y patrocinio para empresas, con contratos gestionados y pagados mediante Stripe Checkout.</li>
+      <li>Garantizar la seguridad de los usuarios mediante autenticación JWT con invalidación por versión, 2FA (TOTP y Email OTP), Google OAuth y protección reCAPTCHA v3 en formularios.</li>
+      <li>Cumplir con el Reglamento General de Protección de Datos (RGPD) mediante borrado suave, consentimiento explícito de términos, gestión de newsletter con double opt-in y tokens de baja únicos.</li>
+      <li>Diseñar una arquitectura escalable y mantenible, desplegada íntegramente en servicios cloud (Render, Vercel, Cloudinary, PostgreSQL gestionado).</li>
+      <li>Habilitar la distribución como aplicación nativa Android (y potencialmente iOS) mediante Ionic + Capacitor sin duplicar el código fuente.</li>
+    </ul>
+
+    <h3 class="subsection-title">Tecnologías Utilizadas y Justificación</h3>
+
+    <div class="context-box">
+      <p><strong>Backend — Spring Boot 3.5.13 (Java 17):</strong> Framework maduro con ecosistema robusto para seguridad (Spring Security), persistencia (Spring Data JPA + Hibernate), comunicación en tiempo real (Spring WebSocket STOMP), correo (Spring Mail), caché y validación. Java 17 (LTS) garantiza compatibilidad y soporte a largo plazo. La elección frente a Node.js o Django se justifica por la tipificación fuerte, el rendimiento en JVM y la cobertura nativa de todos los casos de uso requeridos (seguridad, pagos, WebSocket, email) con un modelo de inyección de dependencias maduro.</p>
+
+      <p><strong>Base de datos — PostgreSQL:</strong> Sistema de gestión de bases de datos relacional de código abierto con soporte avanzado para índices compuestos, consultas con JOIN complejas y tipos TEXT ilimitados. Se eligió frente a MySQL por su mayor conformidad con el estándar SQL, mejor soporte para operaciones concurrentes y disponibilidad en el plan gratuito de Render. La gestión del esquema se delega a Hibernate con <code>ddl-auto=create</code> durante el desarrollo.</p>
+
+      <p><strong>Frontend de usuario — Angular 21 + Ionic 8 + Capacitor 8 (TypeScript 5.9):</strong> Angular 21 con Standalone Components y Signals reactivos ofrece una arquitectura sin módulos NgModule que reduce la complejidad y mejora el tree-shaking. Ionic 8 proporciona componentes UI nativos adaptados a dispositivos móviles. Capacitor 8 compila la app web como aplicación nativa Android e iOS con acceso a APIs del dispositivo (cámara, GPS). Esta combinación fue elegida frente a React Native o Flutter porque maximiza la reutilización de código entre web y móvil con una única base de código Angular.</p>
+
+      <p><strong>Panel de administración — Angular 21:</strong> Aplicación Angular independiente desplegada en un subdominio separado por seguridad, con acceso exclusivo para administradores (ROLE_ADMIN). Comparte el mismo backend pero utiliza tokens JWT con rol diferente, evitando que cualquier vulnerabilidad en la app pública afecte al panel de administración.</p>
+
+      <p><strong>Web informativa — Astro:</strong> Framework de generación de sitios con renderizado en servidor (SSR) y cero JavaScript por defecto en el cliente. Ideal para la web de presentación del proyecto por su velocidad de carga, excelente SEO y sintaxis de componentes familiar para desarrolladores Angular/React.</p>
+
+      <p><strong>Almacenamiento de medios — Cloudinary 1.36.0:</strong> Servicio cloud de gestión y transformación de imágenes. Todas las imágenes de productos, vehículos, ofertas y avatares se suben a Cloudinary vía la API HTTP (con el cliente Java), liberando al servidor Spring de almacenamiento en disco. Cloudinary optimiza y sirve las imágenes desde su CDN global.</p>
+
+      <p><strong>Pasarela de pagos — Stripe Java SDK 24.1.0 + Stripe.js:</strong> Stripe Payment Intents para el flujo de compra con modelo escrow; Stripe Checkout Sessions para contratos de publicidad de empresas; Webhooks con verificación de firma HMAC para confirmación asíncrona de pagos. Stripe ofrece el mejor equilibrio entre facilidad de integración, seguridad PCI DSS y exhaustividad de la documentación.</p>
+
+      <p><strong>Autenticación — JJWT 0.11.5 + Spring Security + BCrypt:</strong> Los tokens JWT son firmados con HMAC-SHA256. El campo <code>jwtVersion</code> en la entidad Actor permite invalidar globalmente todos los tokens de un usuario sin necesidad de una blacklist en servidor. Las contraseñas siempre se almacenan hasheadas con BCrypt.</p>
+
+      <p><strong>Autenticación en dos factores — dev.samstevens.totp 1.7.1 + ZXing 3.5.3:</strong> La librería TOTP genera secretos compatibles con Google Authenticator y Authy. ZXing genera los códigos QR para el proceso de vinculación. El método por email usa códigos OTP de 6 dígitos con caducidad de 10 minutos.</p>
+
+      <p><strong>Chat en tiempo real — Spring WebSocket + STOMP + SockJS + @stomp/stompjs 7.3.0:</strong> El protocolo STOMP sobre WebSocket gestiona la mensajería privada entre usuarios. El interceptor WebSocket autentica las conexiones usando el mismo JWT del usuario. SockJS proporciona fallback HTTP para navegadores o redes sin soporte nativo de WebSocket.</p>
+
+      <p><strong>Asistente IA de soporte — Google Gemini 1.5-flash / Groq (LLaMA 3.3-70b):</strong> El chatbot de soporte integra dos proveedores de IA intercambiables mediante configuración. Cuando ningún agente puede resolver la consulta, el sistema escala automáticamente por email al equipo de soporte.</p>
+
+      <p><strong>Protección anti-bots — Google reCAPTCHA v3:</strong> Integrado en el registro y login. El token se genera en el cliente y se verifica en el backend contra la API de Google (<code>recaptcha.net/recaptcha/api/siteverify</code>) con un umbral mínimo de puntuación de 0.5, rechazando peticiones automatizadas sin interrumpir al usuario legítimo.</p>
+    </div>
+
+    <h3 class="subsection-title">Alcance del Sistema</h3>
+    <p>
+      El sistema Nexus abarca cuatro submódulos desplegados de forma independiente pero interconectados:
+    </p>
+    <ul>
+      <li><strong>Aplicación de usuario</strong> (<code>nexus-angular-app</code>): Aplicación web/móvil para usuarios finales. Incluye el marketplace completo (productos, vehículos, ofertas), sistema de pagos con Stripe, chat en tiempo real, notificaciones in-app, gestión del perfil, secciones de publicidad y asistente IA de soporte. Desplegada en Vercel, compilable para Android vía Capacitor.</li>
+      <li><strong>Panel de administración</strong> (<code>nexus-admin-web-app</code>): Aplicación web exclusiva para administradores, con 19 módulos de gestión: dashboard, estadísticas, usuarios, moderación (productos, ofertas, vehículos, reportes), devoluciones, compras, contratos, cupones, patrocinios, newsletter, notificaciones masivas, soporte de chat, audit log y configuración global. Desplegada en Vercel en un dominio separado.</li>
+      <li><strong>Web informativa</strong> (<code>nexus-web-about</code>): Sitio estático con documentación técnica, blog de actualizaciones, catálogo de tecnologías y páginas legales. Generada con Astro y desplegada en Vercel.</li>
+      <li><strong>Backend unificado</strong> (<code>nexus-backend</code>): API REST (48 controladores) + WebSocket STOMP que sirve a todas las aplicaciones cliente. Desplegado en Render con Docker. Puerto 8080 con compresión HTTP y configuración optimizada para entornos con recursos limitados.</li>
+    </ul>
+    <p>
+      <strong>Exclusiones deliberadas en v1.0:</strong> Los pagos están limitados al entorno de pruebas de Stripe (sin cargos reales). La aplicación iOS está prevista pero aún no publicada en App Store. La integración con transportistas externos (Correos, MRW) está implementada como servicio stub con estructura preparada para integración real.
+    </p>
   </section>
 
   <section id="analisis">
     <h2>Análisis y Requisitos</h2>
-    <p>
-      Definición de los requisitos funcionales y no funcionales, así como el
-      análisis del dominio.
+    <p class="lead">
+      Esta sección presenta los actores del sistema, los requisitos funcionales y no funcionales más representativos, y los principales casos de uso identificados. Para la especificación completa y detallada, consulta la sección <a href="#requisitos-sistema">Requisitos del Sistema</a>, extraída del análisis exhaustivo del código fuente real.
     </p>
-    <div class="placeholder-box">Contenido pendiente de redactar...</div>
+
+    <h3 class="subsection-title">Actores del Sistema</h3>
+    <p>
+      Nexus define cuatro tipos de actores representados mediante una jerarquía de herencia en la capa de persistencia, con la clase abstracta <code>Actor</code> como base común (estrategia JPA <code>InheritanceType.JOINED</code>, tabla compartida <code>actor</code>):
+    </p>
+
+    <div class="actor-grid">
+      <div class="actor-card">
+        <span class="actor-icon">&#127759;</span>
+        <h4>Visitante</h4>
+        <ul>
+          <li>No registrado, sin token JWT</li>
+          <li>Acceso de solo lectura al catálogo</li>
+          <li>Puede buscar, navegar perfiles públicos y ver ofertas</li>
+          <li>Puede suscribirse al newsletter e iniciar el chat de soporte IA</li>
+          <li>Puede registrarse o iniciar sesión</li>
+        </ul>
+      </div>
+      <div class="actor-card">
+        <span class="actor-icon">&#128100;</span>
+        <h4>Usuario (<code>ROLE_USER</code>)</h4>
+        <ul>
+          <li>Registro con email o Google OAuth</li>
+          <li>Puede publicar productos, vehículos y ofertas</li>
+          <li>Compra y venta con pagos seguros (Stripe escrow)</li>
+          <li>Chat en tiempo real, favoritos, valoraciones, bloqueos</li>
+          <li>Acceso a su perfil, configuración, notificaciones y compras</li>
+          <li>Puede convertirse en Empresa completando el onboarding empresarial</li>
+        </ul>
+      </div>
+      <div class="actor-card">
+        <span class="actor-icon">&#127970;</span>
+        <h4>Empresa (<code>ROLE_EMPRESA</code>)</h4>
+        <ul>
+          <li>Perfil empresarial con CIF y nombre comercial</li>
+          <li>Acceso a contratos publicitarios (banners y patrocinios)</li>
+          <li>Pago de contratos mediante Stripe Checkout</li>
+          <li>Publicación de contenido como cuenta verificada</li>
+          <li>Gestión de sus patrocinios activos</li>
+        </ul>
+      </div>
+      <div class="actor-card">
+        <span class="actor-icon">&#128737;</span>
+        <h4>Administrador (<code>ROLE_ADMIN</code>)</h4>
+        <ul>
+          <li>Panel de gestión exclusivo en dominio separado</li>
+          <li>Moderación de usuarios, contenido y reportes</li>
+          <li>Gestión de contratos, cupones, publicidad y newsletter</li>
+          <li>Estadísticas, auditoría de acciones y configuración global</li>
+          <li>Tres niveles de acceso: 1 (básico), 2 (moderador), 3 (superadmin)</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3 class="subsection-title">Principales Requisitos Funcionales</h3>
+
+    <div class="req-block">
+      <p class="req-id">RF — Autenticación</p>
+      <h5>Sistema de autenticación multicapa</h5>
+      <p>El sistema soporta registro con email y contraseña (con medidor de fortaleza y reCAPTCHA v3 verificado en backend), Google OAuth 2.0 (ID token verificado en el backend con la librería de Google API Client), verificación de email con código OTP de 6 dígitos (válido 30 minutos), autenticación de dos factores (TOTP con código QR vía ZXing o Email OTP válido 10 minutos), recuperación de contraseña con token UUID de 15 minutos de vigencia almacenado directamente en la entidad Actor (sin tabla adicional), y un wizard de onboarding inicial para nuevos usuarios que guia por aceptación de términos, configuración de seguridad y elección del tipo de cuenta.</p>
+    </div>
+
+    <div class="req-block">
+      <p class="req-id">RF — Marketplace</p>
+      <h5>Publicación y gestión del catálogo</h5>
+      <p>Los usuarios pueden publicar productos de segunda mano (con hasta 1 imagen principal + 5 en galería almacenadas en Cloudinary, tipo de oferta VENTA/DONACION/INTERCAMBIO, condición, peso para cálculo de envío, geolocalización y vigencia automática de 180 días), vehículos (con ficha técnica completa: marca, modelo, año, kilometraje, combustible, cambio, potencia, cilindrada, color, puertas, plazas, ITV, garantía, extras) y ofertas/chollos (con precio original, precio de oferta, código de descuento, URL externa, y datos de flash sale con fecha de fin y límite de unidades). Los anuncios expirados permanecen visibles 14 días adicionales antes de ocultarse.</p>
+    </div>
+
+    <div class="req-block">
+      <p class="req-id">RF — Búsqueda</p>
+      <h5>Motor de búsqueda unificado con filtros avanzados</h5>
+      <p>El <code>MarketplaceSearchController</code> indexa simultáneamente productos, vehículos y ofertas con expansión de sinónimos gestionada por <code>SynonymService</code> (p. ej. “ps5” encuentra “PlayStation 5”). Los filtros incluyen: categoría, rango de precio (mínimo y máximo), condición del artículo, antigüedad de la publicación, disponibilidad de envío, ordenación (novedades, precio asc/desc), parámetros específicos de vehículos y filtro geográfico por ubicación (manual o GPS) con radio ajustable en kilómetros. El radio geográfico se convierte en un bounding box lat/lon calculado en el backend con trigonometría esférica.</p>
+    </div>
+
+    <div class="req-block">
+      <p class="req-id">RF — Pagos</p>
+      <h5>Sistema de pagos seguro con Stripe</h5>
+      <p>Las compras de productos usan Stripe Payment Intents con modelo escrow (el dinero queda retenido hasta que el comprador confirma la recepción). Los contratos publicitarios de empresas usan Stripe Checkout Sessions con redirección al portal de Stripe. El <code>StripeWebhookController</code> recibe confirmaciones asíncronas vía POST en <code>/stripe/webhook</code>, verificando la firma HMAC del evento con el secreto del endpoint. El sistema calcula automáticamente la comisión de la plataforma (<code>comisionNexus</code>) en cada transacción. Los cupones de descuento se validan y aplican en el proceso de checkout mediante <code>CuponValidacionService</code>.</p>
+    </div>
+
+    <div class="req-block">
+      <p class="req-id">RF — Mensajería</p>
+      <h5>Chat en tiempo real con WebSocket STOMP</h5>
+      <p>El sistema de mensajería permite conversaciones privadas entre comprador y vendedor, asociadas opcionalmente a un producto concreto mediante un <code>roomId</code> determinista (calculado a partir de los IDs de ambos participantes). Soporta múltiples tipos de mensaje: TEXTO, IMAGEN, VIDEO, AUDIO, GIF y OFERTA_PRECIO (propuesta de precio con aceptación/rechazo en tiempo real). El <code>WebSocketAuthInterceptor</code> valida el token JWT en el handshake de la conexión STOMP. El sistema de bloqueo (<code>BloqueoService</code>) impide la comunicación entre usuarios que se han bloqueado mutuamente.</p>
+    </div>
+
+    <div class="req-block">
+      <p class="req-id">RF — Moderación</p>
+      <h5>Sistema de reportes y sanciones</h5>
+      <p>Los usuarios pueden reportar productos, ofertas, vehículos, usuarios, mensajes y comentarios seleccionando un motivo predefinido. Los administradores gestionan los reportes desde el panel, pudiendo aplicar sanciones: ban permanente (<code>baneado = true</code>), suspensión temporal (<code>suspendidoHasta</code>) o marcado de fraude (<code>flagFraude</code>). El campo <code>jwtVersion</code> del actor sancionado se incrementa para invalidar todos sus tokens activos. Todas las acciones del administrador se registran en la entidad <code>AuditLog</code> con actor, tipo, descripción y timestamp.</p>
+    </div>
+
+    <div class="req-block">
+      <p class="req-id">RF — Newsletter</p>
+      <h5>Newsletter con double opt-in y cumplimiento RGPD</h5>
+      <p>El sistema de newsletter implementa el flujo de double opt-in requerido por el artículo 7 del RGPD: el visitante proporciona su email, el sistema envía un correo de confirmación (Gmail SMTP con Spring Mail y STARTTLS), y solo activa la suscripción tras la confirmación. Cada suscriptor tiene un token de baja único incluido en cada email. El sistema registra la IP del consentimiento, la fecha y la versión de la política de privacidad aceptada, permitiendo acreditar el consentimiento explícito ante cualquier auditoría. El administrador puede gestionar suscriptores y enviar campañas desde el panel de administración.</p>
+    </div>
+
+    <h3 class="subsection-title">Requisitos No Funcionales</h3>
+
+    <table class="req-table">
+      <thead>
+        <tr>
+          <th>Categoría</th>
+          <th>Requisito</th>
+          <th>Implementación técnica</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Seguridad</strong></td>
+          <td>Contraseñas nunca en texto plano</td>
+          <td>BCrypt con configuración de coste vía <code>PasswordConfig</code> de Spring Security. El getter de password en Actor está anotado con <code>@JsonIgnore</code>.</td>
+        </tr>
+        <tr>
+          <td><strong>Seguridad</strong></td>
+          <td>Protección contra bots en formularios</td>
+          <td>Google reCAPTCHA v3 con umbral mínimo de puntuación 0.5, verificado sincrónicamente en el backend antes de procesar el registro o login</td>
+        </tr>
+        <tr>
+          <td><strong>Seguridad</strong></td>
+          <td>Tokens JWT con invalidación global</td>
+          <td>Campo <code>jwtVersion</code> (entero) en <code>Actor</code>; al incrementarse, todos los JWT emitidos previamente son rechazados por el <code>JWTAuthenticationFilter</code></td>
+        </tr>
+        <tr>
+          <td><strong>Privacidad (RGPD)</strong></td>
+          <td>Derecho al olvido</td>
+          <td>Borrado suave (<code>cuentaEliminada = true</code>) sin eliminar registros históricos de compras; anonimización de datos personales en la práctica</td>
+        </tr>
+        <tr>
+          <td><strong>Privacidad (RGPD)</strong></td>
+          <td>Consentimiento verificable de newsletter</td>
+          <td>Double opt-in con registro de IP del consentimiento, fecha exacta, versión de la política aceptada y token de baja único por suscriptor</td>
+        </tr>
+        <tr>
+          <td><strong>Rendimiento</strong></td>
+          <td>Optimización para entorno con recursos limitados</td>
+          <td>Tomcat máximo 15 hilos, HikariCP máximo 3 conexiones, pool async máximo 5 hilos, scheduler 1 hilo, compresión HTTP habilitada desde 1 KB</td>
+        </tr>
+        <tr>
+          <td><strong>Escalabilidad</strong></td>
+          <td>Carga progresiva del frontend</td>
+          <td>Lazy loading total de rutas en Angular con <code>loadComponent(() =&gt; import(...))</code>, sin módulos NgModule, reduciendo el bundle inicial</td>
+        </tr>
+        <tr>
+          <td><strong>Disponibilidad</strong></td>
+          <td>Despliegue continuo y tolerancia a fallos</td>
+          <td>Docker en Render (backend), Vercel CDN global (frontends). HikariCP configurado con <code>initialization-fail-timeout=60s</code> y <code>keepalive-time=60s</code> para tolerar reinicios de la BD</td>
+        </tr>
+        <tr>
+          <td><strong>Mantenibilidad</strong></td>
+          <td>Trazabilidad de acciones administrativas</td>
+          <td>Entidad <code>AuditLog</code> inmutable que registra cada acción administrativa (actor, tipo, descripción, timestamp), consultable desde el panel de administración</td>
+        </tr>
+        <tr>
+          <td><strong>Usabilidad</strong></td>
+          <td>Soporte multidispositivo nativo</td>
+          <td>Angular + Ionic como PWA y app nativa Android vía Capacitor 8; diseño adaptativo (responsive) para todos los tamaños de pantalla</td>
+        </tr>
+        <tr>
+          <td><strong>Interoperabilidad</strong></td>
+          <td>API documentada automáticamente</td>
+          <td>SpringDoc OpenAPI 2.6.0 con anotaciones <code>@Tag</code>, <code>@Operation</code> y <code>@Schema</code>; Swagger UI accesible en <code>/swagger-ui.html</code></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 class="subsection-title">Casos de Uso Principales</h3>
+
+    <div class="req-block">
+      <p class="req-id">CU-01</p>
+      <h5>Compra de un producto de segunda mano</h5>
+      <p><strong>Actor principal:</strong> Usuario autenticado (comprador)</p>
+      <p><strong>Flujo:</strong> El usuario navega el marketplace → accede al detalle del producto → pulsa “Comprar” → selecciona método de entrega (envío o recogida en mano) → introduce la dirección de entrega → aplica cupón de descuento (opcional, validado en el backend) → el sistema crea un Stripe Payment Intent y devuelve el <code>clientSecret</code> → el usuario completa el pago en el formulario de Stripe.js → Stripe envía el webhook <code>payment_intent.succeeded</code> → el backend crea la entidad <code>Compra</code> (estado PAGADO) y <code>Envio</code> (con código QR base64) → el vendedor y el comprador reciben notificaciones in-app → el producto pasa a estado RESERVADO → el vendedor confirma el envío con número de seguimiento → el comprador confirma la recepción → el pago se libera (modelo escrow) → ambas partes pueden valorarse.</p>
+    </div>
+
+    <div class="req-block">
+      <p class="req-id">CU-02</p>
+      <h5>Publicación y votación de una oferta/chollo</h5>
+      <p><strong>Actor principal:</strong> Usuario o Empresa autenticados</p>
+      <p><strong>Flujo:</strong> El usuario accede a “Publicar oferta” → completa el formulario (título, descripción, tienda, precio original, precio oferta, categoría, imagen subida a Cloudinary, URL externa, código de descuento, tipo flash/normal con fecha de fin) → el sistema calcula automáticamente el badge (NUEVA, CHOLLAZO, PORCENTAJE, GRATUITA, EXPIRA_HOY) en <code>@PreUpdate</code> → la oferta se publica y es visible en el chollometro → los usuarios votan con Spark (positivo) o Drip (negativo) usando <code>SparkVotoController</code> → un scheduler recalcula el <code>sparkScore</code> cada 5 minutos → las ofertas más valoradas ascienden en el ranking principal.</p>
+    </div>
+
+    <div class="req-block">
+      <p class="req-id">CU-03</p>
+      <h5>Contratación de publicidad por una empresa</h5>
+      <p><strong>Actor principal:</strong> Empresa autenticada</p>
+      <p><strong>Flujo:</strong> La empresa accede a “Publicidad / Mis contratos” → solicita un patrocinio (tipo BANNER o PUBLICACION) indicando el ítem a patrocinar (producto, oferta o vehículo) y los días de duración → el administrador recibe la solicitud en estado DRAFT → el administrador la aprueba y establece el precio → el sistema genera una Stripe Checkout Session vía <code>PatrocinioController</code> → la empresa paga mediante Stripe Checkout → el webhook <code>checkout.session.completed</code> confirma el pago → el contrato pasa a estado ACTIVE y el ítem recibe el flag <code>patrocinado = true</code> con la <code>patrocinioHasta</code> calculada → el ítem aparece con la etiqueta “Patrocinado” en el catálogo.</p>
+    </div>
+
+    <div class="req-block">
+      <p class="req-id">CU-04</p>
+      <h5>Registro y autenticación con 2FA TOTP</h5>
+      <p><strong>Actor principal:</strong> Visitante</p>
+      <p><strong>Flujo:</strong> El visitante rellena el formulario de registro con username único, email, contraseña (con validación de fortaleza en tiempo real) y token reCAPTCHA → el backend valida el captcha y crea el <code>Usuario</code> con contraseña hasheada con BCrypt → envía un OTP de 6 dígitos al email → el usuario verifica su cuenta → accede al wizard de onboarding → activa 2FA TOTP: el backend genera un secreto TOTP con <code>TwoFactorAuthService</code>, crea el QR con ZXing y lo devuelve en base64 → el usuario escanea el QR con Google Authenticator → en el próximo login, tras verificar credenciales, el backend responde con <code>twoFactorRequired: true</code> → el usuario introduce el código TOTP de 6 dígitos → el backend lo valida con la librería dev.samstevens.totp → si es válido, genera y devuelve el JWT con el rol del actor.</p>
+    </div>
+
+    <div class="req-block">
+      <p class="req-id">CU-05</p>
+      <h5>Solicitud y gestión de una devolución</h5>
+      <p><strong>Actor principal:</strong> Usuario comprador</p>
+      <p><strong>Flujo:</strong> El comprador accede al detalle de una compra en estado ENTREGADA → solicita una devolución seleccionando un motivo (PRODUCTO_DEFECTUOSO, NO_CORRESPONDE, DAÑO_TRANSPORTE, CAMBIO_DE_OPINIÓN, TALLA_INCORRECTA, OTRO) y adjuntando fotos de evidencia (hasta 4, subidas a Cloudinary) → el sistema crea la entidad <code>Devolucion</code> en estado SOLICITADA → el vendedor recibe una notificación y puede aceptar o rechazar la devolución con una nota → si es aceptada, el sistema inicia el reembolso en Stripe (vía <code>DevolucionService.procesarReembolso()</code>) → el estado de la compra pasa a REEMBOLSADA → el comprador recibe el importe devuelto.</p>
+    </div>
   </section>
 
   <section id="diseno">
     <h2>Diseño</h2>
-    <p>
-      Arquitectura del sistema, diseño de la interfaz de usuario y diseño de la
-      base de datos.
+    <p class="lead">
+      Esta sección describe la arquitectura general del sistema, el modelo de datos persistente, el diseño de la API REST y la organización de componentes en las aplicaciones Angular.
     </p>
-    <div class="placeholder-box">Contenido pendiente de redactar...</div>
+
+    <h3 class="subsection-title">Arquitectura del Sistema</h3>
+    <p>
+      Nexus adopta una arquitectura <strong>cliente-servidor desacoplada</strong> con cuatro aplicaciones independientes que se comunican con un único backend centralizado. El sistema se despliega íntegramente en servicios cloud:
+    </p>
+
+    <div class="context-box">
+      <strong>Visión general de componentes:</strong>
+      <pre style="background:transparent;margin:0.5rem 0 0;font-size:0.82rem;line-height:1.6;overflow-x:auto;">&#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472; CAPA DE CLIENTE (Vercel CDN) &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;
+&#9474;  nexus-angular-app          nexus-admin-web-app      nexus-web-about     &#9474;
+&#9474;  Angular 21 + Ionic 8       Angular 21               Astro (estático)     &#9474;
+&#9474;  puerto 4200 (dev)          puerto 4201 (dev)        puerto 4321 (dev)   &#9474;
+&#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9500;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9524;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;
+            &#9474; HTTP REST + JWT Bearer         &#9474;
+            &#9474; WebSocket STOMP (app usuario)  &#9474;
+&#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9524;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9524;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;
+&#9474;       CAPA DE SERVICIO (Render.com — Docker)                        &#9474;
+&#9474;       nexus-backend — Spring Boot 3.5.13 (Java 17)                   &#9474;
+&#9474;  &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488; &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488; &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488; &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;  &#9474;
+&#9474;  &#9474; Controllers  &#9474; &#9474; Services  &#9474; &#9474; Security  &#9474; &#9474;   Schedulers   &#9474;  &#9474;
+&#9474;  &#9474; REST (48)   &#9474; &#9474; (44)      &#9474; &#9474; JWT+2FA   &#9474; &#9474; Caducidad,  &#9474;  &#9474;
+&#9474;  &#9474; WS (1)      &#9474; &#9474;           &#9474; &#9474; reCAPTCHA &#9474; &#9474; Spark score &#9474;  &#9474;
+&#9474;  &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496; &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496; &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496; &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;  &#9474;
+&#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9500;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;
+            &#9474; Spring Data JPA / Hibernate
+  &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;  &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;   &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;   &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;
+  &#9474; PostgreSQL  &#9474;  &#9474; Cloudinary &#9474;   &#9474; Stripe&#9474;   &#9474; Gmail  &#9474;
+  &#9474; (Render DB) &#9474;  &#9474; (Medios)   &#9474;   &#9474; (Pagos&#9474;   &#9474; SMTP   &#9474;
+  &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;  &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;   &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;   &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;</pre>
+    </div>
+
+    <h4 class="group-title">Capas internas del backend</h4>
+    <p>El backend sigue el patrón arquitectónico en capas clásico de Spring:</p>
+    <ul>
+      <li><strong>Capa de presentación (Controllers):</strong> 48 controladores REST + 1 controlador WebSocket, uno por dominio funcional. Anotados con <code>@RestController</code> y documentados con OpenAPI/Swagger (<code>@Tag</code>, <code>@Operation</code>). Gestionan la serialización/deserialización JSON con Jackson.</li>
+      <li><strong>Capa de servicio (Services):</strong> 44 servicios que encapsulan toda la lógica de negocio. Anotados con <code>@Service</code> y gestionados por el contenedor IoC de Spring. Las operaciones que requieren atomicidad se anotan con <code>@Transactional</code>.</li>
+      <li><strong>Capa de persistencia (Repositories):</strong> Interfaces Spring Data JPA que extienden <code>JpaRepository</code> con métodos derivados del nombre y consultas JPQL personalizadas con <code>@Query</code>.</li>
+      <li><strong>Capa de seguridad:</strong> El <code>JWTAuthenticationFilter</code> intercepta todas las peticiones HTTP, extrae el token Bearer, valida la firma y la <code>jwtVersion</code>, y establece el contexto de autenticación en el <code>SecurityContextHolder</code>. El <code>WebSocketAuthInterceptor</code> aplica el mismo proceso para las conexiones STOMP.</li>
+      <li><strong>Capa de tareas programadas (Schedulers):</strong> Dos schedulers: <code>AnuncioCaducidadService</code> (gestiona la caducidad de anuncios y envía notificaciones proactivas) y <code>NewsletterScheduler</code> (gestiona envíos de campañas). El recalculo del Spark Score se integra en el servicio de votos con el intervalo configurado.</li>
+    </ul>
+
+    <h3 class="subsection-title">Modelo de Base de Datos</h3>
+    <p>
+      La base de datos PostgreSQL se gestiona con Hibernate ORM a través de Spring Data JPA. La jerarquía de actores se implementa con la estrategia <strong>JOINED</strong>: la tabla <code>actor</code> almacena los campos comunes y las tablas <code>usuario</code>, <code>empresa</code> y <code>admin</code> solo los campos específicos de cada subtipo, unidos mediante <code>PrimaryKeyJoinColumn</code>. Los índices de base de datos más críticos se definen con la anotación <code>@Table(indexes = {...})</code> directamente en las entidades Java.
+    </p>
+
+    <table class="req-table">
+      <thead>
+        <tr>
+          <th>Entidad</th>
+          <th>Tabla</th>
+          <th>Hereda de</th>
+          <th>Índices clave</th>
+          <th>Campos destacados</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>Actor</code></td>
+          <td><code>actor</code></td>
+          <td><code>DomainEntity</code> (ID autogenerado)</td>
+          <td>username (unique), email (unique), googleId, resetToken (unique)</td>
+          <td>username, email, password (bcrypt), avatar, twoFactorEnabled, twoFactorMethod, twoFactorSecret, jwtVersion, cuentaEliminada, cuentaVerificada, baneado, suspendidoHasta, flagFraude, stripeCustomerId, onboardingCompletado, resetToken, resetTokenExpira</td>
+        </tr>
+        <tr>
+          <td><code>Usuario</code></td>
+          <td><code>usuario</code></td>
+          <td><code>Actor</code> (actor_id FK)</td>
+          <td>&mdash;</td>
+          <td>biografia, ubicacion, tipoCuenta (PERSONAL), reputacion (0.0–5.0), totalVentas, esVerificado, cuentaPrivada, perfilPublico, mostrarTelefono, mostrarUbicacion, permitirMensajesDesconocidos, 6 flags de notificación, direccionPorDefecto (embebida), blockedUserIds (lista), terminosAceptados, versionTerminosAceptados, newsletterSuscrito</td>
+        </tr>
+        <tr>
+          <td><code>Empresa</code></td>
+          <td><code>empresa</code></td>
+          <td><code>Actor</code> (actor_id FK)</td>
+          <td>cif (unique)</td>
+          <td>cif, nombreComercial, descripcion, web, telefono, logo (URL Cloudinary), verificada (por admin)</td>
+        </tr>
+        <tr>
+          <td><code>Admin</code></td>
+          <td><code>admin</code></td>
+          <td><code>Actor</code> (actor_id FK)</td>
+          <td>&mdash;</td>
+          <td>nivelAcceso (int: 1, 2 o 3)</td>
+        </tr>
+        <tr>
+          <td><code>Producto</code></td>
+          <td><code>producto</code></td>
+          <td><code>DomainEntity</code></td>
+          <td>idx_producto_vendedor, idx_producto_estado, idx_producto_categoria</td>
+          <td>titulo, descripcion, precio, tipoOferta (VENTA/DONACION/INTERCAMBIO), estado (DISPONIBLE/RESERVADO/VENDIDO/PAUSADO/ELIMINADO/EXPIRADO), condicion, categoria (FK), vendedor/Actor (FK), marca, modelo, peso, admiteEnvio, precioEnvio, precioNegociable, ubicacion, latitude, longitude, imagenPrincipal, galeriaImagenes (tabla producto_imagenes), numeroVistas, numeroFavoritos, fechaPublicacion, fechaCaducidad (180 días), pausadoHasta, motivoPausa, destacado, patrocinado, patrocinioHasta</td>
+        </tr>
+        <tr>
+          <td><code>Oferta</code></td>
+          <td><code>oferta</code></td>
+          <td><code>DomainEntity</code></td>
+          <td>idx_oferta_activa, idx_oferta_categoria, idx_oferta_spark, idx_oferta_publicacion</td>
+          <td>titulo, descripcion, precioOferta, precioOriginal, tienda, urlOferta, categoria (FK), actor (FK), estado (ACTIVA/PAUSADA/AGOTADA), badge (NUEVA/CHOLLAZO/PORCENTAJE/GRATUITA/EXPIRA_HOY), sparkCount, dripCount, sparkScore, codigoDescuento, esOnline, ciudadOferta, gastosEnvio, esFlash, flashFin, limiteUnidades, destacada, patrocinada, patrocinioHasta</td>
+        </tr>
+        <tr>
+          <td><code>Vehiculo</code></td>
+          <td><code>vehiculo</code></td>
+          <td><code>DomainEntity</code></td>
+          <td>idx_vehiculo_publicador, idx_vehiculo_categoria, idx_vehiculo_estado, idx_vehiculo_tipo</td>
+          <td>titulo, descripcion, precio, tipoOferta, tipoVehiculo (COCHE/MOTO/FURGONETA/SCOOTER/OTRO), estadoVehiculo, condicion, categoria (FK), publicador/Actor (FK), marca, modelo, anio, kilometros, combustible (GASOLINA/DIESEL/HIBRIDO/ELECTRICO/GLP/GNC), cambio, potencia, cilindrada, color, numeroPuertas, plazas, matricula, itv, fechaITV, garantia, extras (lista), imagenPrincipal, galeriaImagenes, latitude, longitude, fechaCaducidad, patrocinado</td>
+        </tr>
+        <tr>
+          <td><code>Compra</code></td>
+          <td><code>compra</code></td>
+          <td><code>DomainEntity</code></td>
+          <td>idx_compra_comprador, idx_compra_estado</td>
+          <td>comprador/Actor (FK), producto/Producto (FK), estado (PENDIENTE/PAGADO/ENVIADO/ENTREGADO/EN_DISPUTA/REEMBOLSADA/CANCELADA/COMPLETADA), stripePaymentIntentId, precioFinal, precioEnvio, comisionNexus, metodoEntrega, dirNombre/Calle/Ciudad/CodigoPostal/Pais/Telefono, fechaCompra, fechaPago, fechaEnvio, fechaEntrega, fechaCompletada, tipoEnvio, puntoRecogidaId</td>
+        </tr>
+        <tr>
+          <td><code>Envio</code></td>
+          <td><code>envio</code></td>
+          <td><code>DomainEntity</code></td>
+          <td>&mdash;</td>
+          <td>compra (FK OneToOne), codigoEnvio (SHIP-XXXXXXXX), codigoQR (base64), transportista, numeroSeguimiento, urlTracking, fechaLimiteEnvio, estado (PENDIENTE/EN_TRANSITO/ENTREGADO)</td>
+        </tr>
+        <tr>
+          <td><code>Devolucion</code></td>
+          <td><code>devolucion</code></td>
+          <td><code>DomainEntity</code></td>
+          <td>&mdash;</td>
+          <td>compra (FK), motivo (enum MotivoDevolucion), descripcion, fotosEvidencia (hasta 4 URLs), dirDevolucion, notaVendedor, importeDevuelto, estado (SOLICITADA/ACEPTADA/RECHAZADA/COMPLETADA)</td>
+        </tr>
+        <tr>
+          <td><code>ChatMensaje</code></td>
+          <td><code>chat_mensaje</code></td>
+          <td><code>DomainEntity</code></td>
+          <td>roomId, remitente, receptor, fechaEnvio</td>
+          <td>remitente/Actor (FK), receptor/Actor (FK), producto/Producto (FK, opcional), roomId, texto, mediaUrl, duracionAudio, tipo (TEXTO/IMAGEN/VIDEO/AUDIO/GIF/OFERTA_PRECIO/SISTEMA), leido, recibido, precioPropuesto, estadoPropuesta (PENDIENTE/ACEPTADA/RECHAZADA)</td>
+        </tr>
+        <tr>
+          <td><code>Valoracion</code></td>
+          <td><code>valoracion</code></td>
+          <td><code>DomainEntity</code></td>
+          <td>compra (unique, una valoración por compra)</td>
+          <td>comprador/Actor (FK), vendedor/Actor (FK), compra/Compra (FK unique), puntuacion (1–5), comentario, respuestaVendedor, fechaRespuesta</td>
+        </tr>
+        <tr>
+          <td><code>Contrato</code></td>
+          <td><code>contrato</code></td>
+          <td><code>DomainEntity</code></td>
+          <td>&mdash;</td>
+          <td>empresa/Empresa (FK), actor/Actor (FK), tipoContrato (BANNER/PUBLICACION), estado (DRAFT/PROPUESTA_ADMIN/PENDIENTE_PAGO/ACTIVE/RECHAZADO/EXPIRED/CANCELLED), fechaInicio, fechaFin, monto, tipoItem, itemId, itemTitulo, itemImagen, diasPatrocinio, textoBanner, urlClick, stripeCheckoutSessionId, stripePaymentIntentId</td>
+        </tr>
+        <tr>
+          <td><code>Cupon</code></td>
+          <td><code>cupon</code></td>
+          <td><code>DomainEntity</code></td>
+          <td>codigo (unique)</td>
+          <td>codigo (único, máx 20 chars), tipoDescuento (PORCENTAJE/FIJO), valor, importeMinimo, topeMaximo, alcance (TODOS/USUARIO_ESPECIFICO/GRUPO), limiteTotalUsos, limiteUsosPorUsuario, fechaInicio, fechaFin, categoriasAplicables</td>
+        </tr>
+        <tr>
+          <td><code>Categoria</code></td>
+          <td><code>categoria</code></td>
+          <td><code>DomainEntity</code></td>
+          <td>slug (unique)</td>
+          <td>árbol jerarquico self-join (parent → hijos), nombre, slug (único), icono, color, orden, activa</td>
+        </tr>
+        <tr>
+          <td><code>NewsletterSuscripcion</code></td>
+          <td><code>newsletter_suscripcion</code></td>
+          <td><code>DomainEntity</code></td>
+          <td>email (unique), tokenBaja (unique)</td>
+          <td>email, activa, ipConsentimiento, fechaConsentimiento, versionPolitica, tokenBaja, fechaBaja</td>
+        </tr>
+        <tr>
+          <td><code>AuditLog</code></td>
+          <td><code>audit_log</code></td>
+          <td><code>DomainEntity</code></td>
+          <td>actor, fechaAccion</td>
+          <td>actor/Actor (FK), tipoAccion, descripcion, fechaAccion. Registro inmutable de acciones administrativas.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 class="subsection-title">Diseño de la API REST</h3>
+    <p>
+      La API REST está documentada automáticamente con <strong>SpringDoc OpenAPI 2.6.0</strong> (Swagger UI en <code>/swagger-ui.html</code>, especificación JSON en <code>/v3/api-docs</code>). Las rutas siguen el patrón REST estándar con sustantivos en plural para colecciones:
+    </p>
+
+    <table class="req-table">
+      <thead>
+        <tr>
+          <th>Base de ruta</th>
+          <th>Controlador</th>
+          <th>Métodos principales</th>
+          <th>Autenticación requerida</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>/api/auth</code> &nbsp;&#183;&nbsp; <code>/auth</code></td>
+          <td><code>AuthController</code></td>
+          <td>POST /login, /register, /google, /verify-2fa, /forgot-password, /reset-password, /verify-email</td>
+          <td>Pública</td>
+        </tr>
+        <tr>
+          <td><code>/producto</code></td>
+          <td><code>ProductoController</code></td>
+          <td>GET /, /disponibles, /{id}, /filtrar; POST /publicar/{usuarioId}; PUT /{id}; PATCH /{id}/estado; DELETE /{id}; POST /{id}/votar, /{id}/renovar</td>
+          <td>Lectura pública; escritura autenticada</td>
+        </tr>
+        <tr>
+          <td><code>/oferta</code></td>
+          <td><code>OfertaController</code></td>
+          <td>GET / (paginado con filtros), /{id}; POST /publicar; PUT /{id}; DELETE /{id}; POST /{id}/spark, /{id}/drip</td>
+          <td>Lectura pública; escritura autenticada</td>
+        </tr>
+        <tr>
+          <td><code>/vehiculo</code></td>
+          <td><code>VehiculoController</code></td>
+          <td>GET /, /filtrar, /{id}; POST /publicar/{usuarioId}; PUT /{id}; PATCH /{id}/estado; DELETE /{id}</td>
+          <td>Lectura pública; escritura autenticada</td>
+        </tr>
+        <tr>
+          <td><code>/compra</code></td>
+          <td><code>CompraController</code></td>
+          <td>POST /; GET /{id}, /mis-compras, /mis-ventas; PATCH /{id}/confirmar-entrega, /{id}/cancelar</td>
+          <td>ROLE_USER</td>
+        </tr>
+        <tr>
+          <td><code>/pago</code></td>
+          <td><code>PagoController</code></td>
+          <td>POST /crear-intent, /confirmar; GET /estado/{compraId}</td>
+          <td>ROLE_USER</td>
+        </tr>
+        <tr>
+          <td><code>/envio</code></td>
+          <td><code>EnvioController</code></td>
+          <td>POST /; GET /{id}/qr; PATCH /{id}/tracking, /{id}/confirmar</td>
+          <td>ROLE_USER</td>
+        </tr>
+        <tr>
+          <td><code>/devolucion</code></td>
+          <td><code>DevolucionController</code></td>
+          <td>POST /; GET /{id}; PATCH /{id}/aceptar, /{id}/rechazar, /{id}/completar</td>
+          <td>ROLE_USER</td>
+        </tr>
+        <tr>
+          <td><code>/chat</code> &nbsp;&#183;&nbsp; <code>/ws</code></td>
+          <td><code>ChatController</code>, <code>ChatWebSocketController</code></td>
+          <td>GET /historial/{roomId}; POST /enviar (fallback REST); WS /app/chat (STOMP)</td>
+          <td>ROLE_USER</td>
+        </tr>
+        <tr>
+          <td><code>/notificacion</code></td>
+          <td><code>NotificacionController</code></td>
+          <td>GET /mis-notificaciones; PATCH /{id}/leer; DELETE /{id}</td>
+          <td>ROLE_USER</td>
+        </tr>
+        <tr>
+          <td><code>/favorito</code></td>
+          <td><code>FavoritoController</code></td>
+          <td>POST /; DELETE /{id}; GET /mis-favoritos</td>
+          <td>ROLE_USER</td>
+        </tr>
+        <tr>
+          <td><code>/valoracion</code></td>
+          <td><code>ValoracionController</code></td>
+          <td>POST /; GET /vendedor/{id}; PATCH /{id}/responder</td>
+          <td>ROLE_USER</td>
+        </tr>
+        <tr>
+          <td><code>/reporte</code></td>
+          <td><code>ReporteController</code></td>
+          <td>POST /; GET /mis-reportes</td>
+          <td>ROLE_USER</td>
+        </tr>
+        <tr>
+          <td><code>/contrato</code></td>
+          <td><code>ContratoController</code></td>
+          <td>POST /solicitar; GET /mis-contratos; POST /pagar/{id}</td>
+          <td>ROLE_USER / ROLE_EMPRESA</td>
+        </tr>
+        <tr>
+          <td><code>/newsletter</code></td>
+          <td><code>NewsletterController</code></td>
+          <td>POST /suscribir; GET /confirmar?token=...; GET /baja?token=...</td>
+          <td>Pública</td>
+        </tr>
+        <tr>
+          <td><code>/soporte-chat</code></td>
+          <td><code>SoporteChatController</code></td>
+          <td>POST /mensaje; GET /historial/{sessionId}</td>
+          <td>Pública</td>
+        </tr>
+        <tr>
+          <td><code>/api/admin/**</code></td>
+          <td>13 controladores Admin</td>
+          <td>CRUD completo sobre usuarios, productos, ofertas, vehículos, compras, devoluciones, contratos, cupones, newsletter, reportes, sanciones, estadísticas, audit-log, configuración</td>
+          <td>ROLE_ADMIN</td>
+        </tr>
+        <tr>
+          <td><code>/stripe/webhook</code></td>
+          <td><code>StripeWebhookController</code></td>
+          <td>POST / (receptor de eventos Stripe con verificación de firma HMAC-SHA256)</td>
+          <td>Pública (verificada por firma)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 class="subsection-title">Diseño de la Interfaz de Usuario</h3>
+    <p>
+      La aplicación Angular (<code>nexus-angular-app</code>) sigue la arquitectura de <strong>Standalone Components</strong> sin módulos NgModule. Las rutas se definen en <code>app.routes.ts</code> con lazy loading total mediante <code>loadComponent(() =&gt; import(...))</code>. Los guards <code>authGuard</code> y <code>guestGuard</code> protegen las rutas privadas y públicas respectivamente:
+    </p>
+
+    <table class="req-table">
+      <thead>
+        <tr>
+          <th>Módulo / carpeta</th>
+          <th>Componentes principales</th>
+          <th>Guard</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><code>/</code> (home)</td><td>HomeComponent — dashboard con secciones destacadas, ofertas flash y productos recientes</td><td>Ninguno</td></tr>
+        <tr><td><code>/login</code>, <code>/register</code></td><td>LoginComponent, RegisterComponent — formularios con reCAPTCHA y validación reactiva</td><td>guestGuard</td></tr>
+        <tr><td><code>/forgot-password</code>, <code>/reset-password</code></td><td>ForgotPasswordComponent, ResetPasswordComponent — flujo de recuperación de contraseña por email</td><td>Ninguno</td></tr>
+        <tr><td><code>/verify-email</code></td><td>VerifyEmailComponent — verificación del OTP recibido por email</td><td>Ninguno</td></tr>
+        <tr><td><code>/search</code></td><td>SearchComponent — búsqueda unificada con panel de filtros y resultados paginados</td><td>Ninguno</td></tr>
+        <tr><td><code>/productos/:slug</code></td><td>ProductoDetailComponent — detalle del producto con galería, info del vendedor y botón de compra</td><td>Ninguno</td></tr>
+        <tr><td><code>/ofertas/:slug</code></td><td>OfertaDetailComponent — detalle de oferta con votos Spark/Drip y comentarios</td><td>Ninguno</td></tr>
+        <tr><td><code>/vehiculos</code>, <code>/vehiculos/:slug</code></td><td>VehiculosComponent, VehiculoDetailComponent — catálogo y ficha técnica de vehículos</td><td>Ninguno</td></tr>
+        <tr><td><code>/publicar</code>, <code>/publicar/oferta</code>, <code>/publicar/vehiculo</code></td><td>PublishProductoComponent, PublishOfertaComponent, PublishVehiculoComponent — formularios de publicación multistep</td><td>authGuard</td></tr>
+        <tr><td><code>/checkout/:slug</code></td><td>CheckoutComponent — flujo de compra con Stripe.js integrado</td><td>authGuard</td></tr>
+        <tr><td><code>/compras/mis-compras</code>, <code>/compras/:id</code></td><td>MisComprasComponent, CompraDetailComponent — historial y detalle de compras</td><td>authGuard</td></tr>
+        <tr><td><code>/mensajes</code></td><td>MensajesContainerComponent — chat en tiempo real con lista de conversaciones activas</td><td>authGuard</td></tr>
+        <tr><td><code>/perfil</code>, <code>/perfil/:username</code></td><td>MiCuentaComponent, PerfilPublicoComponent — perfil privado y público</td><td>authGuard / Ninguno</td></tr>
+        <tr><td><code>/configuracion</code></td><td>ConfiguracionComponent — seguridad, privacidad, notificaciones, 2FA</td><td>authGuard</td></tr>
+        <tr><td><code>/notificaciones</code></td><td>NotificacionesComponent — centro de notificaciones in-app</td><td>authGuard</td></tr>
+        <tr><td><code>/publicidad/contratos</code>, <code>/publicidad/patrocinios</code></td><td>EmpresaContratosPageComponent, MisPatrociniosPageComponent — gestión de publicidad para empresas</td><td>authGuard</td></tr>
+        <tr><td><code>/devoluciones/*</code></td><td>NuevaDevolucionComponent, DevolucionDetailComponent — solicitud y seguimiento de devoluciones</td><td>authGuard</td></tr>
+      </tbody>
+    </table>
+
+    <p>Los servicios Angular del directorio <code>core/services/</code> encapsulan todas las llamadas HTTP al backend mediante <code>HttpClient</code>. El <code>JwtInterceptor</code> inyecta automáticamente el token Bearer en todas las peticiones internas (excluye URLs externas como las de Stripe o Google). El <code>ErrorInterceptor</code> gestiona de forma centralizada las respuestas de error 401 (sesión expirada), 403 (acceso denegado) y 500 (error interno).</p>
   </section>
 
   <section id="implementacion">
     <h2>Implementación</h2>
-    <p>
-      Detalles sobre el desarrollo, tecnologías utilizadas y retos técnicos
-      superados.
+    <p class="lead">
+      Esta sección detalla la organización del código fuente, las decisiones técnicas tomadas durante el desarrollo y los flujos de implementación más representativos del sistema.
     </p>
-    <div class="placeholder-box">Contenido pendiente de redactar...</div>
+
+    <h3 class="subsection-title">Estructura de Carpetas del Backend</h3>
+    <div class="context-box">
+      <strong>nexus-backend/src/main/java/com/nexus/</strong>
+      <ul style="font-family:monospace;margin-top:0.5rem;">
+        <li><strong>config/</strong> &mdash; Configuración de Spring: CORS (origenes dinámicos desde application.properties), WebSocket STOMP (broker de mensajes), caché (<code>@EnableCaching</code>), Cloudinary, OpenAPI/Swagger</li>
+        <li><strong>controller/</strong> &mdash; 49 controladores (48 REST + 1 WebSocket), uno por dominio funcional. Incluye <code>AuthController</code>, <code>ProductoController</code>, <code>CompraController</code>, <code>ChatWebSocketController</code>, 13 controladores Admin* y <code>StripeWebhookController</code></li>
+        <li><strong>dto/</strong> &mdash; Data Transfer Objects para respuestas específicas que no coinciden directamente con las entidades (resumen de vendedor, estado de compra, etc.)</li>
+        <li><strong>entity/</strong> &mdash; 56 archivos Java: entidades JPA (Actor, Usuario, Empresa, Admin, Producto, Oferta, Vehiculo, Compra, Envio, Devolucion, ChatMensaje, Valoracion, Contrato, Cupon, Categoria, AuditLog, SparkVoto, Bloqueo, etc.) y enumeraciones (EstadoCompra, TipoOferta, CondicionProducto, TipoCombustible, TipoVehiculo, MotivoDevolucion, MotivoReporte, TipoMensaje, TipoNotificacion, etc.)</li>
+        <li><strong>repository/</strong> &mdash; Interfaces Spring Data JPA con métodos derivados del nombre y consultas JPQL con <code>@Query</code> para filtros complejos</li>
+        <li><strong>scheduler/</strong> &mdash; Tareas programadas con <code>@Scheduled</code>: gestión de caducidad de anuncios (avisos a 30, 14, 7 y 1 días) y gestión del scheduler de newsletter</li>
+        <li><strong>security/</strong> &mdash; <code>JWTUtils</code> (generación/validación de tokens, HMAC-SHA256), <code>JWTAuthenticationFilter</code> (filtro HTTP que intercepta todas las peticiones), <code>WebSocketAuthInterceptor</code> (validación del JWT en el handshake STOMP), <code>SecurityConfiguration</code> (reglas de autorización por ruta y rol), <code>PasswordConfig</code> (bean BCrypt)</li>
+        <li><strong>service/</strong> &mdash; 44 servicios de negocio: <code>UsuarioService</code>, <code>ProductoService</code>, <code>CompraService</code>, <code>StripeService</code>, <code>StorageService</code> (Cloudinary), <code>EmailService</code> (Spring Mail + Gmail SMTP), <code>TwoFactorService</code>/<code>TwoFactorAuthService</code>, <code>SoporteAiService</code> (Gemini/Groq), <code>CuponValidacionService</code>, <code>SynonymService</code>, etc.</li>
+        <li><strong>soporte/</strong> &mdash; Lógica del chatbot de soporte IA y escalación a agente humano</li>
+      </ul>
+    </div>
+
+    <h3 class="subsection-title">Estructura de Carpetas del Frontend de Usuario</h3>
+    <div class="context-box">
+      <strong>nexus-angular-app/src/app/</strong>
+      <ul style="font-family:monospace;margin-top:0.5rem;">
+        <li><strong>components/</strong> &mdash; Componentes organizados por dominio: <em>auth/</em> (login, register, forgot/reset-password, verify-email), <em>home/</em>, <em>marketplace/</em> (publish-producto, publish-oferta, publish-vehiculo, cerca-de-ti, gratis, viajes), <em>search/</em>, <em>compras/</em> (checkout, confirmacion, mis-compras, enviar-pedido), <em>mensajes/</em>, <em>notificaciones/</em>, <em>perfil/</em> (mi-cuenta, perfil-publico, configuracion), <em>vehiculos/</em>, <em>ofertas/</em>, <em>devoluciones/</em>, <em>publicidad/</em>, <em>newsletter/</em>, <em>errors/</em></li>
+        <li><strong>core/auth/</strong> &mdash; <code>JwtService</code> (almacenamiento y validación del token en localStorage), <code>AuthService</code> (estado de sesión reactivo con Signals)</li>
+        <li><strong>core/guards/</strong> &mdash; <code>auth-guard.ts</code> (redirige a registro si no hay sesión activa), <code>guest-guard.ts</code> (redirige a home si ya hay sesión)</li>
+        <li><strong>core/interceptors/</strong> &mdash; <code>jwt-interceptor.ts</code> (inyecta el Bearer token en todas las peticiones internas; detecta si la petición va al panel admin y usa el token admin correspondiente), <code>error-interceptor.ts</code> (gestión centralizada de errores HTTP)</li>
+        <li><strong>core/services/</strong> &mdash; 15 servicios Angular: <code>chat.service</code>, <code>compra.service</code>, <code>favorito.service</code>, <code>pago.service</code>, <code>notification.service</code>, <code>search.service</code>, <code>websocket.service</code> (gestión de la conexión STOMP), <code>toast.service</code>, <code>ui.service</code>, <code>devolucion.service</code>, <code>bloqueo.service</code>, <code>support-chat.service</code>, <code>cookie.service</code>, <code>scroll.service</code>, <code>guest-popup.service</code></li>
+        <li><strong>models/</strong> &mdash; 25 interfaces TypeScript que reflejan las entidades del backend: <code>Usuario</code>, <code>Producto</code>, <code>Oferta</code>, <code>Vehiculo</code>, <code>Compra</code>, <code>Envio</code>, <code>Devolucion</code>, <code>ChatMensaje</code>, <code>Valoracion</code>, <code>Contrato</code>, <code>Cupon</code>, <code>Categoria</code>, <code>Notificacion</code>, etc.</li>
+        <li><strong>shared/</strong> &mdash; Componentes reutilizables entre módulos (<code>ProductoDetailComponent</code>)</li>
+        <li><strong>mobile/</strong> &mdash; Componentes específicos para la app móvil Capacitor (<code>MobileFavoritosComponent</code>)</li>
+      </ul>
+    </div>
+
+    <h3 class="subsection-title">Estructura del Panel de Administración</h3>
+    <div class="context-box">
+      <strong>nexus-admin-web-app/src/app/admin/</strong>
+      <ul style="font-family:monospace;margin-top:0.5rem;">
+        <li>19 módulos lazy-loaded: <em>dashboard/</em>, <em>estadisticas/</em>, <em>usuarios/</em>, <em>fraude/</em>, <em>sanciones/</em>, <em>reportes/</em>, <em>devoluciones/</em>, <em>productos/</em>, <em>ofertas/</em>, <em>compras/</em>, <em>cupones/</em>, <em>vehiculos/</em>, <em>soporte/</em>, <em>notificaciones/</em>, <em>newsletter/</em>, <em>contratos/</em>, <em>patrocinios/</em>, <em>configuracion/</em>, <em>audit-log/</em>, <em>seguridad/</em></li>
+        <li><strong>admin.routes.ts</strong> &mdash; Todas las rutas del panel envueltas en el <code>AdminLayoutComponent</code> como componente padre con sidebar lateral</li>
+        <li><strong>admin.service.ts</strong> &mdash; Servicio central que encapsula todas las llamadas HTTP al backend bajo el prefijo <code>/api/admin/</code></li>
+        <li><strong>admin.models.ts</strong> &mdash; Interfaces TypeScript del dominio administrativo</li>
+      </ul>
+    </div>
+
+    <h3 class="subsection-title">Decisiones Técnicas Relevantes</h3>
+
+    <div class="req-block">
+      <p class="req-id">DT-01</p>
+      <h5>Jerarquía de herencia JOINED en JPA para los actores</h5>
+      <p>
+        La entidad abstracta <code>Actor</code> es la clase base para <code>Usuario</code>, <code>Empresa</code> y <code>Admin</code> usando la estrategia <code>InheritanceType.JOINED</code>. Los campos comunes (email, password, avatar, 2FA, jwtVersion, estado de cuenta, ban, stripe…) se almacenan en la tabla <code>actor</code>; los específicos de cada tipo, en sus propias tablas. Esta decisión simplifica la autenticación (siempre se busca en <code>actor</code>) y la generación de JWT (siempre hay un único punto de entrada). El método genérico <code>JWTUtils.userLogin()</code> detecta el tipo del actor (instanceof Admin/Empresa/Usuario) y carga la subclase correspondiente con todos sus campos.
+      </p>
+    </div>
+
+    <div class="req-block">
+      <p class="req-id">DT-02</p>
+      <h5>Invalidación global de tokens JWT mediante jwtVersion</h5>
+      <p>
+        Los JWT son stateless: una vez emitidos, el servidor no puede invalidarlos individualmente sin mantener una blacklist. Nexus resuelve esto con el campo <code>jwtVersion</code> (entero) en la entidad <code>Actor</code>. Cada JWT lleva en su payload la versión vigente en el momento de emisión. El <code>JWTAuthenticationFilter</code> compara esa versión con la actual en la BD. Al cambiar la contraseña, aplicar un ban o ejecutar un logout global, el backend incrementa <code>jwtVersion</code> y todos los tokens anteriores son rechazados automáticamente, efectuando un logout global sin blacklist.
+      </p>
+    </div>
+
+    <div class="req-block">
+      <p class="req-id">DT-03</p>
+      <h5>Optimización para el plan gratuito de Render (0.1 CPU / 512 MB RAM)</h5>
+      <p>
+        El backend está desplegado en el plan gratuito de Render. Para operar establemente con estos recursos, se aplicaron las siguientes optimizaciones en <code>application.properties</code>: Tomcat con máximo 15 hilos activos y 2 mínimos; pool HikariCP con máximo 3 conexiones, <code>initialization-fail-timeout=60s</code> para tolerar arranques lentos de la BD y <code>keepalive-time=60s</code>; pool de tareas async con máximo 5 hilos y cola de 25; scheduler de 1 hilo; compresión HTTP de respuestas JSON habilitada desde 1 KB; batching de inserts JPA con tamaño de lote 15; caché de segundo nivel de Hibernate desactivada. La configuración resultante permite operar con consumo de memoria controlado bajo carga moderada.
+      </p>
+    </div>
+
+    <div class="req-block">
+      <p class="req-id">DT-04</p>
+      <h5>Standalone Components y lazy loading total en Angular 21</h5>
+      <p>
+        La aplicación prescinde completamente de los <code>NgModule</code> tradicionales. Cada componente, directiva y pipe se declara como <code>standalone: true</code> e importa directamente sus dependencias. El enrutador carga cada ruta con <code>loadComponent(() =&gt; import(...))</code>, de modo que el bundle inicial solo contiene el código del componente de inicio; el resto se descarga bajo demanda cuando el usuario navega a esa ruta. Esto reduce drásticamente el tiempo de carga inicial (FCP) y mejora el rendimiento en dispositivos móviles.
+      </p>
+    </div>
+
+    <div class="req-block">
+      <p class="req-id">DT-05</p>
+      <h5>Modelo escrow en el sistema de pagos con Stripe</h5>
+      <p>
+        Las compras no transfieren el dinero al vendedor inmediatamente. Se usa el modelo de Payment Intent de Stripe: el comprador paga y el dinero queda pendiente de liberación. Solo cuando el comprador confirma la recepción del producto (o transcurre el plazo máximo configurado), el sistema ejecuta la transferencia definitiva al vendedor descontando la <code>comisionNexus</code> calculada. Este modelo protege al comprador de estafas y es la base del sistema de devoluciones: si el comprador abre una disputa, el <code>DevolucionService</code> puede iniciar un reembolso parcial o total directamente en Stripe.
+      </p>
+    </div>
+
+    <div class="req-block">
+      <p class="req-id">DT-06</p>
+      <h5>Sistema Spark/Drip con recalculo periódico de puntuación</h5>
+      <p>
+        Las ofertas tienen dos contadores: <code>sparkCount</code> (votos positivos) y <code>dripCount</code> (negativos). El <code>sparkScore</code> = <code>sparkCount - dripCount</code> determina el orden de aparición en el feed principal. El campo transitorio <code>miVoto</code> (anotado con <code>@Transient</code>) indica el voto del usuario actual sin persistirlo. Para evitar escrituras masivas en la BD durante picos de votación, el score se recalcula mediante un scheduler configurado en <code>nexus.upvotes.recalculo-minutos=5</code>. El método <code>recalcularScore()</code> de la entidad <code>Oferta</code> se invoca también en <code>@PrePersist</code> y <code>@PreUpdate</code>.
+      </p>
+    </div>
+
+    <div class="req-block">
+      <p class="req-id">DT-07</p>
+      <h5>Prevención de bucles JSON en relaciones JPA bidireccionales</h5>
+      <p>
+        Las relaciones bidireccionales entre entidades JPA (p. ej. Producto &#x2194; Actor, Oferta &#x2194; Categoria) causan bucles infinitos en la serialización Jackson. La solución implementada combina: <code>@JsonIgnoreProperties</code> en las anotaciones de relación (definiendo explícitamente los campos a ignorar en cada dirección), <code>@JsonIgnore</code> en el getter de la contraseña hasheada y el secreto TOTP, y la dependencia <code>jackson-datatype-hibernate6</code> para manejar correctamente las entidades lazy de Hibernate sin deserialización forzada.
+      </p>
+    </div>
+
+    <div class="req-block">
+      <p class="req-id">DT-08</p>
+      <h5>Generación automática de códigos de envío y QR</h5>
+      <p>
+        Cuando se confirma un pago mediante el webhook de Stripe, el <code>EnvioService</code> genera automáticamente un código de envío único con el formato <code>SHIP-XXXXXXXX</code> (UUID truncado en mayúsculas). Usando la librería ZXing (<code>com.google.zxing</code>), se genera un código QR que codifica ese código y se convierte a imagen PNG codificada en Base64. Este QR se muestra al comprador en la confirmación de compra y al vendedor en su panel de envíos para el proceso de entrega logística.
+      </p>
+    </div>
+
+    <h3 class="subsection-title">Flujos Principales Implementados</h3>
+
+    <h4 class="group-title">Flujo completo de autenticación JWT con 2FA</h4>
+    <ol>
+      <li>El usuario envía sus credenciales a <code>POST /api/auth/login</code> con token reCAPTCHA v3 generado en el cliente.</li>
+      <li>El <code>CaptchaService</code> verifica el token contra la API de Google con un umbral mínimo de 0.5. Si falla, devuelve 400.</li>
+      <li>Spring Security autentica al actor mediante <code>AuthenticationManager</code> con BCrypt. Si falla, devuelve 401.</li>
+      <li>Si el actor tiene <code>twoFactorEnabled = true</code>, el backend devuelve <code>{twoFactorRequired: true}</code> sin emitir JWT todavía.</li>
+      <li>El usuario envía el código 2FA a <code>POST /api/auth/verify-2fa</code>. Si es TOTP, se valida con la librería de samstevens.totp. Si es Email OTP, se compara con el código almacenado (válido 10 minutos).</li>
+      <li><code>JWTUtils.generateTokenForUser(actor)</code> genera un JWT firmado con HMAC-SHA256, con claims: subject (username), rol (ROLE_USER/EMPRESA/ADMIN), iat (fecha emisión), exp (86400000 ms = 24h).</li>
+      <li>El frontend almacena el JWT en localStorage y el <code>JwtInterceptor</code> lo incluye en <code>Authorization: Bearer &lt;token&gt;</code> en todas las peticiones HTTP internas.</li>
+      <li>El <code>JWTAuthenticationFilter</code> del backend extrae el token, valida la firma y la <code>jwtVersion</code>, y establece el <code>SecurityContextHolder</code> para cada petición.</li>
+    </ol>
+
+    <h4 class="group-title">Flujo de compra con Stripe Payment Intent</h4>
+    <ol>
+      <li>El usuario accede a <code>/checkout/:slug</code> y selecciona método de entrega y dirección.</li>
+      <li>El frontend llama a <code>POST /pago/crear-intent</code> con el ID del producto y datos del pedido.</li>
+      <li>El backend calcula el precio final (producto + envío - descuento del cupón si aplica) y crea un <code>PaymentIntent</code> en Stripe con el importe en céntimos de euro.</li>
+      <li>El backend devuelve el <code>clientSecret</code> del PaymentIntent. El frontend inicializa el formulario de Stripe.js (<code>@stripe/stripe-js</code>) con ese secreto.</li>
+      <li>El usuario introduce sus datos de pago en el formulario seguro de Stripe y confirma el pago.</li>
+      <li>Stripe procesa el pago y envía el evento <code>payment_intent.succeeded</code> al webhook <code>POST /stripe/webhook</code>. La firma del evento se verifica con <code>stripe.webhook.secret</code>.</li>
+      <li>El <code>StripeWebhookController</code> llama a <code>CompraService.crearCompra()</code> que crea la entidad <code>Compra</code> en estado PAGADO y la entidad <code>Envio</code> con el código QR.</li>
+      <li>El producto pasa a estado RESERVADO. Se envían notificaciones in-app y por email al comprador y al vendedor.</li>
+      <li>El vendedor sube el número de seguimiento en <code>PATCH /envio/{id}/tracking</code>. El estado del envío pasa a EN_TRANSITO.</li>
+      <li>El comprador confirma la recepción en <code>PATCH /compra/{id}/confirmar-entrega</code>. La <code>Compra</code> pasa a COMPLETADA y el pago se libera. El producto pasa a VENDIDO.</li>
+    </ol>
+
+    <h4 class="group-title">Flujo de mensajería en tiempo real con WebSocket STOMP</h4>
+    <ol>
+      <li>El frontend crea una conexión WebSocket en el endpoint <code>/ws</code> usando SockJS como transporte. Se pasa el JWT en la query string o cabecera de la sesión.</li>
+      <li>El <code>WebSocketAuthInterceptor</code> de Spring intercepta el mensaje CONNECT del protocolo STOMP, extrae y valida el JWT, y registra el usuario autenticado en el contexto de la sesión WebSocket.</li>
+      <li>El cliente se suscribe al canal personal <code>/user/{username}/queue/messages</code> para recibir sus mensajes entrantes.</li>
+      <li>Para enviar un mensaje, el cliente publica en <code>/app/chat</code> con el payload: <code>{roomId, texto, tipo, receptorId, productoId (opcional)}</code>.</li>
+      <li>El <code>ChatWebSocketController</code> persiste el <code>ChatMensaje</code> en la BD, detecta si el receptor está conectado y envía el mensaje a su canal personal mediante <code>SimpMessagingTemplate</code>.</li>
+      <li>Si el receptor no está conectado, el mensaje queda en BD con <code>recibido = false</code>. Cuando se conecte, el cliente solicita el historial de mensajes no recibidos vía <code>GET /chat/historial/{roomId}</code> y los marca como recibidos.</li>
+    </ol>
+
+    <h4 class="group-title">Ciclo de vida de anuncios con caducidad automática</h4>
+    <ol>
+      <li>Al publicar un producto, oferta o vehículo, el hook <code>@PrePersist</code> calcula automáticamente la <code>fechaCaducidad</code> = <code>fechaPublicacion + 180 días</code>.</li>
+      <li>El scheduler <code>AnuncioCaducidadService</code> comprueba periódicamente qué anuncios están próximos a caducar.</li>
+      <li>En los hitos de 30, 14, 7 y 1 días restantes, envía una notificación in-app al vendedor y registra el hito en <code>ultimoAvisoCaducidadDias</code> para no duplicar el aviso.</li>
+      <li>Cuando la <code>fechaCaducidad</code> es alcanzada, el estado del anuncio cambia automáticamente a <code>EXPIRADO</code>.</li>
+      <li>El anuncio expirado permanece visible durante 14 días adicionales (mostrándose como expirado), tras los cuales se oculta del catálogo público. El vendedor puede reactivar el anuncio (<code>POST /producto/{id}/renovar</code>) para reiniciar el contador de 180 días.</li>
+    </ol>
   </section>
 
   <section id="pruebas">
@@ -89,23 +856,389 @@ import DocLayout from "../layouts/DocLayout.astro";
 
   <section id="conclusiones">
     <h2>Conclusiones y Posibles Mejoras</h2>
-    <p>Resumen final del proyecto y líneas de trabajo futuras.</p>
-    <div class="placeholder-box">Contenido pendiente de redactar...</div>
+    <p class="lead">
+      Esta sección recoge una valoración objetiva del trabajo realizado, analizando qué objetivos se han cumplido respecto a los planificados, las dificultades encontradas y las líneas de mejora concretas identificadas para versiones futuras.
+    </p>
+
+    <h3 class="subsection-title">Objetivos Cumplidos</h3>
+    <p>
+      El proyecto Nexus ha alcanzado en gran medida los objetivos fijados en la fase de planificación, logrando una plataforma funcional y desplegada en producción con las siguientes capacidades operativas:
+    </p>
+    <ul>
+      <li><strong>Marketplace completo:</strong> Sistema de publicación, búsqueda y compraventa de productos de segunda mano, vehículos y ofertas comunitarias, con ciclo de vida completo de los anuncios (publicación, caducidad a 180 días, renovación, avisos proactivos) y gestión de hasta 6 imágenes por anuncio en Cloudinary.</li>
+      <li><strong>Sistema de pagos funcional:</strong> Integración completa con Stripe en modo test, incluyendo Payment Intents con modelo escrow, Stripe Checkout Sessions para contratos de publicidad empresarial y recepción de webhooks con verificación de firma HMAC.</li>
+      <li><strong>Autenticación multicapa robusta:</strong> Sistema completo con JWT (con invalidación global via jwtVersion), BCrypt, Google OAuth 2.0, reCAPTCHA v3, verificación de email por OTP, 2FA TOTP (con código QR generado por ZXing) y 2FA por email, sin dependencias de sesiones en servidor.</li>
+      <li><strong>Chat en tiempo real:</strong> Mensajería instantanea mediante WebSocket STOMP con soporte para texto, imágenes, audio, vídeo, GIFs y propuestas de precio. Autenticación del canal WebSocket con el mismo JWT de usuario.</li>
+      <li><strong>Panel de administración completo:</strong> Aplicación Angular separada con 19 módulos de gestión, cubriendo moderación, estadísticas, audit log, contratos, cupones, newsletter, gestión de fraude y sanciones.</li>
+      <li><strong>Multiplataforma real:</strong> La aplicación web funciona como Progressive Web App y ha sido compilada como app nativa Android mediante Capacitor 8 con acceso a GPS y cámara.</li>
+      <li><strong>Cumplimiento RGPD:</strong> Borrado suave (soft-delete), double opt-in en newsletter con registro de IP y versión de política, consentimiento explícito de términos y tokens de baja únicos por suscriptor.</li>
+      <li><strong>Asistente IA de soporte:</strong> Chatbot de soporte integrado con Google Gemini 1.5-flash y Groq (LLaMA 3.3-70b) como alternativa, con escalación automática por email cuando el agente no puede resolver la consulta.</li>
+      <li><strong>Infraestructura cloud completa:</strong> Backend en Render (Docker), tres frontends en Vercel CDN, base de datos PostgreSQL gestionada, medios en Cloudinary. Despliegue continuo por push a rama principal.</li>
+    </ul>
+
+    <h3 class="subsection-title">Dificultades Encontradas</h3>
+
+    <div class="req-block">
+      <p class="req-id">D-01</p>
+      <h5>Gestión de herencia JPA con Spring Security y dependencias circulares</h5>
+      <p>La estrategia <code>InheritanceType.JOINED</code> requirió ajustes finos en el <code>UserDetailsService</code> para cargar el actor correcto según su subtipo, y en la generación de JWT para asignar el rol adecuado. La resolución de dependencias circulares entre <code>JWTUtils</code> y los servicios de usuarios/empresas/admins requirió el uso generalizado de la anotación <code>@Lazy</code> en las inyecciones de dependencias para romper los ciclos detectados por el contenedor IoC de Spring en el arranque.</p>
+    </div>
+
+    <div class="req-block">
+      <p class="req-id">D-02</p>
+      <h5>Configuración de CORS y WebSocket en despliegue multidominios</h5>
+      <p>La separación de las aplicaciones en dominios diferentes (API en Render, frontends en Vercel) generó problemas complejos de CORS, especialmente para las conexiones WebSocket STOMP cuyo handshake inicial es HTTP. Fue necesario configurar los orígenes permitidos dinámicamente desde <code>application.properties</code> y validar cuidadosamente el interceptor WebSocket, que tiene un proceso de autenticación diferente al filtro JWT estándar de HTTP.</p>
+    </div>
+
+    <div class="req-block">
+      <p class="req-id">D-03</p>
+      <h5>Optimización de memoria para el plan gratuito de Render</h5>
+      <p>El plan gratuito de Render impone 0.1 CPU y 512 MB de RAM. Las primeras versiones del backend con configuración por defecto de Tomcat y HikariCP causaban errores <code>OutOfMemoryError</code> bajo carga. Se realizó un proceso iterativo de ajuste de todos los parámetros de pools, threads, caché JVM y serialización Jackson hasta alcanzar una configuración estable. La principal limitación detectada es que el plan gratuito provoca que el servicio entre en hibernación tras períodos de inactividad, causando tiempos de arranque de hasta 30-60 segundos en la primera petición.</p>
+    </div>
+
+    <div class="req-block">
+      <p class="req-id">D-04</p>
+      <h5>Integración de Stripe Webhooks en desarrollo local</h5>
+      <p>Los webhooks de Stripe requieren una URL pública accesible. Durante el desarrollo local fue necesario usar Stripe CLI (<code>stripe listen --forward-to localhost:8080/stripe/webhook</code>) para reenviar los eventos al servidor local. La gestión del secreto de webhook diferenciado entre entornos de desarrollo y producción requirió cuidado especial para no exponer credenciales en el repositorio Git.</p>
+    </div>
+
+    <div class="req-block">
+      <p class="req-id">D-05</p>
+      <h5>Serialización JSON con entidades JPA y bucles infinitos</h5>
+      <p>Las relaciones bidireccionales entre entidades JPA (Producto &#x2194; Actor, Oferta &#x2194; Categoria, Compra &#x2194; Producto &#x2194; Actor) causaban bucles infinitos de serialización JSON que resultaban en <code>StackOverflowError</code>. La solución requirió el uso estratégico de <code>@JsonIgnoreProperties</code> con listas explícitas de campos a ignorar en cada dirección de la relación, <code>@JsonIgnore</code> en campos sensibles, y la inclusión de <code>jackson-datatype-hibernate6</code> para manejar correctamente los proxies de Hibernate.</p>
+    </div>
+
+    <div class="req-block">
+      <p class="req-id">D-06</p>
+      <h5>Compatibilidad de versiones en el ecosistema Angular moderno</h5>
+      <p>Angular 21 con Standalone Components es una arquitectura relativamente nueva que presenta incompatibilidades con algunas librerías de terceros diseñadas para NgModules. La librería <code>ng-recaptcha</code> requirió overrides en <code>package.json</code> para forzar la compatibilidad con Angular 21. La integración de Ionic 8 con Capacitor 8 también requirió configuración adicional del <code>capacitor.config.ts</code> y del servidor de desarrollo para el flujo de compilación nativa Android.</p>
+    </div>
+
+    <h3 class="subsection-title">Líneas de Mejora Futuras</h3>
+
+    <table class="req-table">
+      <thead>
+        <tr>
+          <th>Mejora</th>
+          <th>Justificación técnica</th>
+          <th>Prioridad</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Publicación en App Store (iOS) y Google Play</strong></td>
+          <td>La app está compilada con Capacitor para Android pero no publicada en las tiendas. Completar el proceso de firma de APK/IPA y subir a Google Play y App Store ampliaría significativamente el alcance de usuarios.</td>
+          <td>Alta</td>
+        </tr>
+        <tr>
+          <td><strong>Motor de búsqueda avanzado (Elasticsearch)</strong></td>
+          <td>La búsqueda actual usa consultas JPA con filtros dinámicos. Integrar Elasticsearch permitiría búsqueda de texto completo con relevancia ponderada, autocompletado en tiempo real, facetas dinámicas y tolerancia a errores tipográficos (fuzzy search), mejorando radicalmente la experiencia de búsqueda.</td>
+          <td>Alta</td>
+        </tr>
+        <tr>
+          <td><strong>Activación de pagos reales con Stripe Live</strong></td>
+          <td>Actualmente los pagos están en modo Test. Activar el modo Live requiere completar el proceso de verificación KYC de Stripe y configurar transferencias al vendedor vía Stripe Connect para el modelo escrow real.</td>
+          <td>Alta</td>
+        </tr>
+        <tr>
+          <td><strong>Notificaciones push nativas (FCM)</strong></td>
+          <td>Las notificaciones actuales son solo in-app. Integrar Firebase Cloud Messaging (FCM) con el plugin <code>@capacitor/push-notifications</code> permitiría notificaciones push nativas en Android e iOS aunque el usuario no tenga la app abierta.</td>
+          <td>Media</td>
+        </tr>
+        <tr>
+          <td><strong>Integración real con transportistas (Correos, MRW)</strong></td>
+          <td>El módulo de envíos está implementado como stub con estructura preparada (<code>CarrierApiService</code>). Integrar APIs reales de Correos o MRW permitiría generar etiquetas de envío automáticas y hacer seguimiento en tiempo real del paquete.</td>
+          <td>Media</td>
+        </tr>
+        <tr>
+          <td><strong>Sistema de recomendaciones personalizado</strong></td>
+          <td>Implementar un motor de recomendaciones basado en el historial de búsquedas, favoritos y compras del usuario (collaborative filtering o content-based filtering) mejoraría la tasa de descubrimiento de productos relevantes y la tasa de conversión.</td>
+          <td>Media</td>
+        </tr>
+        <tr>
+          <td><strong>Migración a infraestructura escalable</strong></td>
+          <td>El plan gratuito de Render tiene limitaciones críticas (hibernación por inactividad, 0.1 CPU). Migrar a un plan de pago con instancias persistentes o a una infraestructura Kubernetes permitiría escalar horizontalmente y eliminar los tiempos de arranque en frío.</td>
+          <td>Media</td>
+        </tr>
+        <tr>
+          <td><strong>Moderación automática con IA (visión y NLP)</strong></td>
+          <td>Implementar detección automática de contenido inapropiado en imágenes (Google Vision API o similar) y de spam/fraude en descripciones de productos (NLP), reduciendo la carga del equipo de moderación y mejorando la velocidad de detección de contenido dañino.</td>
+          <td>Baja</td>
+        </tr>
+        <tr>
+          <td><strong>Sistema de pujas y subastas</strong></td>
+          <td>La entidad <code>Producto</code> ya define el tipo de oferta <code>SUBASTA</code> en el enum <code>TipoOferta</code>, pero el flujo de subastas con pujas temporizadas no ha sido implementado. Implementarlo añadiría un mecanismo de precio competitivo para artículos de alto valor.</td>
+          <td>Baja</td>
+        </tr>
+        <tr>
+          <td><strong>Programa de afiliados y códigos de referido</strong></td>
+          <td>Implementar un sistema de códigos de referido que recompense a usuarios que inviten a nuevos registros con créditos o descuentos, acelerando el crecimiento orgánico de la plataforma mediante incentivos económicos.</td>
+          <td>Baja</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 class="subsection-title">Reflexión Final</h3>
+    <p>
+      Nexus ha demostrado ser técnicamente viable construir en el marco de un proyecto de formación (noviembre 2025 – mayo 2026) una plataforma de comercio digital con un nivel de complejidad técnica comparable a productos comerciales reales: autenticación multicapa, pagos con Stripe, WebSocket en tiempo real, integración con IAs generativas, RGPD, despliegue cloud y app móvil nativa.
+    </p>
+    <p>
+      La elección de un stack tecnológico maduro y bien documentado (Spring Boot + Angular + PostgreSQL) facilitó la resolución de problemas complejos gracias a la amplia documentación oficial, comunidad activa y ecosistema de librerías probadas. La arquitectura desacoplada (frontend/backend/admin en repositorios y dominios separados) demostró ser la decisión correcta, aunque añadió complejidad de configuración en CORS y WebSocket.
+    </p>
+    <p>
+      El mayor valor técnico del proyecto reside en la integración coherente de múltiples servicios externos (Stripe, Cloudinary, Google OAuth, reCAPTCHA, IA generativa, Gmail SMTP) en un único sistema cohesionado con una arquitectura extensible que permite sustituir o actualizar cada componente de forma independiente sin afectar al resto del sistema.
+    </p>
   </section>
 
   <section id="bibliografia">
     <h2>Bibliografía</h2>
-    <p>Fuentes de información, libros, artículos y recursos web consultados.</p>
-    <div class="placeholder-box">Contenido pendiente de redactar...</div>
+    <p class="lead">Documentación oficial, especificaciones y recursos técnicos consultados durante el desarrollo del proyecto Nexus, ordenados por categoría tecnológica.</p>
+
+    <h3 class="subsection-title">Backend — Java y Spring Ecosystem</h3>
+    <ul class="bibliography-list">
+      <li>VMware Tanzu. (2024). <em>Spring Boot Reference Documentation 3.5</em>. Spring Framework. <a href="https://docs.spring.io/spring-boot/docs/3.5.x/reference/html/" target="_blank" rel="noopener">https://docs.spring.io/spring-boot/docs/3.5.x/reference/html/</a></li>
+      <li>VMware Tanzu. (2024). <em>Spring Security Reference Documentation</em>. Spring Framework. <a href="https://docs.spring.io/spring-security/reference/" target="_blank" rel="noopener">https://docs.spring.io/spring-security/reference/</a></li>
+      <li>VMware Tanzu. (2024). <em>Spring Data JPA Reference Documentation</em>. Spring Framework. <a href="https://docs.spring.io/spring-data/jpa/docs/current/reference/html/" target="_blank" rel="noopener">https://docs.spring.io/spring-data/jpa/docs/current/reference/html/</a></li>
+      <li>VMware Tanzu. (2024). <em>Spring WebSocket — WebSocket Support</em>. Spring Framework. <a href="https://docs.spring.io/spring-framework/reference/web/websocket.html" target="_blank" rel="noopener">https://docs.spring.io/spring-framework/reference/web/websocket.html</a></li>
+      <li>Oracle Corporation. (2024). <em>Java 17 (LTS) API Specification</em>. OpenJDK. <a href="https://docs.oracle.com/en/java/javase/17/" target="_blank" rel="noopener">https://docs.oracle.com/en/java/javase/17/</a></li>
+      <li>Apache Software Foundation. (2024). <em>Apache Maven Documentation</em>. Maven. <a href="https://maven.apache.org/guides/" target="_blank" rel="noopener">https://maven.apache.org/guides/</a></li>
+      <li>Red Hat. (2024). <em>Hibernate ORM Documentation 6.x</em>. Hibernate. <a href="https://docs.jboss.org/hibernate/orm/6.4/userguide/html_single/Hibernate_User_Guide.html" target="_blank" rel="noopener">https://docs.jboss.org/hibernate/orm/6.4/userguide/html_single/Hibernate_User_Guide.html</a></li>
+      <li>Brettwooldridge. (2024). <em>HikariCP — A solid, high-performance, JDBC connection pool at last</em>. GitHub. <a href="https://github.com/brettwooldridge/HikariCP" target="_blank" rel="noopener">https://github.com/brettwooldridge/HikariCP</a></li>
+      <li>FasterXML. (2024). <em>Jackson Databind — General data-binding package for Jackson</em>. GitHub. <a href="https://github.com/FasterXML/jackson-databind" target="_blank" rel="noopener">https://github.com/FasterXML/jackson-databind</a></li>
+    </ul>
+
+    <h3 class="subsection-title">Seguridad y Autenticación</h3>
+    <ul class="bibliography-list">
+      <li>JSON Web Token Working Group. (2015). <em>RFC 7519 — JSON Web Token (JWT)</em>. Internet Engineering Task Force (IETF). <a href="https://tools.ietf.org/html/rfc7519" target="_blank" rel="noopener">https://tools.ietf.org/html/rfc7519</a></li>
+      <li>jwtk. (2024). <em>JJWT — Java JWT: JSON Web Token for Java and Android 0.11.5</em>. GitHub. <a href="https://github.com/jwtk/jjwt" target="_blank" rel="noopener">https://github.com/jwtk/jjwt</a></li>
+      <li>Google LLC. (2024). <em>Google Identity Services — Sign In With Google</em>. Google Developers. <a href="https://developers.google.com/identity/gsi/web/guides/overview" target="_blank" rel="noopener">https://developers.google.com/identity/gsi/web/guides/overview</a></li>
+      <li>Google LLC. (2024). <em>reCAPTCHA v3 Developer Guide</em>. Google Developers. <a href="https://developers.google.com/recaptcha/docs/v3" target="_blank" rel="noopener">https://developers.google.com/recaptcha/docs/v3</a></li>
+      <li>samdjstevens. (2024). <em>java-totp: A library for generating and validating TOTP codes 1.7.1</em>. GitHub. <a href="https://github.com/samdjstevens/java-totp" target="_blank" rel="noopener">https://github.com/samdjstevens/java-totp</a></li>
+      <li>Internet Engineering Task Force. (2011). <em>RFC 6238 — TOTP: Time-Based One-Time Password Algorithm</em>. IETF. <a href="https://tools.ietf.org/html/rfc6238" target="_blank" rel="noopener">https://tools.ietf.org/html/rfc6238</a></li>
+      <li>Google. (2024). <em>ZXing (“Zebra Crossing”) barcode image processing library 3.5.3</em>. GitHub. <a href="https://github.com/zxing/zxing" target="_blank" rel="noopener">https://github.com/zxing/zxing</a></li>
+    </ul>
+
+    <h3 class="subsection-title">Base de Datos</h3>
+    <ul class="bibliography-list">
+      <li>The PostgreSQL Global Development Group. (2024). <em>PostgreSQL 16 Documentation</em>. PostgreSQL. <a href="https://www.postgresql.org/docs/16/" target="_blank" rel="noopener">https://www.postgresql.org/docs/16/</a></li>
+      <li>Jakarta EE Working Group. (2023). <em>Jakarta Persistence 3.1 Specification</em>. Eclipse Foundation. <a href="https://jakarta.ee/specifications/persistence/3.1/" target="_blank" rel="noopener">https://jakarta.ee/specifications/persistence/3.1/</a></li>
+    </ul>
+
+    <h3 class="subsection-title">Frontend — Angular y Ecosistema</h3>
+    <ul class="bibliography-list">
+      <li>Google LLC. (2025). <em>Angular Documentation — v21</em>. Angular. <a href="https://angular.dev/" target="_blank" rel="noopener">https://angular.dev/</a></li>
+      <li>Google LLC. (2025). <em>Angular — Standalone Components Guide</em>. Angular. <a href="https://angular.dev/guide/components" target="_blank" rel="noopener">https://angular.dev/guide/components</a></li>
+      <li>Microsoft Corporation. (2025). <em>TypeScript 5.9 Documentation</em>. TypeScript. <a href="https://www.typescriptlang.org/docs/" target="_blank" rel="noopener">https://www.typescriptlang.org/docs/</a></li>
+      <li>Ionic. (2025). <em>Ionic Framework v8 Documentation</em>. Ionic. <a href="https://ionicframework.com/docs" target="_blank" rel="noopener">https://ionicframework.com/docs</a></li>
+      <li>Ionic. (2025). <em>Capacitor Documentation 8.x</em>. Capacitor. <a href="https://capacitorjs.com/docs" target="_blank" rel="noopener">https://capacitorjs.com/docs</a></li>
+      <li>ReactiveX. (2024). <em>RxJS Documentation 7.8</em>. ReactiveX. <a href="https://rxjs.dev/" target="_blank" rel="noopener">https://rxjs.dev/</a></li>
+      <li>@stomp/stompjs. (2024). <em>STOMP.js — STOMP client for Web browsers and node.js applications 7.3</em>. GitHub. <a href="https://stomp-js.github.io/guide/stompjs/" target="_blank" rel="noopener">https://stomp-js.github.io/guide/stompjs/</a></li>
+      <li>SockJS. (2024). <em>SockJS-client — WebSocket emulation library 1.6.1</em>. GitHub. <a href="https://github.com/sockjs/sockjs-client" target="_blank" rel="noopener">https://github.com/sockjs/sockjs-client</a></li>
+      <li>Swiper. (2025). <em>Swiper.js — The Most Modern Mobile Touch Slider 12.x</em>. Swiper. <a href="https://swiperjs.com/" target="_blank" rel="noopener">https://swiperjs.com/</a></li>
+    </ul>
+
+    <h3 class="subsection-title">Pagos e Infraestructura de Medios</h3>
+    <ul class="bibliography-list">
+      <li>Stripe, Inc. (2025). <em>Stripe Developer Documentation — Payment Intents API</em>. Stripe. <a href="https://stripe.com/docs/payments/payment-intents" target="_blank" rel="noopener">https://stripe.com/docs/payments/payment-intents</a></li>
+      <li>Stripe, Inc. (2025). <em>Stripe Checkout — Accept payments with a Stripe-hosted page</em>. Stripe. <a href="https://stripe.com/docs/payments/checkout" target="_blank" rel="noopener">https://stripe.com/docs/payments/checkout</a></li>
+      <li>Stripe, Inc. (2025). <em>Stripe Java SDK 24.1</em>. GitHub. <a href="https://github.com/stripe/stripe-java" target="_blank" rel="noopener">https://github.com/stripe/stripe-java</a></li>
+      <li>Cloudinary Ltd. (2024). <em>Cloudinary Java SDK Documentation 1.36</em>. Cloudinary. <a href="https://cloudinary.com/documentation/java_integration" target="_blank" rel="noopener">https://cloudinary.com/documentation/java_integration</a></li>
+    </ul>
+
+    <h3 class="subsection-title">Inteligencia Artificial y APIs Externas</h3>
+    <ul class="bibliography-list">
+      <li>Google LLC. (2024). <em>Gemini API Documentation — Gemini 1.5 Flash</em>. Google AI for Developers. <a href="https://ai.google.dev/gemini-api/docs" target="_blank" rel="noopener">https://ai.google.dev/gemini-api/docs</a></li>
+      <li>Groq, Inc. (2024). <em>Groq API Documentation — LLaMA 3.3 70B Versatile</em>. Groq. <a href="https://console.groq.com/docs/openai" target="_blank" rel="noopener">https://console.groq.com/docs/openai</a></li>
+    </ul>
+
+    <h3 class="subsection-title">Infraestructura y Despliegue</h3>
+    <ul class="bibliography-list">
+      <li>Render Inc. (2024). <em>Render Documentation — Deploying Docker Services</em>. Render. <a href="https://render.com/docs/docker" target="_blank" rel="noopener">https://render.com/docs/docker</a></li>
+      <li>Vercel Inc. (2025). <em>Vercel Platform Documentation</em>. Vercel. <a href="https://vercel.com/docs" target="_blank" rel="noopener">https://vercel.com/docs</a></li>
+      <li>Docker Inc. (2024). <em>Dockerfile Reference</em>. Docker. <a href="https://docs.docker.com/engine/reference/builder/" target="_blank" rel="noopener">https://docs.docker.com/engine/reference/builder/</a></li>
+      <li>Astro Build Team. (2025). <em>Astro Documentation</em>. Astro. <a href="https://docs.astro.build/" target="_blank" rel="noopener">https://docs.astro.build/</a></li>
+    </ul>
+
+    <h3 class="subsection-title">Documentación API y estándares</h3>
+    <ul class="bibliography-list">
+      <li>Swagger.io / OpenAPI Initiative. (2024). <em>OpenAPI Specification 3.1</em>. OpenAPI Initiative. <a href="https://spec.openapis.org/oas/v3.1.0" target="_blank" rel="noopener">https://spec.openapis.org/oas/v3.1.0</a></li>
+      <li>springdoc. (2024). <em>SpringDoc OpenAPI — Automating Spring Boot API Documentation 2.6.0</em>. SpringDoc. <a href="https://springdoc.org/" target="_blank" rel="noopener">https://springdoc.org/</a></li>
+      <li>STOMP Specification Team. (2012). <em>STOMP Protocol Specification 1.2</em>. STOMP. <a href="https://stomp.github.io/stomp-specification-1.2.html" target="_blank" rel="noopener">https://stomp.github.io/stomp-specification-1.2.html</a></li>
+    </ul>
+
+    <h3 class="subsection-title">Normativa y Cumplimiento</h3>
+    <ul class="bibliography-list">
+      <li>Parlamento Europeo y Consejo de la UE. (2016). <em>Reglamento (UE) 2016/679 del Parlamento Europeo — Reglamento General de Protección de Datos (RGPD)</em>. Diario Oficial de la Unión Europea. <a href="https://eur-lex.europa.eu/legal-content/ES/TXT/?uri=celex%3A32016R0679" target="_blank" rel="noopener">https://eur-lex.europa.eu/legal-content/ES/TXT/?uri=celex%3A32016R0679</a></li>
+      <li>Agencia Española de Protección de Datos. (2024). <em>Guía práctica para el cumplimiento del RGPD en aplicaciones web</em>. AEPD. <a href="https://www.aepd.es/" target="_blank" rel="noopener">https://www.aepd.es/</a></li>
+    </ul>
   </section>
 
   <section id="anexos">
     <h2>Anexos</h2>
-    <p>
-      Documentación complementaria, manuales de usuario o capturas de pantalla
-      adicionales.
-    </p>
-    <div class="placeholder-box">Contenido pendiente de redactar...</div>
+    <p class="lead">Documentación complementaria que incluye el glosario de términos técnicos, la tabla de endpoints de la API y el resumen del modelo de base de datos.</p>
+
+    <h3 class="subsection-title">Anexo A — Glosario de Términos Técnicos</h3>
+
+    <table class="req-table">
+      <thead>
+        <tr>
+          <th>Término</th>
+          <th>Definición en el contexto de Nexus</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Actor</strong></td><td>Clase base abstracta JPA que representa a cualquier entidad con cuenta en el sistema. Todos los tipos de usuario (Usuario, Empresa, Admin) heredan de Actor.</td></tr>
+        <tr><td><strong>API REST</strong></td><td>Interfaz de programación de aplicaciones basada en el protocolo HTTP con arquitectura REST. El backend expone su funcionalidad mediante API REST JSON.</td></tr>
+        <tr><td><strong>Audit Log</strong></td><td>Registro inmutable de acciones administrativas en el sistema. Cada entrada almacena qué administrador realizó qué acción y cuándo.</td></tr>
+        <tr><td><strong>Badge</strong></td><td>Etiqueta visual calculada automáticamente para las ofertas del chollometro: NUEVA, CHOLLAZO, PORCENTAJE, GRATUITA o EXPIRA_HOY.</td></tr>
+        <tr><td><strong>BCrypt</strong></td><td>Algoritmo de hashing adaptativo usado para almacenar las contraseñas de los usuarios. Nunca se almacena la contraseña en texto plano.</td></tr>
+        <tr><td><strong>Bearer Token</strong></td><td>Token JWT enviado en la cabecera HTTP <code>Authorization: Bearer &lt;token&gt;</code> para autenticar peticiones al backend.</td></tr>
+        <tr><td><strong>Capacitor</strong></td><td>Librería de Ionic que compila una aplicación web Angular como app nativa para Android e iOS, con acceso a APIs del dispositivo (cámara, GPS, etc.).</td></tr>
+        <tr><td><strong>Chollometro</strong></td><td>Sección de Nexus donde los usuarios publican y votan ofertas/chollos de productos nuevos en tiendas online y físicas.</td></tr>
+        <tr><td><strong>Cloudinary</strong></td><td>Servicio cloud de almacenamiento, gestión y transformación de imágenes y vídeos. Todas las imágenes de Nexus se almacenan y sirven desde Cloudinary.</td></tr>
+        <tr><td><strong>CORS</strong></td><td>Cross-Origin Resource Sharing. Mecanismo HTTP que controla qué dominios externos pueden realizar peticiones al backend de Nexus.</td></tr>
+        <tr><td><strong>Cupón</strong></td><td>Código de descuento creado por el administrador y aplicable en el proceso de checkout. Puede ser de tipo PORCENTAJE o FIJO con restricciones de uso.</td></tr>
+        <tr><td><strong>DDL-auto</strong></td><td>Propiedad de Hibernate que controla cómo se gestiona el esquema de BD. En Nexus usa <code>create</code> en desarrollo (recrea el esquema en cada arranque).</td></tr>
+        <tr><td><strong>Double opt-in</strong></td><td>Flujo de suscripción al newsletter que requiere confirmación por email. Requerido por el RGPD para acreditar el consentimiento explícito.</td></tr>
+        <tr><td><strong>Drip</strong></td><td>Voto negativo en el sistema de votación de Nexus. Un Drip indica que la oferta no parece válida o interesante.</td></tr>
+        <tr><td><strong>Escrow</strong></td><td>Modelo de pago donde el dinero del comprador queda retenido por un tercero (Stripe) hasta que se confirma la correcta recepción del producto.</td></tr>
+        <tr><td><strong>FCM</strong></td><td>Firebase Cloud Messaging. Servicio de notificaciones push de Google. Aún no implementado en Nexus (línea de mejora futura).</td></tr>
+        <tr><td><strong>Guard (Angular)</strong></td><td>Servicio Angular que controla el acceso a rutas. <code>authGuard</code> protege rutas privadas; <code>guestGuard</code> protege rutas de no-autenticados.</td></tr>
+        <tr><td><strong>HikariCP</strong></td><td>Pool de conexiones JDBC de alto rendimiento usado por Spring Boot para gestionar el pool de conexiones a PostgreSQL.</td></tr>
+        <tr><td><strong>Interceptor (Angular)</strong></td><td>Servicio Angular que intercepta y modifica peticiones/respuestas HTTP globalmente. Nexus usa <code>JwtInterceptor</code> y <code>ErrorInterceptor</code>.</td></tr>
+        <tr><td><strong>IoC / DI</strong></td><td>Inversión de Control / Inyección de Dependencias. Patrón central de Spring que gestiona la creación y ciclo de vida de los beans.</td></tr>
+        <tr><td><strong>Ionic</strong></td><td>Framework UI para aplicaciones híbridas móviles. Proporciona componentes nativos (botones, listas, tarjetas) adaptados para dispositivos iOS y Android.</td></tr>
+        <tr><td><strong>JPA</strong></td><td>Jakarta Persistence API. Estándar Java para mapeo objeto-relacional (ORM). Nexus usa la implementación de Hibernate.</td></tr>
+        <tr><td><strong>JWT</strong></td><td>JSON Web Token. Estándar (RFC 7519) para tokens de autenticación compactos y firmados. En Nexus se firman con HMAC-SHA256.</td></tr>
+        <tr><td><strong>jwtVersion</strong></td><td>Campo entero en la entidad Actor que permite invalidar globalmente todos los JWT de un usuario al incrementarse.</td></tr>
+        <tr><td><strong>Lazy Loading (Angular)</strong></td><td>Técnica de carga bajo demanda de módulos/componentes Angular. Nexus usa lazy loading total en todas las rutas para reducir el bundle inicial.</td></tr>
+        <tr><td><strong>Lazy Loading (JPA)</strong></td><td>Carga diferida de relaciones JPA. Las entidades con <code>FetchType.LAZY</code> solo se cargan de la BD cuando se accede explícitamente a ellas.</td></tr>
+        <tr><td><strong>Marketplace</strong></td><td>Sección de Nexus donde los usuarios pueden publicar y comprar productos de segunda mano entre particulares.</td></tr>
+        <tr><td><strong>MVP</strong></td><td>Minimum Viable Product (Producto Mínimo Viable). Primera versión funcional del producto con las características esenciales para validar el mercado.</td></tr>
+        <tr><td><strong>OAuth 2.0</strong></td><td>Estándar de autorización que permite a usuarios autenticarse con cuentas de terceros (en Nexus, Google) sin compartir su contraseña.</td></tr>
+        <tr><td><strong>OpenAPI / Swagger</strong></td><td>Especificación estándar para documentar APIs REST. Nexus genera automáticamente la documentación con SpringDoc OpenAPI 2.6.0.</td></tr>
+        <tr><td><strong>OTP</strong></td><td>One-Time Password. Código de un solo uso de 6 dígitos. Nexus lo usa para verificación de email (30 min) y 2FA por email (10 min).</td></tr>
+        <tr><td><strong>Payment Intent</strong></td><td>Objeto de Stripe que representa una intención de cobro. Permite el modelo escrow y el flujo de confirmación en dos pasos.</td></tr>
+        <tr><td><strong>RGPD</strong></td><td>Reglamento General de Protección de Datos (EU 2016/679). Nexus implementa borrado suave, double opt-in y registro de consentimientos para cumplirlo.</td></tr>
+        <tr><td><strong>ROLE_ADMIN</strong></td><td>Rol de Spring Security asignado a los administradores. Da acceso exclusivo al panel de administración (<code>/api/admin/**</code>).</td></tr>
+        <tr><td><strong>ROLE_EMPRESA</strong></td><td>Rol de Spring Security asignado a las empresas. Extiende ROLE_USER con acceso a contratos publicitarios y Stripe Checkout.</td></tr>
+        <tr><td><strong>ROLE_USER</strong></td><td>Rol de Spring Security asignado a los usuarios particulares registrados. Es el rol base del sistema.</td></tr>
+        <tr><td><strong>roomId</strong></td><td>Identificador único de una conversación de chat entre dos usuarios. Se calcula de forma determinista a partir de los IDs de los participantes.</td></tr>
+        <tr><td><strong>Scheduler</strong></td><td>Tarea programada de Spring (<code>@Scheduled</code>) que se ejecuta automáticamente en intervalos configurados. En Nexus gestiona caducidad de anuncios y newsletter.</td></tr>
+        <tr><td><strong>Soft Delete</strong></td><td>Borrado lógico. En lugar de eliminar físicamente un registro de la BD, se marca como eliminado (<code>cuentaEliminada = true</code>). Cumple el RGPD.</td></tr>
+        <tr><td><strong>Spark</strong></td><td>Voto positivo en el sistema de votación de Nexus. Un Spark indica que la oferta es interesante y válida.</td></tr>
+        <tr><td><strong>sparkScore</strong></td><td>Puntuación neta de una oferta = sparkCount - dripCount. Determina el orden de aparición en el feed del chollometro.</td></tr>
+        <tr><td><strong>Standalone Component</strong></td><td>Componente Angular que se declara con <code>standalone: true</code> e importa sus dependencias directamente, sin necesidad de NgModule.</td></tr>
+        <tr><td><strong>STOMP</strong></td><td>Simple Text Orientated Messaging Protocol. Protocolo de mensajería sobre WebSocket usado en Nexus para el chat en tiempo real.</td></tr>
+        <tr><td><strong>Stripe</strong></td><td>Plataforma de pagos online. Nexus la usa para Payment Intents (compras) y Stripe Checkout (contratos de publicidad).</td></tr>
+        <tr><td><strong>TOTP</strong></td><td>Time-based One-Time Password (RFC 6238). Código de 6 dígitos generado por una app autenticadora (Google Authenticator, Authy) que cambia cada 30 segundos.</td></tr>
+        <tr><td><strong>Webhook</strong></td><td>Mecanismo de notificación HTTP en el que Stripe llama al endpoint de Nexus (<code>/stripe/webhook</code>) para confirmar eventos de pago asíncronos.</td></tr>
+        <tr><td><strong>WebSocket</strong></td><td>Protocolo de comunicación bidireccional y persistente sobre TCP. Nexus lo usa con STOMP para el chat en tiempo real y las notificaciones instantáneas.</td></tr>
+        <tr><td><strong>ZXing</strong></td><td>Librería Java para leer y generar códigos QR y de barras. Nexus la usa para generar los códigos QR de los envíos y para el proceso de vinculación del 2FA TOTP.</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="subsection-title">Anexo B — Tabla de Endpoints Principales de la API</h3>
+    <p>Todos los endpoints están documentados con Swagger UI en <code>/swagger-ui.html</code>. A continuación se listan los más representativos por dominio funcional:</p>
+
+    <table class="req-table">
+      <thead>
+        <tr>
+          <th>Método</th>
+          <th>Endpoint</th>
+          <th>Descripción</th>
+          <th>Autenticación</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td colspan="4" style="background:#f8f9fa;"><strong>Autenticación</strong></td></tr>
+        <tr><td>POST</td><td><code>/api/auth/register</code></td><td>Registro de nuevo usuario con email, username, contraseña y reCAPTCHA</td><td>Pública</td></tr>
+        <tr><td>POST</td><td><code>/api/auth/login</code></td><td>Login con credenciales y reCAPTCHA. Devuelve JWT o flag twoFactorRequired</td><td>Pública</td></tr>
+        <tr><td>POST</td><td><code>/api/auth/google</code></td><td>Login/registro con ID token de Google OAuth 2.0</td><td>Pública</td></tr>
+        <tr><td>POST</td><td><code>/api/auth/verify-2fa</code></td><td>Validación del código 2FA (TOTP o Email OTP). Devuelve JWT si es válido</td><td>Pública</td></tr>
+        <tr><td>POST</td><td><code>/api/auth/verify-email</code></td><td>Verificación del email con el OTP de 6 dígitos enviado al correo</td><td>Pública</td></tr>
+        <tr><td>POST</td><td><code>/api/auth/forgot-password</code></td><td>Solicitar enlace de recuperación de contraseña (válido 15 minutos)</td><td>Pública</td></tr>
+        <tr><td>POST</td><td><code>/api/auth/reset-password</code></td><td>Restablecer contraseña con el token recibido por email</td><td>Pública</td></tr>
+        <tr><td colspan="4" style="background:#f8f9fa;"><strong>Productos</strong></td></tr>
+        <tr><td>GET</td><td><code>/producto/filtrar</code></td><td>Búsqueda paginada con filtros (categoría, precio, condición, ubicación, radio)</td><td>Pública</td></tr>
+        <tr><td>GET</td><td><code>/producto/{id}</code></td><td>Detalle de producto. Comprueba bloqueos si se pasa <code>?usuarioId=</code></td><td>Pública</td></tr>
+        <tr><td>POST</td><td><code>/producto/publicar/{usuarioId}</code></td><td>Publicar nuevo producto con imagen principal y galería (multipart)</td><td>JWT</td></tr>
+        <tr><td>PUT</td><td><code>/producto/{id}</code></td><td>Actualizar datos del producto (multipart con campos opcionales)</td><td>JWT</td></tr>
+        <tr><td>PATCH</td><td><code>/producto/{id}/estado</code></td><td>Cambiar estado: DISPONIBLE, RESERVADO, VENDIDO</td><td>JWT</td></tr>
+        <tr><td>DELETE</td><td><code>/producto/{id}</code></td><td>Eliminar producto y sus imágenes de Cloudinary</td><td>JWT</td></tr>
+        <tr><td>POST</td><td><code>/producto/{id}/renovar</code></td><td>Reactivar anuncio expirado con nueva vigencia de 180 días</td><td>JWT</td></tr>
+        <tr><td colspan="4" style="background:#f8f9fa;"><strong>Ofertas (Chollometro)</strong></td></tr>
+        <tr><td>GET</td><td><code>/oferta</code></td><td>Listado de ofertas activas paginado, ordenado por sparkScore descendente</td><td>Pública</td></tr>
+        <tr><td>POST</td><td><code>/oferta/publicar</code></td><td>Publicar nueva oferta/chollo con imagen (multipart)</td><td>JWT</td></tr>
+        <tr><td>POST</td><td><code>/spark-voto/{ofertaId}/votar</code></td><td>Votar Spark (positivo) o Drip (negativo) en una oferta</td><td>JWT</td></tr>
+        <tr><td colspan="4" style="background:#f8f9fa;"><strong>Vehículos</strong></td></tr>
+        <tr><td>GET</td><td><code>/vehiculo/filtrar</code></td><td>Búsqueda de vehículos con filtros de ficha técnica (combustible, km, año, etc.)</td><td>Pública</td></tr>
+        <tr><td>POST</td><td><code>/vehiculo/publicar/{usuarioId}</code></td><td>Publicar vehículo con ficha técnica e imágenes (multipart)</td><td>JWT</td></tr>
+        <tr><td colspan="4" style="background:#f8f9fa;"><strong>Compras y Pagos</strong></td></tr>
+        <tr><td>POST</td><td><code>/pago/crear-intent</code></td><td>Crear Stripe Payment Intent y devolver clientSecret para el frontend</td><td>JWT</td></tr>
+        <tr><td>POST</td><td><code>/stripe/webhook</code></td><td>Receptor de eventos Stripe con verificación de firma HMAC del payload</td><td>Pública (firma)</td></tr>
+        <tr><td>GET</td><td><code>/compra/mis-compras</code></td><td>Historial de compras del usuario autenticado como comprador</td><td>JWT</td></tr>
+        <tr><td>PATCH</td><td><code>/compra/{id}/confirmar-entrega</code></td><td>El comprador confirma la recepción del producto. Libera el pago escrow.</td><td>JWT</td></tr>
+        <tr><td colspan="4" style="background:#f8f9fa;"><strong>Envíos y Devoluciones</strong></td></tr>
+        <tr><td>GET</td><td><code>/envio/{id}/qr</code></td><td>Obtener el código QR del envío en formato base64</td><td>JWT</td></tr>
+        <tr><td>POST</td><td><code>/devolucion</code></td><td>Solicitar devolución de una compra con motivo y fotos de evidencia</td><td>JWT</td></tr>
+        <tr><td colspan="4" style="background:#f8f9fa;"><strong>Chat y Mensajería</strong></td></tr>
+        <tr><td>GET</td><td><code>/chat/historial/{roomId}</code></td><td>Obtener historial de mensajes de una conversación</td><td>JWT</td></tr>
+        <tr><td>WS</td><td><code>/ws (STOMP /app/chat)</code></td><td>Enviar mensaje en tiempo real por WebSocket STOMP</td><td>JWT (handshake)</td></tr>
+        <tr><td colspan="4" style="background:#f8f9fa;"><strong>Perfiles y Social</strong></td></tr>
+        <tr><td>GET</td><td><code>/usuario/perfil/{username}</code></td><td>Perfil público del usuario (si no está privado)</td><td>Pública</td></tr>
+        <tr><td>POST</td><td><code>/favorito</code></td><td>Añadir producto/oferta a favoritos</td><td>JWT</td></tr>
+        <tr><td>POST</td><td><code>/valoracion</code></td><td>Crear valoración post-compra (una por compra)</td><td>JWT</td></tr>
+        <tr><td>POST</td><td><code>/reporte</code></td><td>Reportar un usuario, producto, oferta u otro contenido</td><td>JWT</td></tr>
+        <tr><td colspan="4" style="background:#f8f9fa;"><strong>Newsletter y Soporte</strong></td></tr>
+        <tr><td>POST</td><td><code>/newsletter/suscribir</code></td><td>Suscribirse al newsletter (inicia el double opt-in)</td><td>Pública</td></tr>
+        <tr><td>GET</td><td><code>/newsletter/confirmar</code></td><td>Confirmar la suscripción con el token del email de confirmación</td><td>Pública</td></tr>
+        <tr><td>POST</td><td><code>/soporte-chat/mensaje</code></td><td>Enviar mensaje al chatbot de soporte IA</td><td>Pública</td></tr>
+        <tr><td colspan="4" style="background:#f8f9fa;"><strong>Administración</strong></td></tr>
+        <tr><td>GET</td><td><code>/api/admin/usuarios</code></td><td>Listado completo de usuarios con filtros y búsqueda</td><td>ROLE_ADMIN</td></tr>
+        <tr><td>POST</td><td><code>/api/admin/sanciones/ban</code></td><td>Aplicar ban permanente a un usuario</td><td>ROLE_ADMIN</td></tr>
+        <tr><td>GET</td><td><code>/api/admin/audit-log</code></td><td>Consultar el registro de auditoría de acciones admin</td><td>ROLE_ADMIN</td></tr>
+        <tr><td>GET</td><td><code>/api/admin/estadisticas</code></td><td>Métricas del sistema: usuarios, ventas, ingresos, productos activos</td><td>ROLE_ADMIN</td></tr>
+        <tr><td>POST</td><td><code>/api/admin/cupones</code></td><td>Crear cupón de descuento</td><td>ROLE_ADMIN</td></tr>
+        <tr><td>GET</td><td><code>/api/admin/reportes</code></td><td>Listado de reportes pendientes de resolución</td><td>ROLE_ADMIN</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="subsection-title">Anexo C — Resumen del Modelo de Base de Datos</h3>
+    <p>Las tablas principales del esquema PostgreSQL generado por Hibernate. Todas las tablas incluyen una columna <code>id</code> (SERIAL PRIMARY KEY) heredada de <code>DomainEntity</code>.</p>
+
+    <table class="req-table">
+      <thead>
+        <tr>
+          <th>Tabla</th>
+          <th>Columnas principales</th>
+          <th>Índices</th>
+          <th>Relaciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><code>actor</code></td><td>username (unique), email (unique), password, nombre, apellidos, telefono, avatar, two_factor_enabled, two_factor_method, two_factor_secret, jwt_version, cuenta_eliminada, cuenta_verificada, baneado, motivo_ban, suspendido_hasta, flag_fraude, stripe_customer_id, onboarding_completado, google_id, reset_token (unique), reset_token_expira, fecha_registro</td><td>username, email, google_id, reset_token</td><td>Tabla padre de usuario, empresa, admin</td></tr>
+        <tr><td><code>usuario</code></td><td>actor_id (PK+FK), biografia, ubicacion, tipo_cuenta, reputacion, total_ventas, es_verificado, cuenta_privada, perfil_publico, mostrar_telefono, mostrar_ubicacion, permitir_mensajes_desconocidos, notif_nuevos_mensajes, notif_nueva_compra, notif_valoracion, notif_ofertas, notif_envios, notif_novedades, dir_nombre, dir_calle, dir_ciudad, dir_cp, dir_pais, dir_telefono, terminos_aceptados, version_terminos_aceptados, newsletter_suscrito</td><td>actor_id (FK)</td><td>FK a actor; tabla usuario_bloqueados (lista de IDs bloqueados)</td></tr>
+        <tr><td><code>empresa</code></td><td>actor_id (PK+FK), cif (unique), nombre_comercial, descripcion, web, telefono, logo, verificada</td><td>cif</td><td>FK a actor</td></tr>
+        <tr><td><code>admin</code></td><td>actor_id (PK+FK), nivel_acceso</td><td>actor_id (FK)</td><td>FK a actor</td></tr>
+        <tr><td><code>producto</code></td><td>id, titulo, descripcion, precio, tipo_oferta, estado, condicion, categoria_id, vendedor_id, marca, modelo, peso, admite_envio, precio_envio, precio_negociable, ubicacion, latitude, longitude, imagen_principal, numero_vistas, numero_favoritos, fecha_publicacion, fecha_caducidad, ultimo_aviso_caducidad_dias, pausado_hasta, motivo_pausa, destacado, patrocinado, patrocinio_hasta, fecha_venta</td><td>idx_producto_vendedor, idx_producto_estado, idx_producto_categoria</td><td>FK a actor (vendedor), FK a categoria; tabla producto_imagenes (galería)</td></tr>
+        <tr><td><code>oferta</code></td><td>id, titulo, descripcion, precio_oferta, precio_original, tienda, url_oferta, categoria_id, actor_id, imagen_principal, es_activa, estado, badge, fecha_publicacion, fecha_expiracion, spark_count, drip_count, spark_score, numero_vistas, numero_compartidos, numero_comentarios, codigo_descuento, es_online, ciudad_oferta, latitude, longitude, gastos_envio, destacada, es_flash, flash_fin, limite_unidades, patrocinada, patrocinio_hasta, fecha_finalizado</td><td>idx_oferta_activa, idx_oferta_categoria, idx_oferta_spark, idx_oferta_publicacion</td><td>FK a actor, FK a categoria; tabla oferta_imagenes</td></tr>
+        <tr><td><code>vehiculo</code></td><td>id, titulo, descripcion, precio, tipo_oferta, tipo_vehiculo, estado_vehiculo, condicion, categoria_id, publicador_id, marca, modelo, anio, kilometros, combustible, cambio, potencia, cilindrada, color, numero_puertas, plazas, matricula, itv, fecha_itv, garantia, ubicacion, latitude, longitude, imagen_principal, fecha_publicacion, fecha_caducidad, patrocinado</td><td>idx_vehiculo_publicador, idx_vehiculo_categoria, idx_vehiculo_estado, idx_vehiculo_tipo</td><td>FK a actor (publicador), FK a categoria; tablas vehiculo_imagenes, vehiculo_extras</td></tr>
+        <tr><td><code>compra</code></td><td>id, comprador_id, producto_id, estado, stripe_payment_intent_id, precio_final, precio_envio, costo_envio, comision_nexus, metodo_entrega, dir_nombre, dir_calle, dir_ciudad, dir_codigo_postal, dir_pais, dir_telefono, fecha_compra, fecha_pago, fecha_envio, fecha_entrega, fecha_completada, fecha_cancelacion, tipo_envio, punto_recogida_id</td><td>idx_compra_comprador, idx_compra_estado</td><td>FK a actor (comprador), FK a producto</td></tr>
+        <tr><td><code>envio</code></td><td>id, compra_id, codigo_envio, codigo_qr, transportista, numero_seguimiento, url_tracking, fecha_limite_envio, estado_envio</td><td>compra_id (unique)</td><td>FK a compra (OneToOne)</td></tr>
+        <tr><td><code>devolucion</code></td><td>id, compra_id, motivo, descripcion, nota_vendedor, importe_devuelto, estado, dir_devolucion</td><td>compra_id</td><td>FK a compra; tabla devolucion_fotos</td></tr>
+        <tr><td><code>chat_mensaje</code></td><td>id, remitente_id, receptor_id, producto_id, room_id, texto, media_url, duracion_audio, tipo, leido, recibido, precio_propuesto, estado_propuesta, fecha_envio</td><td>room_id, remitente_id, receptor_id, fecha_envio</td><td>FK a actor (remitente, receptor), FK a producto (opcional)</td></tr>
+        <tr><td><code>valoracion</code></td><td>id, comprador_id, vendedor_id, compra_id (unique), puntuacion, comentario, respuesta_vendedor, fecha_respuesta</td><td>compra_id (unique)</td><td>FK a actor x2, FK a compra</td></tr>
+        <tr><td><code>contrato</code></td><td>id, empresa_id, actor_id, tipo_contrato, estado, fecha, fecha_inicio, fecha_fin, monto, tipo_item, item_id, item_titulo, item_imagen, dias_patrocinio, texto_banner, url_click, stripe_checkout_session_id, stripe_payment_intent_id</td><td>&mdash;</td><td>FK a empresa, FK a actor</td></tr>
+        <tr><td><code>cupon</code></td><td>id, codigo (unique), tipo_descuento, valor, importe_minimo, tope_maximo, alcance, limite_total_usos, limite_usos_por_usuario, fecha_inicio, fecha_fin</td><td>codigo</td><td>Tabla cupon_categorias (categorias aplicables), tabla cupon_uso (historial de usos)</td></tr>
+        <tr><td><code>categoria</code></td><td>id, nombre, slug (unique), icono, color, orden, activa, parent_id</td><td>slug, parent_id</td><td>Self-join ManyToOne (parent → hijos)</td></tr>
+        <tr><td><code>newsletter_suscripcion</code></td><td>id, email (unique), activa, ip_consentimiento, fecha_consentimiento, version_politica, token_baja (unique), fecha_baja</td><td>email, token_baja</td><td>&mdash;</td></tr>
+        <tr><td><code>audit_log</code></td><td>id, actor_id, tipo_accion, descripcion, fecha_accion</td><td>actor_id, fecha_accion</td><td>FK a actor</td></tr>
+        <tr><td><code>spark_voto</code></td><td>id, usuario_id, oferta_id, tipo_voto (SPARK/DRIP), fecha</td><td>usuario_id + oferta_id (unique)</td><td>FK a actor, FK a oferta</td></tr>
+        <tr><td><code>favorito</code></td><td>id, usuario_id, producto_id, oferta_id, vehiculo_id, fecha</td><td>usuario_id + producto_id (unique)</td><td>FK a usuario, FK a producto/oferta/vehiculo</td></tr>
+        <tr><td><code>notificacion_in_app</code></td><td>id, actor_id, titulo, mensaje, tipo, url_destino, leida, destacada, fecha</td><td>actor_id, leida, fecha</td><td>FK a actor</td></tr>
+      </tbody>
+    </table>
   </section>
 
   <hr class="section-divider" />
