@@ -371,7 +371,7 @@ import DocLayout from "../layouts/DocLayout.astro";
 
     <h3 class="subsection-title">Modelo de Base de Datos</h3>
     <p>
-      La base de datos PostgreSQL se gestiona con Hibernate ORM a través de Spring Data JPA. La jerarquía de actores se implementa con la estrategia <strong>JOINED</strong>: la tabla <code>actor</code> almacena los campos comunes y las tablas <code>usuario</code>, <code>empresa</code> y <code>admin</code> solo los campos específicos de cada subtipo, unidos mediante <code>PrimaryKeyJoinColumn</code>. Los índices de base de datos más críticos se definen con la anotación <code>@Table(indexes = {...})</code> directamente en las entidades Java.
+      La base de datos PostgreSQL se gestiona con Hibernate ORM a través de Spring Data JPA. La jerarquía de actores se implementa con la estrategia <strong>JOINED</strong>: la tabla <code>actor</code> almacena los campos comunes y las tablas <code>usuario</code>, <code>empresa</code> y <code>admin</code> solo los campos específicos de cada subtipo, unidos mediante <code>PrimaryKeyJoinColumn</code>. Los índices de base de datos más críticos se definen con la anotación <code>@Table(indexes = &#123;...&#125;)</code> directamente en las entidades Java.
     </p>
 
     <table class="req-table">
@@ -531,67 +531,67 @@ import DocLayout from "../layouts/DocLayout.astro";
         <tr>
           <td><code>/producto</code></td>
           <td><code>ProductoController</code></td>
-          <td>GET /, /disponibles, /{id}, /filtrar; POST /publicar/{usuarioId}; PUT /{id}; PATCH /{id}/estado; DELETE /{id}; POST /{id}/votar, /{id}/renovar</td>
+          <td>GET /, /disponibles, /&#123;id&#125;, /filtrar; POST /publicar/&#123;usuarioId&#125;; PUT /&#123;id&#125;; PATCH /&#123;id&#125;/estado; DELETE /&#123;id&#125;; POST /&#123;id&#125;/votar, /&#123;id&#125;/renovar</td>
           <td>Lectura pública; escritura autenticada</td>
         </tr>
         <tr>
           <td><code>/oferta</code></td>
           <td><code>OfertaController</code></td>
-          <td>GET / (paginado con filtros), /{id}; POST /publicar; PUT /{id}; DELETE /{id}; POST /{id}/spark, /{id}/drip</td>
+          <td>GET / (paginado con filtros), /&#123;id&#125;; POST /publicar; PUT /&#123;id&#125;; DELETE /&#123;id&#125;; POST /&#123;id&#125;/spark, /&#123;id&#125;/drip</td>
           <td>Lectura pública; escritura autenticada</td>
         </tr>
         <tr>
           <td><code>/vehiculo</code></td>
           <td><code>VehiculoController</code></td>
-          <td>GET /, /filtrar, /{id}; POST /publicar/{usuarioId}; PUT /{id}; PATCH /{id}/estado; DELETE /{id}</td>
+          <td>GET /, /filtrar, /&#123;id&#125;; POST /publicar/&#123;usuarioId&#125;; PUT /&#123;id&#125;; PATCH /&#123;id&#125;/estado; DELETE /&#123;id&#125;</td>
           <td>Lectura pública; escritura autenticada</td>
         </tr>
         <tr>
           <td><code>/compra</code></td>
           <td><code>CompraController</code></td>
-          <td>POST /; GET /{id}, /mis-compras, /mis-ventas; PATCH /{id}/confirmar-entrega, /{id}/cancelar</td>
+          <td>POST /; GET /&#123;id&#125;, /mis-compras, /mis-ventas; PATCH /&#123;id&#125;/confirmar-entrega, /&#123;id&#125;/cancelar</td>
           <td>ROLE_USER</td>
         </tr>
         <tr>
           <td><code>/pago</code></td>
           <td><code>PagoController</code></td>
-          <td>POST /crear-intent, /confirmar; GET /estado/{compraId}</td>
+          <td>POST /crear-intent, /confirmar; GET /estado/&#123;compraId&#125;</td>
           <td>ROLE_USER</td>
         </tr>
         <tr>
           <td><code>/envio</code></td>
           <td><code>EnvioController</code></td>
-          <td>POST /; GET /{id}/qr; PATCH /{id}/tracking, /{id}/confirmar</td>
+          <td>POST /; GET /&#123;id&#125;/qr; PATCH /&#123;id&#125;/tracking, /&#123;id&#125;/confirmar</td>
           <td>ROLE_USER</td>
         </tr>
         <tr>
           <td><code>/devolucion</code></td>
           <td><code>DevolucionController</code></td>
-          <td>POST /; GET /{id}; PATCH /{id}/aceptar, /{id}/rechazar, /{id}/completar</td>
+          <td>POST /; GET /&#123;id&#125;; PATCH /&#123;id&#125;/aceptar, /&#123;id&#125;/rechazar, /&#123;id&#125;/completar</td>
           <td>ROLE_USER</td>
         </tr>
         <tr>
           <td><code>/chat</code> &nbsp;&#183;&nbsp; <code>/ws</code></td>
           <td><code>ChatController</code>, <code>ChatWebSocketController</code></td>
-          <td>GET /historial/{roomId}; POST /enviar (fallback REST); WS /app/chat (STOMP)</td>
+          <td>GET /historial/&#123;roomId&#125;; POST /enviar (fallback REST); WS /app/chat (STOMP)</td>
           <td>ROLE_USER</td>
         </tr>
         <tr>
           <td><code>/notificacion</code></td>
           <td><code>NotificacionController</code></td>
-          <td>GET /mis-notificaciones; PATCH /{id}/leer; DELETE /{id}</td>
+          <td>GET /mis-notificaciones; PATCH /&#123;id&#125;/leer; DELETE /&#123;id&#125;</td>
           <td>ROLE_USER</td>
         </tr>
         <tr>
           <td><code>/favorito</code></td>
           <td><code>FavoritoController</code></td>
-          <td>POST /; DELETE /{id}; GET /mis-favoritos</td>
+          <td>POST /; DELETE /&#123;id&#125;; GET /mis-favoritos</td>
           <td>ROLE_USER</td>
         </tr>
         <tr>
           <td><code>/valoracion</code></td>
           <td><code>ValoracionController</code></td>
-          <td>POST /; GET /vendedor/{id}; PATCH /{id}/responder</td>
+          <td>POST /; GET /vendedor/&#123;id&#125;; PATCH /&#123;id&#125;/responder</td>
           <td>ROLE_USER</td>
         </tr>
         <tr>
@@ -603,7 +603,7 @@ import DocLayout from "../layouts/DocLayout.astro";
         <tr>
           <td><code>/contrato</code></td>
           <td><code>ContratoController</code></td>
-          <td>POST /solicitar; GET /mis-contratos; POST /pagar/{id}</td>
+          <td>POST /solicitar; GET /mis-contratos; POST /pagar/&#123;id&#125;</td>
           <td>ROLE_USER / ROLE_EMPRESA</td>
         </tr>
         <tr>
@@ -615,7 +615,7 @@ import DocLayout from "../layouts/DocLayout.astro";
         <tr>
           <td><code>/soporte-chat</code></td>
           <td><code>SoporteChatController</code></td>
-          <td>POST /mensaje; GET /historial/{sessionId}</td>
+          <td>POST /mensaje; GET /historial/&#123;sessionId&#125;</td>
           <td>Pública</td>
         </tr>
         <tr>
@@ -791,7 +791,7 @@ import DocLayout from "../layouts/DocLayout.astro";
       <li>El usuario envía sus credenciales a <code>POST /api/auth/login</code> con token reCAPTCHA v3 generado en el cliente.</li>
       <li>El <code>CaptchaService</code> verifica el token contra la API de Google con un umbral mínimo de 0.5. Si falla, devuelve 400.</li>
       <li>Spring Security autentica al actor mediante <code>AuthenticationManager</code> con BCrypt. Si falla, devuelve 401.</li>
-      <li>Si el actor tiene <code>twoFactorEnabled = true</code>, el backend devuelve <code>{twoFactorRequired: true}</code> sin emitir JWT todavía.</li>
+      <li>Si el actor tiene <code>twoFactorEnabled = true</code>, el backend devuelve <code>&#123;twoFactorRequired: true&#125;</code> sin emitir JWT todavía.</li>
       <li>El usuario envía el código 2FA a <code>POST /api/auth/verify-2fa</code>. Si es TOTP, se valida con la librería de samstevens.totp. Si es Email OTP, se compara con el código almacenado (válido 10 minutos).</li>
       <li><code>JWTUtils.generateTokenForUser(actor)</code> genera un JWT firmado con HMAC-SHA256, con claims: subject (username), rol (ROLE_USER/EMPRESA/ADMIN), iat (fecha emisión), exp (86400000 ms = 24h).</li>
       <li>El frontend almacena el JWT en localStorage y el <code>JwtInterceptor</code> lo incluye en <code>Authorization: Bearer &lt;token&gt;</code> en todas las peticiones HTTP internas.</li>
@@ -808,18 +808,18 @@ import DocLayout from "../layouts/DocLayout.astro";
       <li>Stripe procesa el pago y envía el evento <code>payment_intent.succeeded</code> al webhook <code>POST /stripe/webhook</code>. La firma del evento se verifica con <code>stripe.webhook.secret</code>.</li>
       <li>El <code>StripeWebhookController</code> llama a <code>CompraService.crearCompra()</code> que crea la entidad <code>Compra</code> en estado PAGADO y la entidad <code>Envio</code> con el código QR.</li>
       <li>El producto pasa a estado RESERVADO. Se envían notificaciones in-app y por email al comprador y al vendedor.</li>
-      <li>El vendedor sube el número de seguimiento en <code>PATCH /envio/{id}/tracking</code>. El estado del envío pasa a EN_TRANSITO.</li>
-      <li>El comprador confirma la recepción en <code>PATCH /compra/{id}/confirmar-entrega</code>. La <code>Compra</code> pasa a COMPLETADA y el pago se libera. El producto pasa a VENDIDO.</li>
+      <li>El vendedor sube el número de seguimiento en <code>PATCH /envio/&#123;id&#125;/tracking</code>. El estado del envío pasa a EN_TRANSITO.</li>
+      <li>El comprador confirma la recepción en <code>PATCH /compra/&#123;id&#125;/confirmar-entrega</code>. La <code>Compra</code> pasa a COMPLETADA y el pago se libera. El producto pasa a VENDIDO.</li>
     </ol>
 
     <h4 class="group-title">Flujo de mensajería en tiempo real con WebSocket STOMP</h4>
     <ol>
       <li>El frontend crea una conexión WebSocket en el endpoint <code>/ws</code> usando SockJS como transporte. Se pasa el JWT en la query string o cabecera de la sesión.</li>
       <li>El <code>WebSocketAuthInterceptor</code> de Spring intercepta el mensaje CONNECT del protocolo STOMP, extrae y valida el JWT, y registra el usuario autenticado en el contexto de la sesión WebSocket.</li>
-      <li>El cliente se suscribe al canal personal <code>/user/{username}/queue/messages</code> para recibir sus mensajes entrantes.</li>
-      <li>Para enviar un mensaje, el cliente publica en <code>/app/chat</code> con el payload: <code>{roomId, texto, tipo, receptorId, productoId (opcional)}</code>.</li>
+      <li>El cliente se suscribe al canal personal <code>/user/&#123;username&#125;/queue/messages</code> para recibir sus mensajes entrantes.</li>
+      <li>Para enviar un mensaje, el cliente publica en <code>/app/chat</code> con el payload: <code>&#123;roomId, texto, tipo, receptorId, productoId (opcional)&#125;</code>.</li>
       <li>El <code>ChatWebSocketController</code> persiste el <code>ChatMensaje</code> en la BD, detecta si el receptor está conectado y envía el mensaje a su canal personal mediante <code>SimpMessagingTemplate</code>.</li>
-      <li>Si el receptor no está conectado, el mensaje queda en BD con <code>recibido = false</code>. Cuando se conecte, el cliente solicita el historial de mensajes no recibidos vía <code>GET /chat/historial/{roomId}</code> y los marca como recibidos.</li>
+      <li>Si el receptor no está conectado, el mensaje queda en BD con <code>recibido = false</code>. Cuando se conecte, el cliente solicita el historial de mensajes no recibidos vía <code>GET /chat/historial/&#123;roomId&#125;</code> y los marca como recibidos.</li>
     </ol>
 
     <h4 class="group-title">Ciclo de vida de anuncios con caducidad automática</h4>
@@ -828,7 +828,7 @@ import DocLayout from "../layouts/DocLayout.astro";
       <li>El scheduler <code>AnuncioCaducidadService</code> comprueba periódicamente qué anuncios están próximos a caducar.</li>
       <li>En los hitos de 30, 14, 7 y 1 días restantes, envía una notificación in-app al vendedor y registra el hito en <code>ultimoAvisoCaducidadDias</code> para no duplicar el aviso.</li>
       <li>Cuando la <code>fechaCaducidad</code> es alcanzada, el estado del anuncio cambia automáticamente a <code>EXPIRADO</code>.</li>
-      <li>El anuncio expirado permanece visible durante 14 días adicionales (mostrándose como expirado), tras los cuales se oculta del catálogo público. El vendedor puede reactivar el anuncio (<code>POST /producto/{id}/renovar</code>) para reiniciar el contador de 180 días.</li>
+      <li>El anuncio expirado permanece visible durante 14 días adicionales (mostrándose como expirado), tras los cuales se oculta del catálogo público. El vendedor puede reactivar el anuncio (<code>POST /producto/&#123;id&#125;/renovar</code>) para reiniciar el contador de 180 días.</li>
     </ol>
   </section>
 
@@ -1161,32 +1161,32 @@ import DocLayout from "../layouts/DocLayout.astro";
         <tr><td>POST</td><td><code>/api/auth/reset-password</code></td><td>Restablecer contraseña con el token recibido por email</td><td>Pública</td></tr>
         <tr><td colspan="4" style="background:#f8f9fa;"><strong>Productos</strong></td></tr>
         <tr><td>GET</td><td><code>/producto/filtrar</code></td><td>Búsqueda paginada con filtros (categoría, precio, condición, ubicación, radio)</td><td>Pública</td></tr>
-        <tr><td>GET</td><td><code>/producto/{id}</code></td><td>Detalle de producto. Comprueba bloqueos si se pasa <code>?usuarioId=</code></td><td>Pública</td></tr>
-        <tr><td>POST</td><td><code>/producto/publicar/{usuarioId}</code></td><td>Publicar nuevo producto con imagen principal y galería (multipart)</td><td>JWT</td></tr>
-        <tr><td>PUT</td><td><code>/producto/{id}</code></td><td>Actualizar datos del producto (multipart con campos opcionales)</td><td>JWT</td></tr>
-        <tr><td>PATCH</td><td><code>/producto/{id}/estado</code></td><td>Cambiar estado: DISPONIBLE, RESERVADO, VENDIDO</td><td>JWT</td></tr>
-        <tr><td>DELETE</td><td><code>/producto/{id}</code></td><td>Eliminar producto y sus imágenes de Cloudinary</td><td>JWT</td></tr>
-        <tr><td>POST</td><td><code>/producto/{id}/renovar</code></td><td>Reactivar anuncio expirado con nueva vigencia de 180 días</td><td>JWT</td></tr>
+        <tr><td>GET</td><td><code>/producto/&#123;id&#125;</code></td><td>Detalle de producto. Comprueba bloqueos si se pasa <code>?usuarioId=</code></td><td>Pública</td></tr>
+        <tr><td>POST</td><td><code>/producto/publicar/&#123;usuarioId&#125;</code></td><td>Publicar nuevo producto con imagen principal y galería (multipart)</td><td>JWT</td></tr>
+        <tr><td>PUT</td><td><code>/producto/&#123;id&#125;</code></td><td>Actualizar datos del producto (multipart con campos opcionales)</td><td>JWT</td></tr>
+        <tr><td>PATCH</td><td><code>/producto/&#123;id&#125;/estado</code></td><td>Cambiar estado: DISPONIBLE, RESERVADO, VENDIDO</td><td>JWT</td></tr>
+        <tr><td>DELETE</td><td><code>/producto/&#123;id&#125;</code></td><td>Eliminar producto y sus imágenes de Cloudinary</td><td>JWT</td></tr>
+        <tr><td>POST</td><td><code>/producto/&#123;id&#125;/renovar</code></td><td>Reactivar anuncio expirado con nueva vigencia de 180 días</td><td>JWT</td></tr>
         <tr><td colspan="4" style="background:#f8f9fa;"><strong>Ofertas (Chollometro)</strong></td></tr>
         <tr><td>GET</td><td><code>/oferta</code></td><td>Listado de ofertas activas paginado, ordenado por sparkScore descendente</td><td>Pública</td></tr>
         <tr><td>POST</td><td><code>/oferta/publicar</code></td><td>Publicar nueva oferta/chollo con imagen (multipart)</td><td>JWT</td></tr>
-        <tr><td>POST</td><td><code>/spark-voto/{ofertaId}/votar</code></td><td>Votar Spark (positivo) o Drip (negativo) en una oferta</td><td>JWT</td></tr>
+        <tr><td>POST</td><td><code>/spark-voto/&#123;ofertaId&#125;/votar</code></td><td>Votar Spark (positivo) o Drip (negativo) en una oferta</td><td>JWT</td></tr>
         <tr><td colspan="4" style="background:#f8f9fa;"><strong>Vehículos</strong></td></tr>
         <tr><td>GET</td><td><code>/vehiculo/filtrar</code></td><td>Búsqueda de vehículos con filtros de ficha técnica (combustible, km, año, etc.)</td><td>Pública</td></tr>
-        <tr><td>POST</td><td><code>/vehiculo/publicar/{usuarioId}</code></td><td>Publicar vehículo con ficha técnica e imágenes (multipart)</td><td>JWT</td></tr>
+        <tr><td>POST</td><td><code>/vehiculo/publicar/&#123;usuarioId&#125;</code></td><td>Publicar vehículo con ficha técnica e imágenes (multipart)</td><td>JWT</td></tr>
         <tr><td colspan="4" style="background:#f8f9fa;"><strong>Compras y Pagos</strong></td></tr>
         <tr><td>POST</td><td><code>/pago/crear-intent</code></td><td>Crear Stripe Payment Intent y devolver clientSecret para el frontend</td><td>JWT</td></tr>
         <tr><td>POST</td><td><code>/stripe/webhook</code></td><td>Receptor de eventos Stripe con verificación de firma HMAC del payload</td><td>Pública (firma)</td></tr>
         <tr><td>GET</td><td><code>/compra/mis-compras</code></td><td>Historial de compras del usuario autenticado como comprador</td><td>JWT</td></tr>
-        <tr><td>PATCH</td><td><code>/compra/{id}/confirmar-entrega</code></td><td>El comprador confirma la recepción del producto. Libera el pago escrow.</td><td>JWT</td></tr>
+        <tr><td>PATCH</td><td><code>/compra/&#123;id&#125;/confirmar-entrega</code></td><td>El comprador confirma la recepción del producto. Libera el pago escrow.</td><td>JWT</td></tr>
         <tr><td colspan="4" style="background:#f8f9fa;"><strong>Envíos y Devoluciones</strong></td></tr>
-        <tr><td>GET</td><td><code>/envio/{id}/qr</code></td><td>Obtener el código QR del envío en formato base64</td><td>JWT</td></tr>
+        <tr><td>GET</td><td><code>/envio/&#123;id&#125;/qr</code></td><td>Obtener el código QR del envío en formato base64</td><td>JWT</td></tr>
         <tr><td>POST</td><td><code>/devolucion</code></td><td>Solicitar devolución de una compra con motivo y fotos de evidencia</td><td>JWT</td></tr>
         <tr><td colspan="4" style="background:#f8f9fa;"><strong>Chat y Mensajería</strong></td></tr>
-        <tr><td>GET</td><td><code>/chat/historial/{roomId}</code></td><td>Obtener historial de mensajes de una conversación</td><td>JWT</td></tr>
+        <tr><td>GET</td><td><code>/chat/historial/&#123;roomId&#125;</code></td><td>Obtener historial de mensajes de una conversación</td><td>JWT</td></tr>
         <tr><td>WS</td><td><code>/ws (STOMP /app/chat)</code></td><td>Enviar mensaje en tiempo real por WebSocket STOMP</td><td>JWT (handshake)</td></tr>
         <tr><td colspan="4" style="background:#f8f9fa;"><strong>Perfiles y Social</strong></td></tr>
-        <tr><td>GET</td><td><code>/usuario/perfil/{username}</code></td><td>Perfil público del usuario (si no está privado)</td><td>Pública</td></tr>
+        <tr><td>GET</td><td><code>/usuario/perfil/&#123;username&#125;</code></td><td>Perfil público del usuario (si no está privado)</td><td>Pública</td></tr>
         <tr><td>POST</td><td><code>/favorito</code></td><td>Añadir producto/oferta a favoritos</td><td>JWT</td></tr>
         <tr><td>POST</td><td><code>/valoracion</code></td><td>Crear valoración post-compra (una por compra)</td><td>JWT</td></tr>
         <tr><td>POST</td><td><code>/reporte</code></td><td>Reportar un usuario, producto, oferta u otro contenido</td><td>JWT</td></tr>
@@ -3425,7 +3425,7 @@ import DocLayout from "../layouts/DocLayout.astro";
         <li>
           <strong>Derecho al olvido (art. 17):</strong> Los usuarios podrán eliminar
           su cuenta, lo que resultará en un soft-delete con anonimización del email
-          (<code>deleted_{"{id}"}@nexus.deleted</code>), preservando la
+          (<code>deleted_&#123;id&#125;@nexus.deleted</code>), preservando la
           integridad referencial.
         </li>
         <li>
@@ -3672,11 +3672,11 @@ import DocLayout from "../layouts/DocLayout.astro";
       </p>
       <ul>
         <li>
-          <code>/topic/chat/{"{roomId}"}</code>: mensajes de una conversación
+          <code>/topic/chat/&#123;roomId&#125;</code>: mensajes de una conversación
           concreta.
         </li>
         <li>
-          <code>/user/{"{actorId}"}/queue/notificaciones</code>: notificaciones
+          <code>/user/&#123;actorId&#125;/queue/notificaciones</code>: notificaciones
           privadas por usuario.
         </li>
         <li>
@@ -3684,7 +3684,7 @@ import DocLayout from "../layouts/DocLayout.astro";
           periódicamente.
         </li>
         <li>
-          <code>/topic/chat/{"{roomId}"}/leidos</code> y <code>/recibidos</code
+          <code>/topic/chat/&#123;roomId&#125;/leidos</code> y <code>/recibidos</code>
           >: confirmaciones de estado del mensaje.
         </li>
       </ul>
