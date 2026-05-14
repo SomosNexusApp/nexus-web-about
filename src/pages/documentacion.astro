@@ -126,7 +126,9 @@ import DocLayout from "../layouts/DocLayout.astro";
 
     <div class="actor-grid">
       <div class="actor-card">
-        <span class="actor-icon">&#127759;</span>
+        <span class="actor-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg>
+        </span>
         <h4>Visitante</h4>
         <ul>
           <li>No registrado, sin token JWT</li>
@@ -137,7 +139,9 @@ import DocLayout from "../layouts/DocLayout.astro";
         </ul>
       </div>
       <div class="actor-card">
-        <span class="actor-icon">&#128100;</span>
+        <span class="actor-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        </span>
         <h4>Usuario (<code>ROLE_USER</code>)</h4>
         <ul>
           <li>Registro con email o Google OAuth</li>
@@ -149,7 +153,9 @@ import DocLayout from "../layouts/DocLayout.astro";
         </ul>
       </div>
       <div class="actor-card">
-        <span class="actor-icon">&#127970;</span>
+        <span class="actor-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"></path><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"></path><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"></path><path d="M10 6h4"></path><path d="M10 10h4"></path><path d="M10 14h4"></path><path d="M10 18h4"></path></svg>
+        </span>
         <h4>Empresa (<code>ROLE_EMPRESA</code>)</h4>
         <ul>
           <li>Perfil empresarial con CIF y nombre comercial</li>
@@ -160,7 +166,9 @@ import DocLayout from "../layouts/DocLayout.astro";
         </ul>
       </div>
       <div class="actor-card">
-        <span class="actor-icon">&#128737;</span>
+        <span class="actor-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg>
+        </span>
         <h4>Administrador (<code>ROLE_ADMIN</code>)</h4>
         <ul>
           <li>Panel de gestión exclusivo en dominio separado</li>
@@ -172,7 +180,10 @@ import DocLayout from "../layouts/DocLayout.astro";
       </div>
     </div>
 
-    <h3 class="subsection-title">Principales Requisitos Funcionales</h3>
+    <h3 class="subsection-title">Resumen de Requisitos</h3>
+    <p>
+      A continuación se recogen los módulos funcionales principales y las reglas de negocio más relevantes del sistema. La especificación completa y detallada —con los 63 requisitos funcionales (RF-01 a RF-63), 26 requisitos no funcionales (RNF-01 a RNF-26) y 17 requisitos de información (RI-01 a RI-17)— está disponible en la sección <a href="#requisitos-sistema">Requisitos del Sistema</a> de este mismo documento.
+    </p>
 
     <div class="req-block">
       <p class="req-id">RF — Autenticación</p>
@@ -285,7 +296,8 @@ import DocLayout from "../layouts/DocLayout.astro";
       </tbody>
     </table>
 
-    <h3 class="subsection-title">Casos de Uso Principales</h3>
+    <h3 class="subsection-title">Casos de Uso Representativos</h3>
+    <p>Los siguientes casos de uso cubren los flujos más representativos del sistema. Están implementados al completo en el backend y en las dos aplicaciones Angular.</p>
 
     <div class="req-block">
       <p class="req-id">CU-01</p>
@@ -330,33 +342,71 @@ import DocLayout from "../layouts/DocLayout.astro";
     </p>
 
     <h3 class="subsection-title">Arquitectura del Sistema</h3>
-    <p>
-      Nexus adopta una arquitectura <strong>cliente-servidor desacoplada</strong> con cuatro aplicaciones independientes que se comunican con un único backend centralizado. El sistema se despliega íntegramente en servicios cloud:
-    </p>
+    <p>El sistema se organiza en tres capas bien diferenciadas: los tres clientes en Vercel, el backend central en Render y los servicios externos de terceros. El backend es el único punto de contacto entre todos ellos; ningún cliente habla directamente con PostgreSQL, Cloudinary ni Stripe.</p>
 
-    <div class="context-box">
-      <strong>Visión general de componentes:</strong>
-      <pre style="background:transparent;margin:0.5rem 0 0;font-size:0.82rem;line-height:1.6;overflow-x:auto;">&#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472; CAPA DE CLIENTE (Vercel CDN) &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;
-&#9474;  nexus-angular-app          nexus-admin-web-app      nexus-web-about     &#9474;
-&#9474;  Angular 21 + Ionic 8       Angular 21               Astro (estático)     &#9474;
-&#9474;  puerto 4200 (dev)          puerto 4201 (dev)        puerto 4321 (dev)   &#9474;
-&#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9500;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9524;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;
-            &#9474; HTTP REST + JWT Bearer         &#9474;
-            &#9474; WebSocket STOMP (app usuario)  &#9474;
-&#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9524;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9524;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;
-&#9474;       CAPA DE SERVICIO (Render.com — Docker)                        &#9474;
-&#9474;       nexus-backend — Spring Boot 3.5.13 (Java 17)                   &#9474;
-&#9474;  &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488; &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488; &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488; &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;  &#9474;
-&#9474;  &#9474; Controllers  &#9474; &#9474; Services  &#9474; &#9474; Security  &#9474; &#9474;   Schedulers   &#9474;  &#9474;
-&#9474;  &#9474; REST (48)   &#9474; &#9474; (44)      &#9474; &#9474; JWT+2FA   &#9474; &#9474; Caducidad,  &#9474;  &#9474;
-&#9474;  &#9474; WS (1)      &#9474; &#9474;           &#9474; &#9474; reCAPTCHA &#9474; &#9474; Spark score &#9474;  &#9474;
-&#9474;  &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496; &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496; &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496; &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;  &#9474;
-&#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9500;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;
-            &#9474; Spring Data JPA / Hibernate
-  &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;  &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;   &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;   &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;
-  &#9474; PostgreSQL  &#9474;  &#9474; Cloudinary &#9474;   &#9474; Stripe&#9474;   &#9474; Gmail  &#9474;
-  &#9474; (Render DB) &#9474;  &#9474; (Medios)   &#9474;   &#9474; (Pagos&#9474;   &#9474; SMTP   &#9474;
-  &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;  &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;   &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;   &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;</pre>
+    <div class="context-box" style="padding: 0; overflow: hidden; margin: 20px 0 32px;">
+      <div style="padding: 14px 20px; background: #eef2ff; border-bottom: 1px solid #c7d7fe;">
+        <p style="font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #4f46e5; margin: 0 0 10px;">
+          Capa de cliente &mdash; Vercel CDN
+        </p>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
+          <div style="background: white; border: 1px solid #c7d7fe; border-radius: 8px; padding: 10px 12px;">
+            <p style="font-weight: 700; color: #1e40af; margin: 0 0 3px; font-size: 0.85rem;">nexus-angular-app</p>
+            <p style="margin: 0; font-size: 0.75rem; color: #6b7280; line-height: 1.4;">Angular 21 + Ionic 8<br>App de usuario &middot; Web + Android<br><em>Puerto 4200 (dev)</em></p>
+          </div>
+          <div style="background: white; border: 1px solid #c7d7fe; border-radius: 8px; padding: 10px 12px;">
+            <p style="font-weight: 700; color: #1e40af; margin: 0 0 3px; font-size: 0.85rem;">nexus-admin-web-app</p>
+            <p style="margin: 0; font-size: 0.75rem; color: #6b7280; line-height: 1.4;">Angular 21<br>Panel de administraci&oacute;n<br><em>Puerto 4201 (dev)</em></p>
+          </div>
+          <div style="background: white; border: 1px solid #c7d7fe; border-radius: 8px; padding: 10px 12px;">
+            <p style="font-weight: 700; color: #1e40af; margin: 0 0 3px; font-size: 0.85rem;">nexus-web-about</p>
+            <p style="margin: 0; font-size: 0.75rem; color: #6b7280; line-height: 1.4;">Astro (est&aacute;tico)<br>Web informativa y docs<br><em>Puerto 4321 (dev)</em></p>
+          </div>
+        </div>
+      </div>
+      <div style="text-align: center; padding: 8px 20px; background: #f0f4ff; border-bottom: 1px solid #c7d7fe; font-size: 0.78rem; color: #6b7280; letter-spacing: 0.02em;">
+        HTTP REST + JWT Bearer &nbsp;&middot;&nbsp; WebSocket STOMP (solo app de usuario)
+      </div>
+      <div style="padding: 14px 20px; background: #fdf4ff; border-bottom: 1px solid #e9d5ff;">
+        <p style="font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #7c3aed; margin: 0 0 10px;">
+          Backend &mdash; Render.com &middot; Docker &middot; Puerto 8080
+        </p>
+        <div style="background: white; border: 1px solid #ddd6fe; border-radius: 8px; padding: 10px 14px;">
+          <p style="font-weight: 700; color: #6d28d9; margin: 0 0 8px; font-size: 0.88rem;">nexus-backend &mdash; Spring Boot 3.5.13 (Java 17)</p>
+          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px;">
+            <div style="background: #f5f3ff; border-radius: 4px; padding: 6px 8px; font-size: 0.72rem; color: #5b21b6; text-align: center; line-height: 1.4;">Controllers<br><strong>48 REST + 1 WS</strong></div>
+            <div style="background: #f5f3ff; border-radius: 4px; padding: 6px 8px; font-size: 0.72rem; color: #5b21b6; text-align: center; line-height: 1.4;">Services<br><strong>44</strong></div>
+            <div style="background: #f5f3ff; border-radius: 4px; padding: 6px 8px; font-size: 0.72rem; color: #5b21b6; text-align: center; line-height: 1.4;">Security<br><strong>JWT + 2FA + reCAPTCHA</strong></div>
+            <div style="background: #f5f3ff; border-radius: 4px; padding: 6px 8px; font-size: 0.72rem; color: #5b21b6; text-align: center; line-height: 1.4;">Schedulers<br><strong>7 tareas auto</strong></div>
+          </div>
+        </div>
+      </div>
+      <div style="text-align: center; padding: 8px 20px; background: #f0f4ff; border-bottom: 1px solid #c7d7fe; font-size: 0.78rem; color: #6b7280; letter-spacing: 0.02em;">
+        Spring Data JPA / Hibernate
+      </div>
+      <div style="padding: 14px 20px; background: #f0fdf4;">
+        <p style="font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #059669; margin: 0 0 10px;">
+          Servicios externos
+        </p>
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;">
+          <div style="background: white; border: 1px solid #bbf7d0; border-radius: 6px; padding: 8px 10px; text-align: center; font-size: 0.75rem; line-height: 1.4;">
+            <strong style="color: #065f46; display: block;">PostgreSQL</strong>
+            <span style="color: #6b7280;">Base de datos<br>(Render DB)</span>
+          </div>
+          <div style="background: white; border: 1px solid #bbf7d0; border-radius: 6px; padding: 8px 10px; text-align: center; font-size: 0.75rem; line-height: 1.4;">
+            <strong style="color: #065f46; display: block;">Cloudinary</strong>
+            <span style="color: #6b7280;">Im&aacute;genes y v&iacute;deos</span>
+          </div>
+          <div style="background: white; border: 1px solid #bbf7d0; border-radius: 6px; padding: 8px 10px; text-align: center; font-size: 0.75rem; line-height: 1.4;">
+            <strong style="color: #065f46; display: block;">Stripe</strong>
+            <span style="color: #6b7280;">Pagos y webhooks</span>
+          </div>
+          <div style="background: white; border: 1px solid #bbf7d0; border-radius: 6px; padding: 8px 10px; text-align: center; font-size: 0.75rem; line-height: 1.4;">
+            <strong style="color: #065f46; display: block;">Gmail SMTP</strong>
+            <span style="color: #6b7280;">Correo transaccional</span>
+          </div>
+        </div>
+      </div>
     </div>
 
     <h4 class="group-title">Capas internas del backend</h4>
@@ -374,135 +424,154 @@ import DocLayout from "../layouts/DocLayout.astro";
       La base de datos PostgreSQL se gestiona con Hibernate ORM a través de Spring Data JPA. La jerarquía de actores se implementa con la estrategia <strong>JOINED</strong>: la tabla <code>actor</code> almacena los campos comunes y las tablas <code>usuario</code>, <code>empresa</code> y <code>admin</code> solo los campos específicos de cada subtipo, unidos mediante <code>PrimaryKeyJoinColumn</code>. Los índices de base de datos más críticos se definen con la anotación <code>@Table(indexes = &#123;...&#125;)</code> directamente en las entidades Java.
     </p>
 
+    <h4 class="group-title">Jerarquía de actores</h4>
     <table class="req-table">
       <thead>
         <tr>
-          <th>Entidad</th>
-          <th>Tabla</th>
-          <th>Hereda de</th>
-          <th>Índices clave</th>
-          <th>Campos destacados</th>
+          <th style="width:22%">Entidad / Tabla</th>
+          <th style="width:28%">Relaciones</th>
+          <th>Campos principales</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td><code>Actor</code></td>
-          <td><code>actor</code></td>
-          <td><code>DomainEntity</code> (ID autogenerado)</td>
-          <td>username (unique), email (unique), googleId, resetToken (unique)</td>
-          <td>username, email, password (bcrypt), avatar, twoFactorEnabled, twoFactorMethod, twoFactorSecret, jwtVersion, cuentaEliminada, cuentaVerificada, baneado, suspendidoHasta, flagFraude, stripeCustomerId, onboardingCompletado, resetToken, resetTokenExpira</td>
+          <td><code>Actor</code><br><small style="color:#9ca3af">actor</small></td>
+          <td>Clase base de <code>Usuario</code>, <code>Empresa</code> y <code>Admin</code> (estrategia <code>JOINED</code>)</td>
+          <td><code>username</code> (unique), <code>email</code> (unique), <code>password</code> (bcrypt), <code>jwtVersion</code>, <code>twoFactorEnabled</code>, <code>baneado</code>, <code>suspendidoHasta</code>, <code>stripeCustomerId</code>, <code>cuentaEliminada</code>, <code>googleId</code></td>
         </tr>
         <tr>
-          <td><code>Usuario</code></td>
-          <td><code>usuario</code></td>
-          <td><code>Actor</code> (actor_id FK)</td>
-          <td>&mdash;</td>
-          <td>biografia, ubicacion, tipoCuenta (PERSONAL), reputacion (0.0–5.0), totalVentas, esVerificado, cuentaPrivada, perfilPublico, mostrarTelefono, mostrarUbicacion, permitirMensajesDesconocidos, 6 flags de notificación, direccionPorDefecto (embebida), blockedUserIds (lista), terminosAceptados, versionTerminosAceptados, newsletterSuscrito</td>
+          <td><code>Usuario</code><br><small style="color:#9ca3af">usuario</small></td>
+          <td>Extiende <code>Actor</code> (PK compartida)</td>
+          <td><code>reputacion</code> (0.0–5.0), <code>totalVentas</code>, <code>ubicacion</code>, <code>cuentaPrivada</code>, <code>newsletterSuscrito</code>, <code>terminosAceptados</code>, <code>direccionPorDefecto</code> (embebida), 6 flags de notificación</td>
         </tr>
         <tr>
-          <td><code>Empresa</code></td>
-          <td><code>empresa</code></td>
-          <td><code>Actor</code> (actor_id FK)</td>
-          <td>cif (unique)</td>
-          <td>cif, nombreComercial, descripcion, web, telefono, logo (URL Cloudinary), verificada (por admin)</td>
+          <td><code>Empresa</code><br><small style="color:#9ca3af">empresa</small></td>
+          <td>Extiende <code>Actor</code> (PK compartida)</td>
+          <td><code>cif</code> (unique), <code>nombreComercial</code>, <code>descripcion</code>, <code>web</code>, <code>logo</code> (Cloudinary URL), <code>verificada</code></td>
         </tr>
         <tr>
-          <td><code>Admin</code></td>
-          <td><code>admin</code></td>
-          <td><code>Actor</code> (actor_id FK)</td>
-          <td>&mdash;</td>
-          <td>nivelAcceso (int: 1, 2 o 3)</td>
+          <td><code>Admin</code><br><small style="color:#9ca3af">admin</small></td>
+          <td>Extiende <code>Actor</code> (PK compartida)</td>
+          <td><code>nivelAcceso</code> (1 básico / 2 moderador / 3 superadmin)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h4 class="group-title">Catálogo</h4>
+    <table class="req-table">
+      <thead>
+        <tr>
+          <th style="width:22%">Entidad / Tabla</th>
+          <th style="width:28%">Relaciones e índices</th>
+          <th>Campos principales</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>Producto</code><br><small style="color:#9ca3af">producto</small></td>
+          <td>FK Actor (vendedor), FK Categoria<br><small>idx_producto_vendedor, idx_producto_estado, idx_producto_categoria</small></td>
+          <td><code>titulo</code>, <code>precio</code>, <code>tipoOferta</code> (VENTA/DONACION/INTERCAMBIO), <code>estado</code>, <code>condicion</code>, <code>admiteEnvio</code>, <code>latitude/longitude</code>, <code>imagenPrincipal</code>, galería (hasta 5), <code>fechaCaducidad</code> (180 días), <code>patrocinado</code></td>
         </tr>
         <tr>
-          <td><code>Producto</code></td>
-          <td><code>producto</code></td>
-          <td><code>DomainEntity</code></td>
-          <td>idx_producto_vendedor, idx_producto_estado, idx_producto_categoria</td>
-          <td>titulo, descripcion, precio, tipoOferta (VENTA/DONACION/INTERCAMBIO), estado (DISPONIBLE/RESERVADO/VENDIDO/PAUSADO/ELIMINADO/EXPIRADO), condicion, categoria (FK), vendedor/Actor (FK), marca, modelo, peso, admiteEnvio, precioEnvio, precioNegociable, ubicacion, latitude, longitude, imagenPrincipal, galeriaImagenes (tabla producto_imagenes), numeroVistas, numeroFavoritos, fechaPublicacion, fechaCaducidad (180 días), pausadoHasta, motivoPausa, destacado, patrocinado, patrocinioHasta</td>
+          <td><code>Oferta</code><br><small style="color:#9ca3af">oferta</small></td>
+          <td>FK Actor, FK Categoria<br><small>idx_oferta_activa, idx_oferta_spark, idx_oferta_categoria</small></td>
+          <td><code>titulo</code>, <code>precioOferta</code>, <code>precioOriginal</code>, <code>tienda</code>, <code>badge</code> (auto), <code>sparkCount</code>, <code>dripCount</code>, <code>sparkScore</code>, <code>esFlash</code>, <code>flashFin</code>, <code>codigoDescuento</code>, <code>patrocinada</code></td>
         </tr>
         <tr>
-          <td><code>Oferta</code></td>
-          <td><code>oferta</code></td>
-          <td><code>DomainEntity</code></td>
-          <td>idx_oferta_activa, idx_oferta_categoria, idx_oferta_spark, idx_oferta_publicacion</td>
-          <td>titulo, descripcion, precioOferta, precioOriginal, tienda, urlOferta, categoria (FK), actor (FK), estado (ACTIVA/PAUSADA/AGOTADA), badge (NUEVA/CHOLLAZO/PORCENTAJE/GRATUITA/EXPIRA_HOY), sparkCount, dripCount, sparkScore, codigoDescuento, esOnline, ciudadOferta, gastosEnvio, esFlash, flashFin, limiteUnidades, destacada, patrocinada, patrocinioHasta</td>
+          <td><code>Vehiculo</code><br><small style="color:#9ca3af">vehiculo</small></td>
+          <td>FK Actor (publicador), FK Categoria<br><small>idx_vehiculo_publicador, idx_vehiculo_tipo, idx_vehiculo_estado</small></td>
+          <td><code>tipoVehiculo</code>, <code>marca</code>, <code>modelo</code>, <code>anio</code>, <code>kilometros</code>, <code>combustible</code>, <code>cambio</code>, <code>potencia</code>, <code>itv</code>, <code>garantia</code>, <code>extras</code> (lista), galería de imágenes</td>
         </tr>
         <tr>
-          <td><code>Vehiculo</code></td>
-          <td><code>vehiculo</code></td>
-          <td><code>DomainEntity</code></td>
-          <td>idx_vehiculo_publicador, idx_vehiculo_categoria, idx_vehiculo_estado, idx_vehiculo_tipo</td>
-          <td>titulo, descripcion, precio, tipoOferta, tipoVehiculo (COCHE/MOTO/FURGONETA/SCOOTER/OTRO), estadoVehiculo, condicion, categoria (FK), publicador/Actor (FK), marca, modelo, anio, kilometros, combustible (GASOLINA/DIESEL/HIBRIDO/ELECTRICO/GLP/GNC), cambio, potencia, cilindrada, color, numeroPuertas, plazas, matricula, itv, fechaITV, garantia, extras (lista), imagenPrincipal, galeriaImagenes, latitude, longitude, fechaCaducidad, patrocinado</td>
+          <td><code>Categoria</code><br><small style="color:#9ca3af">categoria</small></td>
+          <td>Self-join ManyToOne (parent → hijos)<br><small>slug (unique), parent_id</small></td>
+          <td><code>nombre</code>, <code>slug</code> (único), <code>icono</code>, <code>color</code>, <code>orden</code>, <code>activa</code>, <code>parent</code> (FK opcional)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h4 class="group-title">Comercio y logística</h4>
+    <table class="req-table">
+      <thead>
+        <tr>
+          <th style="width:22%">Entidad / Tabla</th>
+          <th style="width:28%">Relaciones</th>
+          <th>Campos principales</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>Compra</code><br><small style="color:#9ca3af">compra</small></td>
+          <td>FK Actor (comprador), FK Producto<br><small>idx_compra_comprador, idx_compra_estado</small></td>
+          <td><code>estado</code> (PENDIENTE/PAGADO/ENVIADO/ENTREGADO/COMPLETADA…), <code>stripePaymentIntentId</code>, <code>precioFinal</code>, <code>comisionNexus</code>, <code>metodoEntrega</code>, dirección completa de entrega, fechas de cada hito</td>
         </tr>
         <tr>
-          <td><code>Compra</code></td>
-          <td><code>compra</code></td>
-          <td><code>DomainEntity</code></td>
-          <td>idx_compra_comprador, idx_compra_estado</td>
-          <td>comprador/Actor (FK), producto/Producto (FK), estado (PENDIENTE/PAGADO/ENVIADO/ENTREGADO/EN_DISPUTA/REEMBOLSADA/CANCELADA/COMPLETADA), stripePaymentIntentId, precioFinal, precioEnvio, comisionNexus, metodoEntrega, dirNombre/Calle/Ciudad/CodigoPostal/Pais/Telefono, fechaCompra, fechaPago, fechaEnvio, fechaEntrega, fechaCompletada, tipoEnvio, puntoRecogidaId</td>
+          <td><code>Envio</code><br><small style="color:#9ca3af">envio</small></td>
+          <td>OneToOne con <code>Compra</code></td>
+          <td><code>codigoEnvio</code> (SHIP-XXXXXXXX), <code>codigoQR</code> (base64), <code>transportista</code>, <code>numeroSeguimiento</code>, <code>urlTracking</code>, <code>fechaLimiteEnvio</code>, <code>estadoEnvio</code></td>
         </tr>
         <tr>
-          <td><code>Envio</code></td>
-          <td><code>envio</code></td>
-          <td><code>DomainEntity</code></td>
-          <td>&mdash;</td>
-          <td>compra (FK OneToOne), codigoEnvio (SHIP-XXXXXXXX), codigoQR (base64), transportista, numeroSeguimiento, urlTracking, fechaLimiteEnvio, estado (PENDIENTE/EN_TRANSITO/ENTREGADO)</td>
+          <td><code>Devolucion</code><br><small style="color:#9ca3af">devolucion</small></td>
+          <td>FK Compra; tabla <code>devolucion_fotos</code></td>
+          <td><code>motivo</code> (enum), <code>descripcion</code>, fotos de evidencia (hasta 4 URLs), <code>notaVendedor</code>, <code>importeDevuelto</code>, <code>estado</code> (SOLICITADA/ACEPTADA/RECHAZADA/COMPLETADA)</td>
         </tr>
         <tr>
-          <td><code>Devolucion</code></td>
-          <td><code>devolucion</code></td>
-          <td><code>DomainEntity</code></td>
-          <td>&mdash;</td>
-          <td>compra (FK), motivo (enum MotivoDevolucion), descripcion, fotosEvidencia (hasta 4 URLs), dirDevolucion, notaVendedor, importeDevuelto, estado (SOLICITADA/ACEPTADA/RECHAZADA/COMPLETADA)</td>
+          <td><code>Contrato</code><br><small style="color:#9ca3af">contrato</small></td>
+          <td>FK Empresa, FK Actor</td>
+          <td><code>tipoContrato</code> (BANNER/PUBLICACION), <code>estado</code> (DRAFT→ACTIVE→EXPIRED), <code>monto</code>, <code>itemId</code> (ítem patrocinado), <code>diasPatrocinio</code>, <code>stripeCheckoutSessionId</code></td>
         </tr>
         <tr>
-          <td><code>ChatMensaje</code></td>
-          <td><code>chat_mensaje</code></td>
-          <td><code>DomainEntity</code></td>
-          <td>roomId, remitente, receptor, fechaEnvio</td>
-          <td>remitente/Actor (FK), receptor/Actor (FK), producto/Producto (FK, opcional), roomId, texto, mediaUrl, duracionAudio, tipo (TEXTO/IMAGEN/VIDEO/AUDIO/GIF/OFERTA_PRECIO/SISTEMA), leido, recibido, precioPropuesto, estadoPropuesta (PENDIENTE/ACEPTADA/RECHAZADA)</td>
+          <td><code>Cupon</code><br><small style="color:#9ca3af">cupon</small></td>
+          <td>Tabla <code>cupon_uso</code> (historial); tabla <code>cupon_categorias</code></td>
+          <td><code>codigo</code> (unique, máx 20 chars), <code>tipoDescuento</code> (PORCENTAJE/FIJO), <code>valor</code>, <code>importeMinimo</code>, <code>alcance</code>, <code>limiteTotalUsos</code>, <code>limiteUsosPorUsuario</code>, fechas de vigencia</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h4 class="group-title">Social y sistema</h4>
+    <table class="req-table">
+      <thead>
+        <tr>
+          <th style="width:22%">Entidad / Tabla</th>
+          <th style="width:28%">Relaciones</th>
+          <th>Campos principales</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>ChatMensaje</code><br><small style="color:#9ca3af">chat_mensaje</small></td>
+          <td>FK Actor ×2 (remitente, receptor), FK Producto (opcional)<br><small>idx: roomId, remitente, receptor, fechaEnvio</small></td>
+          <td><code>roomId</code>, <code>texto</code>, <code>mediaUrl</code>, <code>tipo</code> (TEXTO/IMAGEN/VIDEO/AUDIO/GIF/OFERTA_PRECIO), <code>leido</code>, <code>recibido</code>, <code>precioPropuesto</code>, <code>estadoPropuesta</code></td>
         </tr>
         <tr>
-          <td><code>Valoracion</code></td>
-          <td><code>valoracion</code></td>
-          <td><code>DomainEntity</code></td>
-          <td>compra (unique, una valoración por compra)</td>
-          <td>comprador/Actor (FK), vendedor/Actor (FK), compra/Compra (FK unique), puntuacion (1–5), comentario, respuestaVendedor, fechaRespuesta</td>
+          <td><code>Valoracion</code><br><small style="color:#9ca3af">valoracion</small></td>
+          <td>FK Actor ×2 (comprador, vendedor), FK Compra (unique — una por compra)</td>
+          <td><code>puntuacion</code> (1–5 estrellas), <code>comentario</code>, <code>respuestaVendedor</code>, <code>fechaRespuesta</code></td>
         </tr>
         <tr>
-          <td><code>Contrato</code></td>
-          <td><code>contrato</code></td>
-          <td><code>DomainEntity</code></td>
-          <td>&mdash;</td>
-          <td>empresa/Empresa (FK), actor/Actor (FK), tipoContrato (BANNER/PUBLICACION), estado (DRAFT/PROPUESTA_ADMIN/PENDIENTE_PAGO/ACTIVE/RECHAZADO/EXPIRED/CANCELLED), fechaInicio, fechaFin, monto, tipoItem, itemId, itemTitulo, itemImagen, diasPatrocinio, textoBanner, urlClick, stripeCheckoutSessionId, stripePaymentIntentId</td>
+          <td><code>SparkVoto</code><br><small style="color:#9ca3af">spark_voto</small></td>
+          <td>FK Actor, FK Oferta<br><small>unique (usuario_id + oferta_id)</small></td>
+          <td><code>tipoVoto</code> (SPARK/DRIP), <code>fecha</code></td>
         </tr>
         <tr>
-          <td><code>Cupon</code></td>
-          <td><code>cupon</code></td>
-          <td><code>DomainEntity</code></td>
-          <td>codigo (unique)</td>
-          <td>codigo (único, máx 20 chars), tipoDescuento (PORCENTAJE/FIJO), valor, importeMinimo, topeMaximo, alcance (TODOS/USUARIO_ESPECIFICO/GRUPO), limiteTotalUsos, limiteUsosPorUsuario, fechaInicio, fechaFin, categoriasAplicables</td>
+          <td><code>Favorito</code><br><small style="color:#9ca3af">favorito</small></td>
+          <td>FK Actor, FK Producto/Oferta/Vehiculo (opcional)</td>
+          <td><code>fecha</code>. Restricción unique por usuario + ítem para evitar duplicados.</td>
         </tr>
         <tr>
-          <td><code>Categoria</code></td>
-          <td><code>categoria</code></td>
-          <td><code>DomainEntity</code></td>
-          <td>slug (unique)</td>
-          <td>árbol jerarquico self-join (parent → hijos), nombre, slug (único), icono, color, orden, activa</td>
+          <td><code>NewsletterSuscripcion</code><br><small style="color:#9ca3af">newsletter_suscripcion</small></td>
+          <td>Sin FK externas<br><small>email (unique), tokenBaja (unique)</small></td>
+          <td><code>email</code>, <code>activa</code>, <code>ipConsentimiento</code>, <code>fechaConsentimiento</code>, <code>versionPolitica</code>, <code>tokenBaja</code> (único por suscriptor), <code>fechaBaja</code></td>
         </tr>
         <tr>
-          <td><code>NewsletterSuscripcion</code></td>
-          <td><code>newsletter_suscripcion</code></td>
-          <td><code>DomainEntity</code></td>
-          <td>email (unique), tokenBaja (unique)</td>
-          <td>email, activa, ipConsentimiento, fechaConsentimiento, versionPolitica, tokenBaja, fechaBaja</td>
+          <td><code>AuditLog</code><br><small style="color:#9ca3af">audit_log</small></td>
+          <td>FK Actor (admin que actuó)<br><small>idx: actor_id, fechaAccion</small></td>
+          <td><code>tipoAccion</code>, <code>descripcion</code>, <code>fechaAccion</code>. Registro <strong>inmutable</strong> de cada acción administrativa sensible.</td>
         </tr>
         <tr>
-          <td><code>AuditLog</code></td>
-          <td><code>audit_log</code></td>
-          <td><code>DomainEntity</code></td>
-          <td>actor, fechaAccion</td>
-          <td>actor/Actor (FK), tipoAccion, descripcion, fechaAccion. Registro inmutable de acciones administrativas.</td>
+          <td><code>NotificacionInApp</code><br><small style="color:#9ca3af">notificacion_in_app</small></td>
+          <td>FK Actor (destinatario)<br><small>idx: actor_id, leida, fecha</small></td>
+          <td><code>titulo</code>, <code>mensaje</code>, <code>tipo</code> (NUEVA_COMPRA/MENSAJE/ALERTA/CADUCIDAD_ANUNCIO/…), <code>urlDestino</code>, <code>leida</code>, <code>destacada</code></td>
         </tr>
       </tbody>
     </table>
@@ -668,6 +737,59 @@ import DocLayout from "../layouts/DocLayout.astro";
     </table>
 
     <p>Los servicios Angular del directorio <code>core/services/</code> encapsulan todas las llamadas HTTP al backend mediante <code>HttpClient</code>. El <code>JwtInterceptor</code> inyecta automáticamente el token Bearer en todas las peticiones internas (excluye URLs externas como las de Stripe o Google). El <code>ErrorInterceptor</code> gestiona de forma centralizada las respuestas de error 401 (sesión expirada), 403 (acceso denegado) y 500 (error interno).</p>
+
+    <h3 class="subsection-title">Las dos aplicaciones Angular: diferencias y relación con el backend</h3>
+    <p>
+      Nexus tiene dos frontends Angular completamente separados que se conectan al mismo backend. No comparten código entre sí, tienen dominios distintos y sus tokens JWT sirven para cosas diferentes. Esto es deliberado: si alguien encuentra un fallo en la app pública, no puede saltarse al panel de admin.
+    </p>
+
+    <div class="context-box" style="padding: 0; overflow: hidden; margin: 20px 0 32px;">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0;">
+        <div style="padding: 20px 24px; border-right: 1px solid #c7d7fe;">
+          <p style="font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #4f46e5; margin: 0 0 12px;">nexus-angular-app &mdash; App de usuario</p>
+          <ul style="margin: 0; padding-left: 18px; font-size: 0.85rem; color: #374151; line-height: 1.7;">
+            <li><strong>Para quién:</strong> cualquier persona, sin necesidad de cuenta para navegar</li>
+            <li><strong>Rutas públicas:</strong> catálogo, buscador, detalle de productos, perfiles públicos</li>
+            <li><strong>Rutas privadas:</strong> publicar anuncios, comprar, mensajes, devoluciones, configuración</li>
+            <li><strong>Tecnología extra:</strong> Ionic 8 para UI móvil + Capacitor 8 para compilar como APK Android</li>
+            <li><strong>WebSocket:</strong> sí — chat en tiempo real y notificaciones in-app</li>
+            <li><strong>Roles JWT:</strong> <code>ROLE_USER</code> y <code>ROLE_EMPRESA</code></li>
+            <li><strong>Despliegue:</strong> Vercel, dominio principal de la plataforma</li>
+          </ul>
+        </div>
+        <div style="padding: 20px 24px;">
+          <p style="font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #7c3aed; margin: 0 0 12px;">nexus-admin-web-app &mdash; Panel de administración</p>
+          <ul style="margin: 0; padding-left: 18px; font-size: 0.85rem; color: #374151; line-height: 1.7;">
+            <li><strong>Para quién:</strong> solo administradores con <code>ROLE_ADMIN</code></li>
+            <li><strong>Rutas:</strong> todas privadas, redirige a login si no hay token admin válido</li>
+            <li><strong>Módulos:</strong> dashboard, estadísticas, usuarios, moderación, reportes, devoluciones, compras, contratos, cupones, patrocinios, newsletter, notificaciones masivas, soporte de chat, audit log, categorías, seguridad y configuración global</li>
+            <li><strong>Tecnología extra:</strong> solo Angular puro, sin Ionic ni Capacitor</li>
+            <li><strong>WebSocket:</strong> no (el soporte de chat usa polling o conexión puntual)</li>
+            <li><strong>Roles JWT:</strong> <code>ROLE_ADMIN</code> exclusivamente</li>
+            <li><strong>Despliegue:</strong> Vercel, subdominio separado</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <h4 class="group-title">Cómo se comunican con el backend</h4>
+    <p>
+      Las dos apps siguen exactamente el mismo patrón de comunicación: todas las peticiones van con el header <code>Authorization: Bearer &lt;token&gt;</code>, el <code>JwtInterceptor</code> lo inyecta automáticamente y el backend valida el token en cada petición antes de ejecutar nada. La diferencia está en qué endpoints acepta cada token:
+    </p>
+    <ul>
+      <li>Un token de <code>ROLE_USER</code> puede llamar a rutas como <code>/producto</code>, <code>/compra</code>, <code>/chat</code>. Si intenta acceder a <code>/api/admin/**</code>, recibe un 403.</li>
+      <li>Un token de <code>ROLE_ADMIN</code> puede acceder a todo lo anterior más <code>/api/admin/**</code>. En la práctica, los admins solo usan su panel y nunca interactúan con la app pública.</li>
+      <li>Las rutas públicas (catálogo, búsqueda, newsletter) no necesitan token. El backend las sirve sin autenticación.</li>
+    </ul>
+    <p>
+      El <code>admin.service.ts</code> del panel de administración encapsula todas las llamadas HTTP bajo el prefijo <code>/api/admin/</code> en un único servicio centralizado. Esto hace que añadir nuevas funciones al panel sea mucho más simple: el componente llama al servicio, el servicio llama al backend, el backend ejecuta y devuelve. Sin lógica de negocio en el frontend.
+    </p>
+
+    <div class="req-block">
+      <p class="req-id">Nota de seguridad</p>
+      <h5>Por qué el admin está en un dominio separado</h5>
+      <p>Tener el panel de administración en un subdominio diferente no es solo una decisión de organización: es una medida de seguridad. Cualquier política de <code>Content-Security-Policy</code> o configuración de CORS del panel no afecta a la app pública, y viceversa. Si la app pública sufre un ataque XSS, el atacante no puede acceder al almacenamiento del panel porque están en orígenes distintos. El backend también rechaza cualquier petición a <code>/api/admin/**</code> que no lleve un JWT con <code>ROLE_ADMIN</code>, independientemente del origen.</p>
+    </div>
   </section>
 
   <section id="implementacion">
@@ -835,23 +957,59 @@ import DocLayout from "../layouts/DocLayout.astro";
   <section id="pruebas">
     <h2>Pruebas y Evaluación</h2>
     <p>
-      Metodología de pruebas, resultados obtenidos y evaluación del sistema.
+      La estrategia de pruebas del proyecto combina pruebas funcionales manuales sobre el sistema desplegado, pruebas de integración de los servicios externos (Stripe en modo test, Cloudinary, WebSocket) y pruebas exploratorias por parte del equipo. Dado que el proyecto es un Trabajo de Fin de Grado con un equipo de tres personas, el foco se puso en cobertura funcional real frente a cobertura de código automatizada.
     </p>
-    <div class="placeholder-box">Contenido pendiente de redactar...</div>
 
     <h3 class="subsection-title">Pruebas funcionales</h3>
-    <div class="placeholder-box">Contenido pendiente de redactar...</div>
+    <p>Se realizaron pruebas manuales sobre los flujos principales del sistema en el entorno de producción real (Render + Vercel), cubriendo los siguientes escenarios críticos:</p>
+    <ul>
+      <li>Registro, verificación de email y login (con y sin 2FA TOTP y Email OTP)</li>
+      <li>Publicación de productos, ofertas y vehículos con subida de imágenes a Cloudinary</li>
+      <li>Flujo completo de compra con Stripe en modo Test (Payment Intent &rarr; webhook &rarr; creación de compra)</li>
+      <li>Chat en tiempo real entre dos usuarios con WebSocket STOMP (mensajes de texto, imágenes y propuestas de precio)</li>
+      <li>Solicitud y gestión de devoluciones con reembolso en Stripe</li>
+      <li>Contratación de patrocinio por empresa con Stripe Checkout</li>
+      <li>Moderación desde el panel de administración (bans, sanciones, cupones, newsletter)</li>
+      <li>Compilación y prueba de la app como APK Android con Capacitor 8</li>
+    </ul>
 
     <h3 class="subsection-title">Pruebas unitarias</h3>
-    <div class="placeholder-box">Contenido pendiente de redactar...</div>
+    <p>El backend incluye la clase <code>PopulateDB.java</code> que genera datos de prueba consistentes para validar el comportamiento de la API en desarrollo. Las pruebas de los servicios críticos (validación de JWT, cálculo de comisiones, generación de QR) se verificaron mediante llamadas directas a los endpoints documentados en Swagger UI. La configuración de Stripe CLI (<code>stripe listen --forward-to localhost:8080/stripe/webhook</code>) se usó durante el desarrollo para validar el flujo de webhooks en local antes del despliegue.</p>
   </section>
 
   <section id="despliegue">
     <h2>Despliegue</h2>
-    <p>
-      Estrategia de puesta en producción, configuración del entorno y herramientas utilizadas para el despliegue del sistema.
+    <p class="lead">
+      El sistema completo está desplegado en producción usando exclusivamente servicios cloud. No hay servidores propios: todo corre en Render, Vercel y servicios gestionados de terceros.
     </p>
-    <div class="placeholder-box">Contenido pendiente de redactar...</div>
+
+    <h3 class="subsection-title">Backend — Render.com con Docker</h3>
+    <p>
+      El backend (<code>nexus-backend</code>) se despliega en Render como un <strong>Web Service Docker</strong>. El <code>Dockerfile</code> del repositorio usa una imagen base <code>eclipse-temurin:17-jdk-alpine</code>, compila el JAR con Maven y arranca la aplicación en el puerto 8080. El despliegue es continuo: cada push a la rama principal del repositorio dispara automáticamente un nuevo build y despliegue en Render.
+    </p>
+    <p>
+      La configuración de producción se gestiona íntegramente mediante <strong>variables de entorno</strong> en el panel de Render (nunca en el código fuente): cadena de conexión PostgreSQL, secreto JWT, claves de Stripe, API keys de Cloudinary, credenciales Gmail SMTP, secreto de webhook de Stripe, claves de Google OAuth y reCAPTCHA, y API keys de Gemini/Groq.
+    </p>
+    <p>
+      La base de datos es un <strong>PostgreSQL gestionado por Render</strong> (plan gratuito). Hibernate arranca con <code>ddl-auto=create</code> en el primer despliegue para generar el esquema, y luego se cambia a <code>validate</code> para no recrear tablas en reinicios. El pool de conexiones HikariCP está ajustado a máximo 3 conexiones para respetar el límite del plan gratuito.
+    </p>
+
+    <h3 class="subsection-title">Frontends — Vercel</h3>
+    <p>
+      Los tres frontends (<code>nexus-angular-app</code>, <code>nexus-admin-web-app</code>, <code>nexus-web-about</code>) se despliegan en <strong>Vercel</strong> con despliegue continuo por push. Cada proyecto tiene su propio <code>vercel.json</code> con la configuración de build y las reglas de reescritura de rutas necesarias para el enrutamiento SPA de Angular.
+    </p>
+    <p>
+      Las variables de entorno del frontend (URL del backend, claves públicas de Stripe, site key de reCAPTCHA, Google Client ID) se definen en el panel de Vercel y se inyectan en tiempo de build como variables de entorno de Angular (<code>environments/environment.prod.ts</code>).
+    </p>
+
+    <h3 class="subsection-title">App Android — Capacitor</h3>
+    <p>
+      La app móvil Android se genera a partir del mismo código de <code>nexus-angular-app</code>. El proceso de compilación es: <code>ng build --configuration production</code> &rarr; <code>npx cap copy android</code> &rarr; compilación del proyecto Android con Android Studio. El APK resultante funciona conectado al mismo backend en producción. La distribución en Google Play está pendiente de completar el proceso de firma y publicación.
+    </p>
+
+    <div class="info-callout">
+      <strong>Limitación del plan gratuito de Render:</strong> El servicio entra en hibernación después de 15 minutos de inactividad. La primera petición tras la hibernación puede tardar entre 30 y 60 segundos en responder mientras el contenedor Docker arranca. Esta limitación desaparece al migrar a un plan de pago con instancias persistentes.
+    </div>
   </section>
 
   <section id="conclusiones">
@@ -1205,38 +1363,37 @@ import DocLayout from "../layouts/DocLayout.astro";
     </table>
 
     <h3 class="subsection-title">Anexo C — Resumen del Modelo de Base de Datos</h3>
-    <p>Las tablas principales del esquema PostgreSQL generado por Hibernate. Todas las tablas incluyen una columna <code>id</code> (SERIAL PRIMARY KEY) heredada de <code>DomainEntity</code>.</p>
+    <p>Tablas principales del esquema PostgreSQL generado por Hibernate. Todas incluyen <code>id</code> (SERIAL PRIMARY KEY) heredado de <code>DomainEntity</code>. Para el detalle completo de campos consulta la sección <a href="#diseno">Diseño &rarr; Modelo de Base de Datos</a>.</p>
 
     <table class="req-table">
       <thead>
         <tr>
-          <th>Tabla</th>
-          <th>Columnas principales</th>
-          <th>Índices</th>
-          <th>Relaciones</th>
+          <th style="width:20%">Tabla</th>
+          <th style="width:45%">Columnas clave</th>
+          <th>Relaciones e índices</th>
         </tr>
       </thead>
       <tbody>
-        <tr><td><code>actor</code></td><td>username (unique), email (unique), password, nombre, apellidos, telefono, avatar, two_factor_enabled, two_factor_method, two_factor_secret, jwt_version, cuenta_eliminada, cuenta_verificada, baneado, motivo_ban, suspendido_hasta, flag_fraude, stripe_customer_id, onboarding_completado, google_id, reset_token (unique), reset_token_expira, fecha_registro</td><td>username, email, google_id, reset_token</td><td>Tabla padre de usuario, empresa, admin</td></tr>
-        <tr><td><code>usuario</code></td><td>actor_id (PK+FK), biografia, ubicacion, tipo_cuenta, reputacion, total_ventas, es_verificado, cuenta_privada, perfil_publico, mostrar_telefono, mostrar_ubicacion, permitir_mensajes_desconocidos, notif_nuevos_mensajes, notif_nueva_compra, notif_valoracion, notif_ofertas, notif_envios, notif_novedades, dir_nombre, dir_calle, dir_ciudad, dir_cp, dir_pais, dir_telefono, terminos_aceptados, version_terminos_aceptados, newsletter_suscrito</td><td>actor_id (FK)</td><td>FK a actor; tabla usuario_bloqueados (lista de IDs bloqueados)</td></tr>
-        <tr><td><code>empresa</code></td><td>actor_id (PK+FK), cif (unique), nombre_comercial, descripcion, web, telefono, logo, verificada</td><td>cif</td><td>FK a actor</td></tr>
-        <tr><td><code>admin</code></td><td>actor_id (PK+FK), nivel_acceso</td><td>actor_id (FK)</td><td>FK a actor</td></tr>
-        <tr><td><code>producto</code></td><td>id, titulo, descripcion, precio, tipo_oferta, estado, condicion, categoria_id, vendedor_id, marca, modelo, peso, admite_envio, precio_envio, precio_negociable, ubicacion, latitude, longitude, imagen_principal, numero_vistas, numero_favoritos, fecha_publicacion, fecha_caducidad, ultimo_aviso_caducidad_dias, pausado_hasta, motivo_pausa, destacado, patrocinado, patrocinio_hasta, fecha_venta</td><td>idx_producto_vendedor, idx_producto_estado, idx_producto_categoria</td><td>FK a actor (vendedor), FK a categoria; tabla producto_imagenes (galería)</td></tr>
-        <tr><td><code>oferta</code></td><td>id, titulo, descripcion, precio_oferta, precio_original, tienda, url_oferta, categoria_id, actor_id, imagen_principal, es_activa, estado, badge, fecha_publicacion, fecha_expiracion, spark_count, drip_count, spark_score, numero_vistas, numero_compartidos, numero_comentarios, codigo_descuento, es_online, ciudad_oferta, latitude, longitude, gastos_envio, destacada, es_flash, flash_fin, limite_unidades, patrocinada, patrocinio_hasta, fecha_finalizado</td><td>idx_oferta_activa, idx_oferta_categoria, idx_oferta_spark, idx_oferta_publicacion</td><td>FK a actor, FK a categoria; tabla oferta_imagenes</td></tr>
-        <tr><td><code>vehiculo</code></td><td>id, titulo, descripcion, precio, tipo_oferta, tipo_vehiculo, estado_vehiculo, condicion, categoria_id, publicador_id, marca, modelo, anio, kilometros, combustible, cambio, potencia, cilindrada, color, numero_puertas, plazas, matricula, itv, fecha_itv, garantia, ubicacion, latitude, longitude, imagen_principal, fecha_publicacion, fecha_caducidad, patrocinado</td><td>idx_vehiculo_publicador, idx_vehiculo_categoria, idx_vehiculo_estado, idx_vehiculo_tipo</td><td>FK a actor (publicador), FK a categoria; tablas vehiculo_imagenes, vehiculo_extras</td></tr>
-        <tr><td><code>compra</code></td><td>id, comprador_id, producto_id, estado, stripe_payment_intent_id, precio_final, precio_envio, costo_envio, comision_nexus, metodo_entrega, dir_nombre, dir_calle, dir_ciudad, dir_codigo_postal, dir_pais, dir_telefono, fecha_compra, fecha_pago, fecha_envio, fecha_entrega, fecha_completada, fecha_cancelacion, tipo_envio, punto_recogida_id</td><td>idx_compra_comprador, idx_compra_estado</td><td>FK a actor (comprador), FK a producto</td></tr>
-        <tr><td><code>envio</code></td><td>id, compra_id, codigo_envio, codigo_qr, transportista, numero_seguimiento, url_tracking, fecha_limite_envio, estado_envio</td><td>compra_id (unique)</td><td>FK a compra (OneToOne)</td></tr>
-        <tr><td><code>devolucion</code></td><td>id, compra_id, motivo, descripcion, nota_vendedor, importe_devuelto, estado, dir_devolucion</td><td>compra_id</td><td>FK a compra; tabla devolucion_fotos</td></tr>
-        <tr><td><code>chat_mensaje</code></td><td>id, remitente_id, receptor_id, producto_id, room_id, texto, media_url, duracion_audio, tipo, leido, recibido, precio_propuesto, estado_propuesta, fecha_envio</td><td>room_id, remitente_id, receptor_id, fecha_envio</td><td>FK a actor (remitente, receptor), FK a producto (opcional)</td></tr>
-        <tr><td><code>valoracion</code></td><td>id, comprador_id, vendedor_id, compra_id (unique), puntuacion, comentario, respuesta_vendedor, fecha_respuesta</td><td>compra_id (unique)</td><td>FK a actor x2, FK a compra</td></tr>
-        <tr><td><code>contrato</code></td><td>id, empresa_id, actor_id, tipo_contrato, estado, fecha, fecha_inicio, fecha_fin, monto, tipo_item, item_id, item_titulo, item_imagen, dias_patrocinio, texto_banner, url_click, stripe_checkout_session_id, stripe_payment_intent_id</td><td>&mdash;</td><td>FK a empresa, FK a actor</td></tr>
-        <tr><td><code>cupon</code></td><td>id, codigo (unique), tipo_descuento, valor, importe_minimo, tope_maximo, alcance, limite_total_usos, limite_usos_por_usuario, fecha_inicio, fecha_fin</td><td>codigo</td><td>Tabla cupon_categorias (categorias aplicables), tabla cupon_uso (historial de usos)</td></tr>
-        <tr><td><code>categoria</code></td><td>id, nombre, slug (unique), icono, color, orden, activa, parent_id</td><td>slug, parent_id</td><td>Self-join ManyToOne (parent → hijos)</td></tr>
-        <tr><td><code>newsletter_suscripcion</code></td><td>id, email (unique), activa, ip_consentimiento, fecha_consentimiento, version_politica, token_baja (unique), fecha_baja</td><td>email, token_baja</td><td>&mdash;</td></tr>
-        <tr><td><code>audit_log</code></td><td>id, actor_id, tipo_accion, descripcion, fecha_accion</td><td>actor_id, fecha_accion</td><td>FK a actor</td></tr>
-        <tr><td><code>spark_voto</code></td><td>id, usuario_id, oferta_id, tipo_voto (SPARK/DRIP), fecha</td><td>usuario_id + oferta_id (unique)</td><td>FK a actor, FK a oferta</td></tr>
-        <tr><td><code>favorito</code></td><td>id, usuario_id, producto_id, oferta_id, vehiculo_id, fecha</td><td>usuario_id + producto_id (unique)</td><td>FK a usuario, FK a producto/oferta/vehiculo</td></tr>
-        <tr><td><code>notificacion_in_app</code></td><td>id, actor_id, titulo, mensaje, tipo, url_destino, leida, destacada, fecha</td><td>actor_id, leida, fecha</td><td>FK a actor</td></tr>
+        <tr><td><code>actor</code></td><td>username, email, password (bcrypt), jwt_version, two_factor_enabled, baneado, suspendido_hasta, stripe_customer_id, google_id, reset_token</td><td>Padre de usuario, empresa, admin &middot; Idx: username, email, google_id, reset_token</td></tr>
+        <tr><td><code>usuario</code></td><td>reputacion, total_ventas, ubicacion, cuenta_privada, newsletter_suscrito, terminos_aceptados, dir_* (dirección embebida)</td><td>FK &rarr; actor (PK compartida) &middot; Tabla: usuario_bloqueados</td></tr>
+        <tr><td><code>empresa</code></td><td>cif (unique), nombre_comercial, descripcion, web, logo, verificada</td><td>FK &rarr; actor (PK compartida) &middot; Idx: cif</td></tr>
+        <tr><td><code>admin</code></td><td>nivel_acceso (1/2/3)</td><td>FK &rarr; actor (PK compartida)</td></tr>
+        <tr><td><code>producto</code></td><td>titulo, precio, tipo_oferta, estado, condicion, admite_envio, latitude, longitude, imagen_principal, fecha_caducidad, patrocinado</td><td>FK &rarr; actor (vendedor), categoria &middot; Tabla: producto_imagenes &middot; Idx: vendedor, estado, categoria</td></tr>
+        <tr><td><code>oferta</code></td><td>titulo, precio_oferta, precio_original, tienda, badge, spark_count, drip_count, spark_score, es_flash, flash_fin, codigo_descuento, patrocinada</td><td>FK &rarr; actor, categoria &middot; Tabla: oferta_imagenes &middot; Idx: activa, spark, categoria, publicacion</td></tr>
+        <tr><td><code>vehiculo</code></td><td>tipo_vehiculo, marca, modelo, anio, kilometros, combustible, cambio, potencia, itv, garantia, latitude, longitude</td><td>FK &rarr; actor (publicador), categoria &middot; Tablas: vehiculo_imagenes, vehiculo_extras &middot; Idx: publicador, tipo, estado</td></tr>
+        <tr><td><code>compra</code></td><td>estado, stripe_payment_intent_id, precio_final, comision_nexus, metodo_entrega, dir_* (dirección), fechas de hitos</td><td>FK &rarr; actor (comprador), producto &middot; Idx: comprador, estado</td></tr>
+        <tr><td><code>envio</code></td><td>codigo_envio (SHIP-XXXXXXXX), codigo_qr (base64), transportista, numero_seguimiento, url_tracking, fecha_limite_envio, estado_envio</td><td>FK &rarr; compra (OneToOne)</td></tr>
+        <tr><td><code>devolucion</code></td><td>motivo, descripcion, nota_vendedor, importe_devuelto, estado</td><td>FK &rarr; compra &middot; Tabla: devolucion_fotos</td></tr>
+        <tr><td><code>chat_mensaje</code></td><td>room_id, texto, media_url, tipo, leido, recibido, precio_propuesto, estado_propuesta, fecha_envio</td><td>FK &rarr; actor x2 (remitente, receptor), producto (opc.) &middot; Idx: room_id, fechas</td></tr>
+        <tr><td><code>valoracion</code></td><td>puntuacion (1-5), comentario, respuesta_vendedor</td><td>FK &rarr; actor x2, compra (unique &mdash; una por compra)</td></tr>
+        <tr><td><code>contrato</code></td><td>tipo_contrato, estado, monto, dias_patrocinio, stripe_checkout_session_id</td><td>FK &rarr; empresa, actor</td></tr>
+        <tr><td><code>cupon</code></td><td>codigo (unique), tipo_descuento, valor, alcance, limite_total_usos, fechas vigencia</td><td>Tablas: cupon_categorias, cupon_uso &middot; Idx: codigo</td></tr>
+        <tr><td><code>categoria</code></td><td>nombre, slug (unique), icono, color, orden, activa, parent_id</td><td>Self-join (parent &rarr; hijos) &middot; Idx: slug, parent_id</td></tr>
+        <tr><td><code>newsletter_suscripcion</code></td><td>email (unique), activa, ip_consentimiento, fecha_consentimiento, version_politica, token_baja (unique)</td><td>Sin FK externas &middot; Idx: email, token_baja</td></tr>
+        <tr><td><code>audit_log</code></td><td>tipo_accion, descripcion, fecha_accion</td><td>FK &rarr; actor (admin responsable) &middot; Idx: actor_id, fecha_accion</td></tr>
+        <tr><td><code>spark_voto</code></td><td>tipo_voto (SPARK/DRIP), fecha</td><td>FK &rarr; actor, oferta &middot; Unique: usuario_id + oferta_id</td></tr>
+        <tr><td><code>favorito</code></td><td>fecha</td><td>FK &rarr; actor y producto/oferta/vehiculo (opc.) &middot; Unique: usuario + item</td></tr>
+        <tr><td><code>notificacion_in_app</code></td><td>titulo, mensaje, tipo, url_destino, leida, destacada, fecha</td><td>FK &rarr; actor &middot; Idx: actor_id, leida, fecha</td></tr>
       </tbody>
     </table>
   </section>
@@ -2889,7 +3046,7 @@ import DocLayout from "../layouts/DocLayout.astro";
       <h5>Sistema de Votación Spark / Drip</h5>
       <p>
         Los usuarios registrados podrán votar las ofertas y productos de la
-        comunidad con Spark (👍 positivo) o Drip (👎 negativo). El sistema
+        comunidad con Spark (voto positivo) o Drip (voto negativo). El sistema
         admite cambiar el voto y cancelarlo (toggle). La puntuación resultante
         determina el ranking de chollos en tiempo real.
       </p>
