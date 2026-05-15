@@ -2,177 +2,192 @@
 import Layout from "./Layout.astro";
 
 interface Props {
-  title: string;
-  description?: string;
-  image?: string;
+    title: string;
+    description?: string;
+    image?: string;
 }
 
 const {
-  title,
-  description = "Documentación técnica detallada de Nexus App: arquitectura, diseño y manual de usuario.",
-  image = "/assets/identidad/logotipo.webp",
+    title,
+    description = "Documentación técnica detallada de Nexus App: arquitectura, diseño y manual de usuario.",
+    image = "/assets/identidad/logotipo.webp",
 } = Astro.props;
 
 // Documentos para el panel lateral
 const docs = [
-  {
-    title: "Documento General",
-    items: [
-      { name: "Introducción y Contexto", id: "introduccion" },
-      { name: "Análisis y Requisitos", id: "analisis" },
-      { name: "Diseño", id: "diseno" },
-      { name: "Implementación", id: "implementacion" },
-      { name: "Pruebas y Evaluación", id: "pruebas" },
-      { name: "Conclusiones y Mejoras", id: "conclusiones" },
-      { name: "Bibliografía", id: "bibliografia" },
-      { name: "Anexos", id: "anexos" },
-    ],
-  },
-  {
-    title: "Otros Documentos",
-    items: [
-      { name: "Plan de Proyecto", id: "plan-proyecto" },
-      { name: "Estudio de Viabilidad", id: "viabilidad" },
-      { name: "Requisitos del Sistema", id: "requisitos-sistema" },
-      { name: "Diagrama UML", id: "uml" },
-      {
-        name: "Mockup Interactivo",
-        id: "mockup",
-        icon: "/assets/herramientas/figma.png",
-      },
-    ],
-  },
+    {
+        title: "Documento General",
+        items: [
+            { name: "Introducción y Contexto", id: "introduccion" },
+            { name: "Análisis y Requisitos", id: "analisis" },
+            { name: "Diseño", id: "diseno" },
+            { name: "Implementación", id: "implementacion" },
+            { name: "Pruebas y Evaluación", id: "pruebas" },
+            { name: "Conclusiones y Mejoras", id: "conclusiones" },
+            { name: "Bibliografía", id: "bibliografia" },
+            { name: "Anexos", id: "anexos" },
+        ],
+    },
+    {
+        title: "Otros Documentos",
+        items: [
+            { name: "Plan de Proyecto", id: "plan-proyecto" },
+            { name: "Estudio de Viabilidad", id: "viabilidad" },
+            { name: "Requisitos del Sistema", id: "requisitos-sistema" },
+            { name: "Diagrama UML", id: "uml" },
+            {
+                name: "Mockup Interactivo",
+                id: "mockup",
+                icon: "/assets/herramientas/figma.png",
+            },
+        ],
+    },
 ];
 ---
 
 <Layout title={title} description={description} image={image}>
-  <!-- Menú móvil sticky solo para el índice -->
-  <div class="mobile-doc-nav">
-    <button class="index-btn" id="index-toggle">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="8" y1="6" x2="21" y2="6"></line>
-        <line x1="8" y1="12" x2="21" y2="12"></line>
-        <line x1="8" y1="18" x2="21" y2="18"></line>
-        <line x1="3" y1="6" x2="3.01" y2="6"></line>
-        <line x1="3" y1="12" x2="3.01" y2="12"></line>
-        <line x1="3" y1="18" x2="3.01" y2="18"></line>
-      </svg>
-      <span>Índice de Contenidos</span>
-    </button>
-  </div>
-
-  <!-- Cajón de Índice para Móvil -->
-  <div class="mobile-index-drawer" id="index-drawer">
-    <div class="drawer-header">
-      <h3>Tabla de Contenidos</h3>
-      <button id="close-index" class="close-drawer">&times;</button>
+    <!-- Menú móvil sticky solo para el índice -->
+    <div class="mobile-doc-nav">
+        <button class="index-btn" id="index-toggle">
+            <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+            >
+                <line x1="8" y1="6" x2="21" y2="6"></line>
+                <line x1="8" y1="12" x2="21" y2="12"></line>
+                <line x1="8" y1="18" x2="21" y2="18"></line>
+                <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                <line x1="3" y1="18" x2="3.01" y2="18"></line>
+            </svg>
+            <span>Índice de Contenidos</span>
+        </button>
     </div>
-    <div class="drawer-body">
-      {
-        docs.map((section) => (
-          <div class="sidebar-section">
-            <h3>{section.title}</h3>
-            <ul>
-              {section.items.map((item) => (
-                <li>
-                  <a href={`#${item.id}`} class="drawer-link sidebar-link-mobile">
-                    {item.name}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))
-      }
-    </div>
-  </div>
-  <div class="drawer-overlay" id="drawer-overlay"></div>
 
-  <div class="doc-layout">
-    <aside class="sidebar">
-      <div class="sidebar-content">
-        {
-          docs.map((section) => (
-            <div class="sidebar-section">
-              <h3>{section.title}</h3>
-              <ul>
-                {section.items.map((item) => (
-                  <li>
-                    <a href={`#${item.id}`} class="sidebar-link">
-                      {item.name}
-                      {(item as any).icon && (
-                        <img
-                          src={(item as any).icon}
-                          alt={item.name}
-                          class="sidebar-icon"
-                        />
-                      )}
-                    </a>
-                  </li>
-                ))}
-              </ul>
+    <!-- Cajón de Índice para Móvil -->
+    <div class="mobile-index-drawer" id="index-drawer">
+        <div class="drawer-header">
+            <h3>Tabla de Contenidos</h3>
+            <button id="close-index" class="close-drawer">&times;</button>
+        </div>
+        <div class="drawer-body">
+            {
+                docs.map((section) => (
+                    <div class="sidebar-section">
+                        <h3>{section.title}</h3>
+                        <ul>
+                            {section.items.map((item) => (
+                                <li>
+                                    <a
+                                        href={`#${item.id}`}
+                                        class="drawer-link sidebar-link-mobile"
+                                    >
+                                        {item.name}
+                                    </a>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                ))
+            }
+        </div>
+    </div>
+    <div class="drawer-overlay" id="drawer-overlay"></div>
+
+    <div class="doc-layout">
+        <aside class="sidebar">
+            <div class="sidebar-content">
+                {
+                    docs.map((section) => (
+                        <div class="sidebar-section">
+                            <h3>{section.title}</h3>
+                            <ul>
+                                {section.items.map((item) => (
+                                    <li>
+                                        <a
+                                            href={`#${item.id}`}
+                                            class="sidebar-link"
+                                        >
+                                            {item.name}
+                                            {(item as any).icon && (
+                                                <img
+                                                    src={(item as any).icon}
+                                                    alt={item.name}
+                                                    class="sidebar-icon"
+                                                />
+                                            )}
+                                        </a>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    ))
+                }
             </div>
-          ))
-        }
-      </div>
-    </aside>
+        </aside>
 
-    <main class="content">
-      <slot />
-    </main>
-  </div>
+        <main class="content">
+            <slot />
+        </main>
+    </div>
 </Layout>
 
 <style is:global>
-      /* Header Blanco Adaptado (igual que Tecnologías) */
-      nav.site-nav {
+    /* Header Blanco Adaptado (igual que Tecnologías) */
+    nav.site-nav {
         background-color: rgba(255, 255, 255, 0.8) !important;
         backdrop-filter: blur(10px) !important;
         -webkit-backdrop-filter: blur(10px) !important;
         border-bottom: 1px solid #eee !important;
-      }
+    }
 
-      nav.site-nav a, 
-      nav.site-nav span,
-      nav.site-nav .nav-contact span {
+    nav.site-nav a,
+    nav.site-nav span,
+    nav.site-nav .nav-contact span {
         color: #000000 !important;
-      }
+    }
 
-      nav.site-nav .nav-line {
+    nav.site-nav .nav-line {
         background-color: #ddd !important;
-      }
+    }
 
-      nav.site-nav .social-icon {
+    nav.site-nav .social-icon {
         background: #f0f0f0 !important;
         color: #111 !important;
-      }
+    }
 
-      nav.site-nav .social-icon:hover {
+    nav.site-nav .social-icon:hover {
         background: #e0e0e0 !important;
-      }
+    }
 
-      nav.site-nav .hamburger-line {
+    nav.site-nav .hamburger-line {
         background-color: #000000 !important;
-      }
+    }
 
-      nav.site-nav .social-icon svg {
+    nav.site-nav .social-icon svg {
         stroke: #111 !important;
-      }
+    }
 
-      .is-menu-open .header-inline-nav {
+    .is-menu-open .header-inline-nav {
         background: rgba(255, 255, 255, 0.98) !important;
-      }
+    }
 
-      .is-menu-open .header-inline-nav a {
+    .is-menu-open .header-inline-nav a {
         color: #000000 !important;
-      }
+    }
 
-      body {
+    body {
         background-color: #ffffff !important;
         /* DO NOT override global text color here so header/footer stay intact */
-      }
-      
-      :root {
+    }
+
+    :root {
         --doc-bg: #ffffff;
         --doc-sidebar-bg: #fafafa;
         --doc-text: #1a1a1a;
@@ -181,20 +196,20 @@ const docs = [
         --doc-accent-soft: rgba(124, 58, 237, 0.08);
         --doc-border: #eaeaea;
         --doc-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-      }
+    }
 
-      /* Layout */
-      .doc-layout {
+    /* Layout */
+    .doc-layout {
         display: flex;
         min-height: 100vh;
         padding-top: 80px; /* Account for fixed header */
         width: 100%;
         position: relative;
         color: var(--doc-text); /* Scope light text only to doc content */
-      }
+    }
 
-      /* Premium Sidebar */
-      .sidebar {
+    /* Premium Sidebar */
+    .sidebar {
         /* Width dynamically set via JS to exactly match nav-brand */
         width: 300px; /* fallback */
         height: calc(100vh - 112px);
@@ -208,39 +223,39 @@ const docs = [
         /* Scrollbar styles for webkit */
         scrollbar-width: thin;
         scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
-      }
+    }
 
-      .sidebar::-webkit-scrollbar {
+    .sidebar::-webkit-scrollbar {
         width: 4px;
-      }
-      .sidebar::-webkit-scrollbar-track {
+    }
+    .sidebar::-webkit-scrollbar-track {
         background: transparent;
-      }
-      .sidebar::-webkit-scrollbar-thumb {
+    }
+    .sidebar::-webkit-scrollbar-thumb {
         background-color: rgba(0, 0, 0, 0.2);
         border-radius: 10px;
-      }
+    }
 
-      .sidebar-section {
+    .sidebar-section {
         margin-bottom: 2.5rem;
-      }
+    }
 
-      .sidebar-section h3 {
+    .sidebar-section h3 {
         font-size: 0.75rem;
         text-transform: uppercase;
         letter-spacing: 0.1em;
         color: var(--doc-text-muted);
         margin-bottom: 1.2rem;
         font-weight: 700;
-      }
+    }
 
-      .sidebar-section ul {
+    .sidebar-section ul {
         list-style: none;
         padding: 0;
         margin: 0;
-      }
+    }
 
-      .sidebar-link {
+    .sidebar-link {
         display: flex;
         align-items: center;
         gap: 12px;
@@ -253,54 +268,54 @@ const docs = [
         border-radius: 8px;
         margin-bottom: 4px;
         border: 1px solid transparent;
-      }
+    }
 
-      .sidebar-icon {
+    .sidebar-icon {
         width: 16px;
         height: 16px;
         object-fit: contain;
         opacity: 0.7;
         transition: opacity 0.25s ease;
         filter: invert(1);
-      }
+    }
 
-      .sidebar-link:hover {
+    .sidebar-link:hover {
         color: var(--doc-text);
         background: rgba(0, 0, 0, 0.03);
-      }
+    }
 
-      .sidebar-link:hover .sidebar-icon {
+    .sidebar-link:hover .sidebar-icon {
         opacity: 1;
-      }
+    }
 
-      .sidebar-link.active {
+    .sidebar-link.active {
         color: var(--doc-accent);
         font-weight: 600;
         background: var(--doc-accent-soft);
         border-color: rgba(124, 58, 237, 0.15);
-      }
-      
-      .sidebar-link.active .sidebar-icon {
-        opacity: 1;
-      }
+    }
 
-      /* Main Content Premium Styling */
-      .content {
+    .sidebar-link.active .sidebar-icon {
+        opacity: 1;
+    }
+
+    /* Main Content Premium Styling */
+    .content {
         flex: 1;
         padding: 4rem 5rem;
         max-width: 950px;
         color: var(--doc-text);
-      }
+    }
 
-      .content h1 {
+    .content h1 {
         font-size: 3.5rem;
         font-weight: 800;
         margin-bottom: 1.5rem;
         letter-spacing: -0.03em;
         color: var(--doc-text);
-      }
+    }
 
-      .content h2 {
+    .content h2 {
         font-size: 2.2rem;
         font-weight: 700;
         margin: 4rem 0 1.5rem;
@@ -309,42 +324,45 @@ const docs = [
         border-bottom: 1px solid var(--doc-border);
         padding-bottom: 0.5rem;
         color: var(--doc-text);
-      }
+    }
 
-      .content p {
+    .content p {
         font-size: 1.15rem;
         color: var(--doc-text);
         margin-bottom: 1.8rem;
         line-height: 1.8;
-      }
+    }
 
-      .content .lead {
+    .content .lead {
         font-size: 1.4rem;
         color: var(--doc-text-muted);
         margin-bottom: 3rem;
         line-height: 1.6;
         font-weight: 400;
-      }
+    }
 
-      /* Cards and elements inside docs */
-      .doc-card {
+    /* Cards and elements inside docs */
+    .doc-card {
         background: #fafafa;
         border: 1px solid var(--doc-border);
         border-radius: 16px;
         padding: 2.5rem;
         margin-bottom: 2.5rem;
-        transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        transition:
+            transform 0.3s ease,
+            box-shadow 0.3s ease,
+            border-color 0.3s ease;
         box-shadow: var(--doc-shadow);
-      }
+    }
 
-      .doc-card:hover {
+    .doc-card:hover {
         transform: translateY(-4px);
         box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
         border-color: rgba(0, 0, 0, 0.1);
-      }
+    }
 
-      /* Mobile Navigation Index */
-      .mobile-doc-nav {
+    /* Mobile Navigation Index */
+    .mobile-doc-nav {
         display: none;
         position: sticky;
         top: 70px;
@@ -354,9 +372,9 @@ const docs = [
         -webkit-backdrop-filter: blur(12px);
         border-bottom: 1px solid var(--doc-border);
         padding: 12px 20px;
-      }
+    }
 
-      .index-btn {
+    .index-btn {
         display: flex;
         align-items: center;
         gap: 10px;
@@ -370,14 +388,15 @@ const docs = [
         cursor: pointer;
         width: 100%;
         transition: all 0.2s ease;
-      }
+    }
 
-      .index-btn:hover, .index-btn:active {
+    .index-btn:hover,
+    .index-btn:active {
         background: rgba(0, 0, 0, 0.06);
-      }
+    }
 
-      /* Drawer Mobile */
-      .mobile-index-drawer {
+    /* Drawer Mobile */
+    .mobile-index-drawer {
         position: fixed;
         top: 0;
         right: -100%;
@@ -391,30 +410,30 @@ const docs = [
         flex-direction: column;
         border-left: 1px solid var(--doc-border);
         box-shadow: -10px 0 40px rgba(0, 0, 0, 0.1);
-      }
+    }
 
-      .mobile-index-drawer.open {
+    .mobile-index-drawer.open {
         right: 0;
-      }
+    }
 
-      .drawer-header {
+    .drawer-header {
         padding: 24px;
         border-bottom: 1px solid var(--doc-border);
         display: flex;
         justify-content: space-between;
         align-items: center;
         background: rgba(0, 0, 0, 0.02);
-      }
+    }
 
-      .drawer-header h3 {
+    .drawer-header h3 {
         font-size: 1.1rem;
         font-weight: 700;
         margin: 0;
         color: var(--doc-text);
         letter-spacing: -0.01em;
-      }
+    }
 
-      .close-drawer {
+    .close-drawer {
         background: rgba(0, 0, 0, 0.05);
         border: 1px solid rgba(0, 0, 0, 0.1);
         border-radius: 50%;
@@ -428,20 +447,20 @@ const docs = [
         justify-content: center;
         line-height: 1;
         transition: all 0.2s ease;
-      }
+    }
 
-      .close-drawer:hover {
+    .close-drawer:hover {
         background: rgba(0, 0, 0, 0.1);
         color: #111;
-      }
+    }
 
-      .drawer-body {
+    .drawer-body {
         padding: 24px;
         overflow-y: auto;
         flex: 1;
-      }
+    }
 
-      .drawer-link {
+    .drawer-link {
         display: block;
         padding: 14px 16px;
         color: var(--doc-text-muted);
@@ -452,23 +471,23 @@ const docs = [
         margin-bottom: 4px;
         transition: all 0.2s ease;
         border: 1px solid transparent;
-      }
+    }
 
-      .drawer-link:active,
-      .drawer-link:hover {
+    .drawer-link:active,
+    .drawer-link:hover {
         background: var(--doc-accent-soft);
         color: var(--doc-accent);
         border-color: rgba(124, 58, 237, 0.1);
-      }
-      
-      .drawer-link.active {
+    }
+
+    .drawer-link.active {
         background: var(--doc-accent-soft);
         color: var(--doc-accent);
         font-weight: 600;
         border-color: rgba(124, 58, 237, 0.2);
-      }
+    }
 
-      .drawer-overlay {
+    .drawer-overlay {
         position: fixed;
         top: 0;
         left: 0;
@@ -481,146 +500,185 @@ const docs = [
         opacity: 0;
         visibility: hidden;
         transition: all 0.3s ease;
-      }
+    }
 
-      .drawer-overlay.visible {
+    .drawer-overlay.visible {
         opacity: 1;
         visibility: visible;
-      }
+    }
 
-      /* Responsive adjustments */
-      @media (max-width: 1024px) {
+    /* Responsive adjustments */
+    @media (max-width: 1024px) {
         .sidebar {
-          display: none;
+            display: none;
         }
         .content {
-          padding: 3rem 2rem;
+            padding: 3rem 2rem;
         }
         .doc-layout {
-          display: block;
+            display: block;
         }
         .mobile-doc-nav {
-          display: block;
+            display: block;
         }
-      }
-      
-      @media (max-width: 768px) {
+    }
+
+    @media (max-width: 768px) {
         .content h1 {
-          font-size: 2.5rem;
+            font-size: 2.5rem;
         }
         .content h2 {
-          font-size: 1.8rem;
+            font-size: 1.8rem;
         }
         .content {
-          padding: 2rem 1.5rem;
+            padding: 2rem 1.5rem;
         }
-      }
-    
-      /* --- Light Footer Override for Doc Page --- */
-      .site-footer {
+    }
+
+    /* --- Light Footer Override for Doc Page --- */
+    .site-footer {
         background-color: #fafafa !important;
         border-top: 1px solid var(--doc-border) !important;
         color: var(--doc-text) !important;
-      }
-      .footer-logo, .footer-big-brand { color: var(--doc-text) !important; }
-      .footer-desc { color: var(--doc-text-muted) !important; }
-      .footer-links h4, .footer-social h4, .loc-item h4 { color: var(--doc-text) !important; }
-      .footer-links a, .footer-sub-links a, .footer-news-label, .loc-item p, .footer-copy { color: var(--doc-text-muted) !important; }
-      .footer-main-links a { color: var(--doc-text) !important; }
-      .footer-main-links a:hover, .footer-sub-links a:hover, .footer-links a:hover { color: var(--doc-accent) !important; }
-      
-      .social-icons a, .footer-social-logos a { 
-        color: var(--doc-text-muted) !important; 
+    }
+    .footer-logo,
+    .footer-big-brand {
+        color: var(--doc-text) !important;
+    }
+    .footer-desc {
+        color: var(--doc-text-muted) !important;
+    }
+    .footer-links h4,
+    .footer-social h4,
+    .loc-item h4 {
+        color: var(--doc-text) !important;
+    }
+    .footer-links a,
+    .footer-sub-links a,
+    .footer-news-label,
+    .loc-item p,
+    .footer-copy {
+        color: var(--doc-text-muted) !important;
+    }
+    .footer-main-links a {
+        color: var(--doc-text) !important;
+    }
+    .footer-main-links a:hover,
+    .footer-sub-links a:hover,
+    .footer-links a:hover {
+        color: var(--doc-accent) !important;
+    }
+
+    .social-icons a,
+    .footer-social-logos a {
+        color: var(--doc-text-muted) !important;
         /* The social icons in footer use background, let's invert the dark mode background */
         /* Home page uses white border, so we use a light gray */
-      }
-      .footer-social-logos a {
+    }
+    .footer-social-logos a {
         background: transparent !important; /* It has no background by default, just color */
-      }
-      .footer-social-logos a:hover { opacity: 0.8 !important; color: var(--doc-accent) !important; }
-      
-      .footer-bottom { border-top: 1px solid var(--doc-border) !important; color: var(--doc-text-muted) !important; }
-      .footer-vertical-text { color: rgba(0,0,0,0.05) !important; }
-      
-      .footer-newsletter { border-bottom: 2px solid rgba(0,0,0,0.1) !important; }
-      .footer-newsletter:focus-within { border-bottom-color: var(--doc-accent) !important; }
-      .footer-newsletter input { color: var(--doc-text) !important; }
-      .footer-newsletter input::placeholder { color: #999 !important; }
-      .footer-newsletter button { color: var(--doc-text) !important; }
-      .footer-newsletter button:hover { color: var(--doc-accent) !important; }
+    }
+    .footer-social-logos a:hover {
+        opacity: 0.8 !important;
+        color: var(--doc-accent) !important;
+    }
 
-    </style>
-    
-    
+    .footer-bottom {
+        border-top: 1px solid var(--doc-border) !important;
+        color: var(--doc-text-muted) !important;
+    }
+    .footer-vertical-text {
+        color: rgba(0, 0, 0, 0.05) !important;
+    }
 
-    <script>
-      // GSAP Animations
-      document.addEventListener("DOMContentLoaded", () => {
+    .footer-newsletter {
+        border-bottom: 2px solid rgba(0, 0, 0, 0.1) !important;
+    }
+    .footer-newsletter:focus-within {
+        border-bottom-color: var(--doc-accent) !important;
+    }
+    .footer-newsletter input {
+        color: var(--doc-text) !important;
+    }
+    .footer-newsletter input::placeholder {
+        color: #999 !important;
+    }
+    .footer-newsletter button {
+        color: var(--doc-text) !important;
+    }
+    .footer-newsletter button:hover {
+        color: var(--doc-accent) !important;
+    }
+</style>
+
+<script>
+    // GSAP Animations
+    document.addEventListener("DOMContentLoaded", () => {
         // @ts-ignore
         if (typeof gsap !== "undefined") {
-          // @ts-ignore
-          gsap.from(".sidebar", {
-            x: -100,
-            opacity: 0,
-            duration: 1,
-            ease: "power4.out",
-          });
+            // @ts-ignore
+            gsap.from(".sidebar", {
+                x: -100,
+                opacity: 0,
+                duration: 1,
+                ease: "power4.out",
+            });
 
-          // @ts-ignore
-          gsap.from(".content section", {
-            y: 50,
-            opacity: 0,
-            duration: 0.8,
-            stagger: 0.2,
-            ease: "power3.out",
-          });
+            // @ts-ignore
+            gsap.from(".content section", {
+                y: 50,
+                opacity: 0,
+                duration: 0.8,
+                stagger: 0.2,
+                ease: "power3.out",
+            });
         }
-      });
+    });
 
-      // Scroll Spy Logic
-      const sections = document.querySelectorAll("section[id]");
-      const navLinks = document.querySelectorAll(".sidebar-link");
+    // Scroll Spy Logic
+    const sections = document.querySelectorAll("section[id]");
+    const navLinks = document.querySelectorAll(".sidebar-link");
 
-      window.addEventListener("scroll", () => {
+    window.addEventListener("scroll", () => {
         let current = "";
         sections.forEach((section) => {
-          const htmlSection = section as HTMLElement;
-          const sectionTop = htmlSection.offsetTop;
-          if (window.scrollY >= sectionTop - 150) {
-            current = section.getAttribute("id") || "";
-          }
+            const htmlSection = section as HTMLElement;
+            const sectionTop = htmlSection.offsetTop;
+            if (window.scrollY >= sectionTop - 150) {
+                current = section.getAttribute("id") || "";
+            }
         });
 
         navLinks.forEach((link) => {
-          link.classList.remove("active");
-          const href = link.getAttribute("href");
-          if (href && current && href.includes(current)) {
-            link.classList.add("active");
-          }
+            link.classList.remove("active");
+            const href = link.getAttribute("href");
+            if (href && current && href.includes(current)) {
+                link.classList.add("active");
+            }
         });
-      });
+    });
 
-      // Sidebar Alignment Logic
-      function alignSidebar() {
+    // Sidebar Alignment Logic
+    function alignSidebar() {
         const navBrand = document.querySelector(".nav-brand");
         const sidebar = document.querySelector(".sidebar");
         if (navBrand && sidebar && window.innerWidth > 1024) {
-          const brandWidth = navBrand.getBoundingClientRect().width;
-          if (brandWidth > 0) {
-            sidebar.style.width = brandWidth + "px";
-          }
+            const brandWidth = navBrand.getBoundingClientRect().width;
+            if (brandWidth > 0) {
+                sidebar.style.width = brandWidth + "px";
+            }
         } else if (sidebar) {
-          sidebar.style.width = ""; // reset on mobile
+            sidebar.style.width = ""; // reset on mobile
         }
-      }
-      
-      // Initialize alignment
-      alignSidebar();
-      window.addEventListener("resize", alignSidebar);
-      document.addEventListener("astro:after-swap", alignSidebar);
+    }
 
-      // Mobile Menu Logic (Index Drawer only)
-      function initDocMenu() {
+    // Initialize alignment
+    alignSidebar();
+    window.addEventListener("resize", alignSidebar);
+    document.addEventListener("astro:after-swap", alignSidebar);
+
+    // Mobile Menu Logic (Index Drawer only)
+    function initDocMenu() {
         // Index Drawer Elements
         const indexToggle = document.getElementById("index-toggle");
         const indexDrawer = document.getElementById("index-drawer");
@@ -629,43 +687,43 @@ const docs = [
 
         // Lógica del Índice
         if (indexToggle && indexDrawer) {
-          indexToggle.onclick = () => {
-            indexDrawer.classList.add("open");
-            if (drawerOverlay) drawerOverlay.classList.add("visible");
-            document.body.style.overflow = "hidden";
-          };
+            indexToggle.onclick = () => {
+                indexDrawer.classList.add("open");
+                if (drawerOverlay) drawerOverlay.classList.add("visible");
+                document.body.style.overflow = "hidden";
+            };
 
-          const closeDrawerFunc = () => {
-            indexDrawer.classList.remove("open");
-            if (drawerOverlay) drawerOverlay.classList.remove("visible");
-            document.body.style.overflow = "";
-          };
+            const closeDrawerFunc = () => {
+                indexDrawer.classList.remove("open");
+                if (drawerOverlay) drawerOverlay.classList.remove("visible");
+                document.body.style.overflow = "";
+            };
 
-          if (closeIndex) closeIndex.onclick = closeDrawerFunc;
-          if (drawerOverlay) drawerOverlay.onclick = closeDrawerFunc;
+            if (closeIndex) closeIndex.onclick = closeDrawerFunc;
+            if (drawerOverlay) drawerOverlay.onclick = closeDrawerFunc;
 
-          // Cerrar al pulsar un enlace del índice
-          const drawerLinks = indexDrawer.querySelectorAll(".drawer-link");
-          drawerLinks.forEach((link) => {
-            link.onclick = closeDrawerFunc;
-          });
+            // Cerrar al pulsar un enlace del índice
+            const drawerLinks = indexDrawer.querySelectorAll(".drawer-link");
+            drawerLinks.forEach((link) => {
+                link.onclick = closeDrawerFunc;
+            });
         }
-      }
+    }
 
-      // Inicializar
-      initDocMenu();
+    // Inicializar
+    initDocMenu();
 
-      // Compatibilidad con transiciones de Astro
-      document.addEventListener("astro:after-swap", initDocMenu);
-    </script>
-    <script is:inline>
-      (function () {
+    // Compatibilidad con transiciones de Astro
+    document.addEventListener("astro:after-swap", initDocMenu);
+</script>
+<script is:inline>
+    (function () {
         const hierEl = document.getElementById("uml-hier");
         const erEl = document.getElementById("uml-er");
         if (!hierEl && !erEl) return;
 
         if (hierEl) {
-          hierEl.innerHTML = `
+            hierEl.innerHTML = `
     <div style="overflow-x:auto;padding:24px 16px;">
       <div style="min-width:620px;font-family:'Inter',sans-serif;display:flex;flex-direction:column;align-items:center;">
 
@@ -747,532 +805,543 @@ const docs = [
         }
 
         if (erEl) {
-          // ── relaciones por grupo ──────────────────────────────────────
-          const relaciones = {
-            "Actores y sesiones": [
-              {
-                from: "Actor",
-                to: "Usuario",
-                card: "1 : 1",
-                label: "hereda (JOINED)",
-              },
-              {
-                from: "Actor",
-                to: "Empresa",
-                card: "1 : 1",
-                label: "hereda (JOINED)",
-              },
-              {
-                from: "Actor",
-                to: "Admin",
-                card: "1 : 1",
-                label: "hereda (JOINED)",
-              },
-              {
-                from: "Actor",
-                to: "SesionDispositivo",
-                card: "1 : N",
-                label: "tiene sesiones",
-              },
-              {
-                from: "Actor",
-                to: "Bloqueo",
-                card: "1 : N",
-                label: "bloqueador / bloqueado",
-              },
-            ],
-            Catalogo: [
-              {
-                from: "Categoria",
-                to: "Categoria",
-                card: "1 : N",
-                label: "padre → hijos (autoreferencia)",
-              },
-              {
-                from: "Actor",
-                to: "Producto",
-                card: "1 : N",
-                label: "publica productos",
-              },
-              {
-                from: "Categoria",
-                to: "Producto",
-                card: "1 : N",
-                label: "clasifica productos",
-              },
-              {
-                from: "Actor",
-                to: "Vehiculo",
-                card: "1 : N",
-                label: "publica vehículos",
-              },
-              {
-                from: "Actor",
-                to: "Oferta",
-                card: "1 : N",
-                label: "publica ofertas",
-              },
-              {
-                from: "Categoria",
-                to: "Oferta",
-                card: "1 : N",
-                label: "clasifica ofertas",
-              },
-            ],
-            "Comercio y logistica": [
-              {
-                from: "Actor",
-                to: "Compra",
-                card: "1 : N",
-                label: "comprador realiza compras",
-              },
-              {
-                from: "Producto",
-                to: "Compra",
-                card: "1 : N",
-                label: "producto vendido en compra",
-              },
-              {
-                from: "Compra",
-                to: "Envio",
-                card: "1 : 1",
-                label: "genera envío",
-              },
-              {
-                from: "Compra",
-                to: "Devolucion",
-                card: "1 : 1",
-                label: "puede tener devolución",
-              },
-              {
-                from: "Compra",
-                to: "Valoracion",
-                card: "1 : 1",
-                label: "genera valoración",
-              },
-              {
-                from: "Actor",
-                to: "Valoracion",
-                card: "1 : N",
-                label: "comprador / vendedor valorado",
-              },
-            ],
-            "Social y mensajeria": [
-              {
-                from: "Actor",
-                to: "ChatMensaje",
-                card: "1 : N",
-                label: "remitente / receptor",
-              },
-              {
-                from: "Producto",
-                to: "ChatMensaje",
-                card: "1 : N",
-                label: "conversación sobre producto",
-              },
-              {
-                from: "Oferta",
-                to: "Comentario",
-                card: "1 : N",
-                label: "oferta tiene comentarios",
-              },
-              {
-                from: "Actor",
-                to: "Comentario",
-                card: "1 : N",
-                label: "actor escribe comentarios",
-              },
-              {
-                from: "Oferta",
-                to: "SparkVoto",
-                card: "1 : N",
-                label: "oferta recibe votos",
-              },
-              {
-                from: "Actor",
-                to: "SparkVoto",
-                card: "1 : N",
-                label: "actor vota ofertas",
-              },
-              {
-                from: "Actor",
-                to: "Favorito",
-                card: "1 : N",
-                label: "actor guarda favoritos",
-              },
-              {
-                from: "Actor",
-                to: "NotificacionInApp",
-                card: "1 : N",
-                label: "actor recibe notificaciones",
-              },
-            ],
-            "Negocio y administracion": [
-              {
-                from: "Empresa",
-                to: "Contrato",
-                card: "1 : N",
-                label: "empresa contrata patrocinio",
-              },
-              {
-                from: "Categoria",
-                to: "Cupon",
-                card: "1 : N",
-                label: "cupón aplica a categoría",
-              },
-              {
-                from: "Actor",
-                to: "Reporte",
-                card: "1 : N",
-                label: "actor reporta contenido",
-              },
-            ],
-          };
+            // ── relaciones por grupo ──────────────────────────────────────
+            const relaciones = {
+                "Actores y sesiones": [
+                    {
+                        from: "Actor",
+                        to: "Usuario",
+                        card: "1 : 1",
+                        label: "hereda (JOINED)",
+                    },
+                    {
+                        from: "Actor",
+                        to: "Empresa",
+                        card: "1 : 1",
+                        label: "hereda (JOINED)",
+                    },
+                    {
+                        from: "Actor",
+                        to: "Admin",
+                        card: "1 : 1",
+                        label: "hereda (JOINED)",
+                    },
+                    {
+                        from: "Actor",
+                        to: "SesionDispositivo",
+                        card: "1 : N",
+                        label: "tiene sesiones",
+                    },
+                    {
+                        from: "Actor",
+                        to: "Bloqueo",
+                        card: "1 : N",
+                        label: "bloqueador / bloqueado",
+                    },
+                ],
+                Catalogo: [
+                    {
+                        from: "Categoria",
+                        to: "Categoria",
+                        card: "1 : N",
+                        label: "padre → hijos (autoreferencia)",
+                    },
+                    {
+                        from: "Actor",
+                        to: "Producto",
+                        card: "1 : N",
+                        label: "publica productos",
+                    },
+                    {
+                        from: "Categoria",
+                        to: "Producto",
+                        card: "1 : N",
+                        label: "clasifica productos",
+                    },
+                    {
+                        from: "Actor",
+                        to: "Vehiculo",
+                        card: "1 : N",
+                        label: "publica vehículos",
+                    },
+                    {
+                        from: "Actor",
+                        to: "Oferta",
+                        card: "1 : N",
+                        label: "publica ofertas",
+                    },
+                    {
+                        from: "Categoria",
+                        to: "Oferta",
+                        card: "1 : N",
+                        label: "clasifica ofertas",
+                    },
+                ],
+                "Comercio y logistica": [
+                    {
+                        from: "Actor",
+                        to: "Compra",
+                        card: "1 : N",
+                        label: "comprador realiza compras",
+                    },
+                    {
+                        from: "Producto",
+                        to: "Compra",
+                        card: "1 : N",
+                        label: "producto vendido en compra",
+                    },
+                    {
+                        from: "Compra",
+                        to: "Envio",
+                        card: "1 : 1",
+                        label: "genera envío",
+                    },
+                    {
+                        from: "Compra",
+                        to: "Devolucion",
+                        card: "1 : 1",
+                        label: "puede tener devolución",
+                    },
+                    {
+                        from: "Compra",
+                        to: "Valoracion",
+                        card: "1 : 1",
+                        label: "genera valoración",
+                    },
+                    {
+                        from: "Actor",
+                        to: "Valoracion",
+                        card: "1 : N",
+                        label: "comprador / vendedor valorado",
+                    },
+                ],
+                "Social y mensajeria": [
+                    {
+                        from: "Actor",
+                        to: "ChatMensaje",
+                        card: "1 : N",
+                        label: "remitente / receptor",
+                    },
+                    {
+                        from: "Producto",
+                        to: "ChatMensaje",
+                        card: "1 : N",
+                        label: "conversación sobre producto",
+                    },
+                    {
+                        from: "Oferta",
+                        to: "Comentario",
+                        card: "1 : N",
+                        label: "oferta tiene comentarios",
+                    },
+                    {
+                        from: "Actor",
+                        to: "Comentario",
+                        card: "1 : N",
+                        label: "actor escribe comentarios",
+                    },
+                    {
+                        from: "Oferta",
+                        to: "SparkVoto",
+                        card: "1 : N",
+                        label: "oferta recibe votos",
+                    },
+                    {
+                        from: "Actor",
+                        to: "SparkVoto",
+                        card: "1 : N",
+                        label: "actor vota ofertas",
+                    },
+                    {
+                        from: "Actor",
+                        to: "Favorito",
+                        card: "1 : N",
+                        label: "actor guarda favoritos",
+                    },
+                    {
+                        from: "Actor",
+                        to: "NotificacionInApp",
+                        card: "1 : N",
+                        label: "actor recibe notificaciones",
+                    },
+                ],
+                "Negocio y administracion": [
+                    {
+                        from: "Empresa",
+                        to: "Contrato",
+                        card: "1 : N",
+                        label: "empresa contrata patrocinio",
+                    },
+                    {
+                        from: "Categoria",
+                        to: "Cupon",
+                        card: "1 : N",
+                        label: "cupón aplica a categoría",
+                    },
+                    {
+                        from: "Actor",
+                        to: "Reporte",
+                        card: "1 : N",
+                        label: "actor reporta contenido",
+                    },
+                ],
+            };
 
-          const groups = [
-            {
-              label: "Actores y sesiones",
-              color: "#7c3aed",
-              border: "#c4b5fd",
-              entities: [
+            const groups = [
                 {
-                  name: "Actor",
-                  fields: [
-                    "Integer id PK",
-                    "String user",
-                    "String email",
-                    "String nombre",
-                    "TipoCuenta tipoCuenta",
-                    "boolean cuentaVerificada",
-                    "String stripeCustomerId",
-                    "boolean twoFactorEnabled",
-                    "LocalDateTime creadoEn",
-                  ],
+                    label: "Actores y sesiones",
+                    color: "#7c3aed",
+                    border: "#c4b5fd",
+                    entities: [
+                        {
+                            name: "Actor",
+                            fields: [
+                                "Integer id PK",
+                                "String user",
+                                "String email",
+                                "String nombre",
+                                "TipoCuenta tipoCuenta",
+                                "boolean cuentaVerificada",
+                                "String stripeCustomerId",
+                                "boolean twoFactorEnabled",
+                                "LocalDateTime creadoEn",
+                            ],
+                        },
+                        {
+                            name: "Usuario",
+                            fields: [
+                                "Integer id PK",
+                                "Double reputacion",
+                                "Integer totalVentas",
+                                "String ubicacion",
+                                "String bio",
+                            ],
+                        },
+                        {
+                            name: "Empresa",
+                            fields: [
+                                "Integer id PK",
+                                "String nombreEmpresa",
+                                "String cif",
+                                "String webEmpresa",
+                                "String logoUrl",
+                            ],
+                        },
+                        {
+                            name: "Admin",
+                            fields: ["Integer id PK", "String nivel"],
+                        },
+                        {
+                            name: "SesionDispositivo",
+                            fields: [
+                                "Integer id PK",
+                                "String deviceName",
+                                "String ipAddress",
+                                "boolean activa",
+                                "LocalDateTime ultimaActividad",
+                                "Integer actorId FK",
+                            ],
+                        },
+                        {
+                            name: "Bloqueo",
+                            fields: [
+                                "Integer id PK",
+                                "String motivo",
+                                "LocalDateTime creadoEn",
+                                "Integer bloqueadorId FK",
+                                "Integer bloqueadoId FK",
+                            ],
+                        },
+                    ],
                 },
                 {
-                  name: "Usuario",
-                  fields: [
-                    "Integer id PK",
-                    "Double reputacion",
-                    "Integer totalVentas",
-                    "String ubicacion",
-                    "String bio",
-                  ],
+                    label: "Catalogo",
+                    color: "#0369a1",
+                    border: "#bae6fd",
+                    entities: [
+                        {
+                            name: "Categoria",
+                            fields: [
+                                "Integer id PK",
+                                "String nombre",
+                                "String slug",
+                                "String icono",
+                                "Integer padreId FK",
+                            ],
+                        },
+                        {
+                            name: "Producto",
+                            fields: [
+                                "Integer id PK",
+                                "String titulo",
+                                "Double precio",
+                                "EstadoProducto estado",
+                                "CondicionProducto condicion",
+                                "String imagenPrincipal",
+                                "Boolean admiteEnvio",
+                                "Double precioEnvio",
+                                "boolean patrocinado",
+                                "Integer actorId FK",
+                                "Integer categoriaId FK",
+                            ],
+                        },
+                        {
+                            name: "Vehiculo",
+                            fields: [
+                                "Integer id PK",
+                                "String titulo",
+                                "String marca",
+                                "String modelo",
+                                "Integer anio",
+                                "Integer km",
+                                "Double precio",
+                                "TipoVehiculo tipoVehiculo",
+                                "EstadoVehiculo estado",
+                                "boolean patrocinado",
+                                "Integer publicadorId FK",
+                            ],
+                        },
+                        {
+                            name: "Oferta",
+                            fields: [
+                                "Integer id PK",
+                                "String titulo",
+                                "Double precioOferta",
+                                "Double precioOriginal",
+                                "String tienda",
+                                "BadgeOferta badge",
+                                "EstadoOferta estado",
+                                "Integer sparks",
+                                "Integer drips",
+                                "boolean patrocinado",
+                                "Integer actorId FK",
+                                "Integer categoriaId FK",
+                            ],
+                        },
+                    ],
                 },
                 {
-                  name: "Empresa",
-                  fields: [
-                    "Integer id PK",
-                    "String nombreEmpresa",
-                    "String cif",
-                    "String webEmpresa",
-                    "String logoUrl",
-                  ],
-                },
-                { name: "Admin", fields: ["Integer id PK", "String nivel"] },
-                {
-                  name: "SesionDispositivo",
-                  fields: [
-                    "Integer id PK",
-                    "String deviceName",
-                    "String ipAddress",
-                    "boolean activa",
-                    "LocalDateTime ultimaActividad",
-                    "Integer actorId FK",
-                  ],
-                },
-                {
-                  name: "Bloqueo",
-                  fields: [
-                    "Integer id PK",
-                    "String motivo",
-                    "LocalDateTime creadoEn",
-                    "Integer bloqueadorId FK",
-                    "Integer bloqueadoId FK",
-                  ],
-                },
-              ],
-            },
-            {
-              label: "Catalogo",
-              color: "#0369a1",
-              border: "#bae6fd",
-              entities: [
-                {
-                  name: "Categoria",
-                  fields: [
-                    "Integer id PK",
-                    "String nombre",
-                    "String slug",
-                    "String icono",
-                    "Integer padreId FK",
-                  ],
-                },
-                {
-                  name: "Producto",
-                  fields: [
-                    "Integer id PK",
-                    "String titulo",
-                    "Double precio",
-                    "EstadoProducto estado",
-                    "CondicionProducto condicion",
-                    "String imagenPrincipal",
-                    "Boolean admiteEnvio",
-                    "Double precioEnvio",
-                    "boolean patrocinado",
-                    "Integer actorId FK",
-                    "Integer categoriaId FK",
-                  ],
+                    label: "Comercio y logistica",
+                    color: "#065f46",
+                    border: "#86efac",
+                    entities: [
+                        {
+                            name: "Compra",
+                            fields: [
+                                "Integer id PK",
+                                "EstadoCompra estado",
+                                "Double precioFinal",
+                                "Double comisionNexus",
+                                "MetodoEntrega metodoEntrega",
+                                "String stripePaymentIntentId",
+                                "LocalDateTime fechaCompra",
+                                "Integer compradorId FK",
+                                "Integer productoId FK",
+                            ],
+                        },
+                        {
+                            name: "Envio",
+                            fields: [
+                                "Integer id PK",
+                                "EstadoEnvio estado",
+                                "String codigoEnvio",
+                                "String numeroSeguimiento",
+                                "Double pesoKg",
+                                "LocalDateTime fechaLimiteEnvio",
+                                "Integer compraId FK",
+                            ],
+                        },
+                        {
+                            name: "Devolucion",
+                            fields: [
+                                "Integer id PK",
+                                "MotivoDevolucion motivo",
+                                "EstadoDevolucion estado",
+                                "Double importeDevolucion",
+                                "LocalDateTime fechaSolicitud",
+                                "Integer compraId FK",
+                            ],
+                        },
+                        {
+                            name: "Valoracion",
+                            fields: [
+                                "Integer id PK",
+                                "Integer puntuacion",
+                                "String comentario",
+                                "String respuestaVendedor",
+                                "LocalDateTime fecha",
+                                "Integer compradorId FK",
+                                "Integer vendedorId FK",
+                                "Integer compraId FK",
+                            ],
+                        },
+                    ],
                 },
                 {
-                  name: "Vehiculo",
-                  fields: [
-                    "Integer id PK",
-                    "String titulo",
-                    "String marca",
-                    "String modelo",
-                    "Integer anio",
-                    "Integer km",
-                    "Double precio",
-                    "TipoVehiculo tipoVehiculo",
-                    "EstadoVehiculo estado",
-                    "boolean patrocinado",
-                    "Integer publicadorId FK",
-                  ],
+                    label: "Social y mensajeria",
+                    color: "#b45309",
+                    border: "#fde68a",
+                    entities: [
+                        {
+                            name: "ChatMensaje",
+                            fields: [
+                                "Integer id PK",
+                                "TipoMensaje tipo",
+                                "String contenido",
+                                "boolean leidoPorComprador",
+                                "boolean leidoPorVendedor",
+                                "LocalDateTime enviadoEn",
+                                "Integer remitenteId FK",
+                                "Integer receptorId FK",
+                                "Integer productoId FK",
+                            ],
+                        },
+                        {
+                            name: "Comentario",
+                            fields: [
+                                "Integer id PK",
+                                "String contenido",
+                                "LocalDateTime fecha",
+                                "Integer autorId FK",
+                                "Integer ofertaId FK",
+                            ],
+                        },
+                        {
+                            name: "SparkVoto",
+                            fields: [
+                                "Integer id PK",
+                                "boolean esSpark",
+                                "Integer actorId FK",
+                                "Integer ofertaId FK",
+                            ],
+                        },
+                        {
+                            name: "Favorito",
+                            fields: [
+                                "Integer id PK",
+                                "Integer actorId FK",
+                                "Integer productoId FK",
+                                "Integer ofertaId FK",
+                                "Integer vehiculoId FK",
+                            ],
+                        },
+                        {
+                            name: "NotificacionInApp",
+                            fields: [
+                                "Integer id PK",
+                                "TipoNotificacion tipo",
+                                "String titulo",
+                                "String mensaje",
+                                "boolean leida",
+                                "LocalDateTime fecha",
+                                "Integer actorId FK",
+                            ],
+                        },
+                    ],
                 },
                 {
-                  name: "Oferta",
-                  fields: [
-                    "Integer id PK",
-                    "String titulo",
-                    "Double precioOferta",
-                    "Double precioOriginal",
-                    "String tienda",
-                    "BadgeOferta badge",
-                    "EstadoOferta estado",
-                    "Integer sparks",
-                    "Integer drips",
-                    "boolean patrocinado",
-                    "Integer actorId FK",
-                    "Integer categoriaId FK",
-                  ],
+                    label: "Negocio y administracion",
+                    color: "#9f1239",
+                    border: "#fecdd3",
+                    entities: [
+                        {
+                            name: "Contrato",
+                            fields: [
+                                "Integer id PK",
+                                "TipoContrato tipoContrato",
+                                "EstadoContrato estado",
+                                "Double monto",
+                                "LocalDateTime fechaInicio",
+                                "LocalDateTime fechaFin",
+                                "Integer empresaId FK",
+                            ],
+                        },
+                        {
+                            name: "Cupon",
+                            fields: [
+                                "Integer id PK",
+                                "String codigo",
+                                "TipoDescuento tipoDescuento",
+                                "Double valor",
+                                "AlcanceCupon alcance",
+                                "Integer usoMaximo",
+                                "Integer usoActual",
+                                "Integer categoriaId FK",
+                            ],
+                        },
+                        {
+                            name: "Reporte",
+                            fields: [
+                                "Integer id PK",
+                                "TipoReporte tipo",
+                                "MotivoReporte motivo",
+                                "EstadoReporte estado",
+                                "LocalDateTime fecha",
+                                "Integer reportadorId FK",
+                            ],
+                        },
+                        {
+                            name: "AuditLog",
+                            fields: [
+                                "Integer id PK",
+                                "String entidad",
+                                "String accion",
+                                "String adminUsername",
+                                "LocalDateTime timestamp",
+                            ],
+                        },
+                        {
+                            name: "NewsletterSuscripcion",
+                            fields: [
+                                "Integer id PK",
+                                "String email",
+                                "EstadoSuscripcion estado",
+                                "String tokenBaja",
+                                "LocalDateTime fechaConsentimiento",
+                            ],
+                        },
+                    ],
                 },
-              ],
-            },
-            {
-              label: "Comercio y logistica",
-              color: "#065f46",
-              border: "#86efac",
-              entities: [
-                {
-                  name: "Compra",
-                  fields: [
-                    "Integer id PK",
-                    "EstadoCompra estado",
-                    "Double precioFinal",
-                    "Double comisionNexus",
-                    "MetodoEntrega metodoEntrega",
-                    "String stripePaymentIntentId",
-                    "LocalDateTime fechaCompra",
-                    "Integer compradorId FK",
-                    "Integer productoId FK",
-                  ],
-                },
-                {
-                  name: "Envio",
-                  fields: [
-                    "Integer id PK",
-                    "EstadoEnvio estado",
-                    "String codigoEnvio",
-                    "String numeroSeguimiento",
-                    "Double pesoKg",
-                    "LocalDateTime fechaLimiteEnvio",
-                    "Integer compraId FK",
-                  ],
-                },
-                {
-                  name: "Devolucion",
-                  fields: [
-                    "Integer id PK",
-                    "MotivoDevolucion motivo",
-                    "EstadoDevolucion estado",
-                    "Double importeDevolucion",
-                    "LocalDateTime fechaSolicitud",
-                    "Integer compraId FK",
-                  ],
-                },
-                {
-                  name: "Valoracion",
-                  fields: [
-                    "Integer id PK",
-                    "Integer puntuacion",
-                    "String comentario",
-                    "String respuestaVendedor",
-                    "LocalDateTime fecha",
-                    "Integer compradorId FK",
-                    "Integer vendedorId FK",
-                    "Integer compraId FK",
-                  ],
-                },
-              ],
-            },
-            {
-              label: "Social y mensajeria",
-              color: "#b45309",
-              border: "#fde68a",
-              entities: [
-                {
-                  name: "ChatMensaje",
-                  fields: [
-                    "Integer id PK",
-                    "TipoMensaje tipo",
-                    "String contenido",
-                    "boolean leidoPorComprador",
-                    "boolean leidoPorVendedor",
-                    "LocalDateTime enviadoEn",
-                    "Integer remitenteId FK",
-                    "Integer receptorId FK",
-                    "Integer productoId FK",
-                  ],
-                },
-                {
-                  name: "Comentario",
-                  fields: [
-                    "Integer id PK",
-                    "String contenido",
-                    "LocalDateTime fecha",
-                    "Integer autorId FK",
-                    "Integer ofertaId FK",
-                  ],
-                },
-                {
-                  name: "SparkVoto",
-                  fields: [
-                    "Integer id PK",
-                    "boolean esSpark",
-                    "Integer actorId FK",
-                    "Integer ofertaId FK",
-                  ],
-                },
-                {
-                  name: "Favorito",
-                  fields: [
-                    "Integer id PK",
-                    "Integer actorId FK",
-                    "Integer productoId FK",
-                    "Integer ofertaId FK",
-                    "Integer vehiculoId FK",
-                  ],
-                },
-                {
-                  name: "NotificacionInApp",
-                  fields: [
-                    "Integer id PK",
-                    "TipoNotificacion tipo",
-                    "String titulo",
-                    "String mensaje",
-                    "boolean leida",
-                    "LocalDateTime fecha",
-                    "Integer actorId FK",
-                  ],
-                },
-              ],
-            },
-            {
-              label: "Negocio y administracion",
-              color: "#9f1239",
-              border: "#fecdd3",
-              entities: [
-                {
-                  name: "Contrato",
-                  fields: [
-                    "Integer id PK",
-                    "TipoContrato tipoContrato",
-                    "EstadoContrato estado",
-                    "Double monto",
-                    "LocalDateTime fechaInicio",
-                    "LocalDateTime fechaFin",
-                    "Integer empresaId FK",
-                  ],
-                },
-                {
-                  name: "Cupon",
-                  fields: [
-                    "Integer id PK",
-                    "String codigo",
-                    "TipoDescuento tipoDescuento",
-                    "Double valor",
-                    "AlcanceCupon alcance",
-                    "Integer usoMaximo",
-                    "Integer usoActual",
-                    "Integer categoriaId FK",
-                  ],
-                },
-                {
-                  name: "Reporte",
-                  fields: [
-                    "Integer id PK",
-                    "TipoReporte tipo",
-                    "MotivoReporte motivo",
-                    "EstadoReporte estado",
-                    "LocalDateTime fecha",
-                    "Integer reportadorId FK",
-                  ],
-                },
-                {
-                  name: "AuditLog",
-                  fields: [
-                    "Integer id PK",
-                    "String entidad",
-                    "String accion",
-                    "String adminUsername",
-                    "LocalDateTime timestamp",
-                  ],
-                },
-                {
-                  name: "NewsletterSuscripcion",
-                  fields: [
-                    "Integer id PK",
-                    "String email",
-                    "EstadoSuscripcion estado",
-                    "String tokenBaja",
-                    "LocalDateTime fechaConsentimiento",
-                  ],
-                },
-              ],
-            },
-          ];
+            ];
 
-          function card(e, color, border) {
-            const rows = e.fields
-              .map((f) => {
-                const isPK = f.includes("PK");
-                const isFK = f.includes("FK");
-                const clean = f.replace(" PK", "").replace(" FK", "");
-                const bg = isPK ? "#faf5ff" : isFK ? "#f8fafc" : "transparent";
-                const tc = isPK ? "#6d28d9" : isFK ? "#64748b" : "#374151";
-                const fw = isPK ? "600" : "400";
-                const badge = isPK
-                  ? '<span style="font-size:9px;font-weight:700;color:#7c3aed;background:#ede9fe;padding:1px 5px;border-radius:3px;margin-left:5px;">PK</span>'
-                  : isFK
-                    ? '<span style="font-size:9px;font-weight:700;color:#0369a1;background:#e0f2fe;padding:1px 5px;border-radius:3px;margin-left:5px;">FK</span>'
-                    : "";
-                return `<tr style="background:${bg};border-bottom:1px solid #f1f5f9;">
+            function card(e, color, border) {
+                const rows = e.fields
+                    .map((f) => {
+                        const isPK = f.includes("PK");
+                        const isFK = f.includes("FK");
+                        const clean = f.replace(" PK", "").replace(" FK", "");
+                        const bg = isPK
+                            ? "#faf5ff"
+                            : isFK
+                              ? "#f8fafc"
+                              : "transparent";
+                        const tc = isPK
+                            ? "#6d28d9"
+                            : isFK
+                              ? "#64748b"
+                              : "#374151";
+                        const fw = isPK ? "600" : "400";
+                        const badge = isPK
+                            ? '<span style="font-size:9px;font-weight:700;color:#7c3aed;background:#ede9fe;padding:1px 5px;border-radius:3px;margin-left:5px;">PK</span>'
+                            : isFK
+                              ? '<span style="font-size:9px;font-weight:700;color:#0369a1;background:#e0f2fe;padding:1px 5px;border-radius:3px;margin-left:5px;">FK</span>'
+                              : "";
+                        return `<tr style="background:${bg};border-bottom:1px solid #f1f5f9;">
           <td style="padding:4px 12px;font-size:11.5px;font-weight:${fw};color:${tc};font-family:monospace;white-space:nowrap;">${clean}${badge}</td>
         </tr>`;
-              })
-              .join("");
-            return `<div style="border:1.5px solid ${border};border-radius:10px;overflow:hidden;background:#fff;min-width:190px;flex:1 1 180px;box-shadow:0 1px 4px rgba(0,0,0,0.05);">
+                    })
+                    .join("");
+                return `<div style="border:1.5px solid ${border};border-radius:10px;overflow:hidden;background:#fff;min-width:190px;flex:1 1 180px;box-shadow:0 1px 4px rgba(0,0,0,0.05);">
         <div style="background:${color};color:#fff;font-size:12px;font-weight:700;padding:7px 12px;">${e.name}</div>
         <table style="width:100%;border-collapse:collapse;">${rows}</table>
       </div>`;
-          }
+            }
 
-          function relTable(rels, color) {
-            if (!rels || !rels.length) return "";
-            const rows = rels
-              .map(
-                (r) => `
+            function relTable(rels, color) {
+                if (!rels || !rels.length) return "";
+                const rows = rels
+                    .map(
+                        (r) => `
         <tr style="border-bottom:1px solid #f1f5f9;">
           <td style="padding:6px 12px;font-size:12px;font-weight:600;color:#1e293b;font-family:monospace;white-space:nowrap;">${r.from}</td>
           <td style="padding:6px 8px;text-align:center;">
@@ -1281,9 +1350,9 @@ const docs = [
           <td style="padding:6px 12px;font-size:12px;font-weight:600;color:#1e293b;font-family:monospace;white-space:nowrap;">${r.to}</td>
           <td style="padding:6px 12px;font-size:12px;color:#64748b;font-style:italic;">${r.label}</td>
         </tr>`,
-              )
-              .join("");
-            return `
+                    )
+                    .join("");
+                return `
         <div style="margin-top:16px;border:1px solid #e2e8f0;border-radius:10px;overflow:hidden;">
           <div style="background:#f8fafc;padding:7px 14px;font-size:11px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.07em;border-bottom:1px solid #e2e8f0;">
             Relaciones
@@ -1300,13 +1369,13 @@ const docs = [
             <tbody>${rows}</tbody>
           </table>
         </div>`;
-          }
+            }
 
-          erEl.innerHTML =
-            `<div style="padding:8px 0;font-family:'Inter',sans-serif;">` +
-            groups
-              .map(
-                (g) => `
+            erEl.innerHTML =
+                `<div style="padding:8px 0;font-family:'Inter',sans-serif;">` +
+                groups
+                    .map(
+                        (g) => `
         <div style="margin-bottom:36px;">
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
             <div style="width:4px;height:18px;background:${g.color};border-radius:2px;flex-shrink:0;"></div>
@@ -1317,21 +1386,21 @@ const docs = [
           </div>
           ${relTable(relaciones[g.label], g.color)}
         </div>`,
-              )
-              .join("") +
-            `</div>`;
+                    )
+                    .join("") +
+                `</div>`;
         }
-      })();
-    </script>
-    <script is:inline>
-      (function () {
+    })();
+</script>
+<script is:inline>
+    (function () {
         const hierEl = document.getElementById("uml-hier");
         const erEl = document.getElementById("uml-er");
         if (!hierEl && !erEl) return;
 
         // ── JERARQUÍA ─────────────────────────────────────────────────
         if (hierEl) {
-          hierEl.innerHTML = `
+            hierEl.innerHTML = `
     <div style="overflow-x:auto;padding:24px 16px;">
       <div style="min-width:640px;font-family:'Inter',sans-serif;display:flex;flex-direction:column;align-items:center;">
 
@@ -1442,38 +1511,38 @@ const docs = [
 
         // ── ER + RELACIONES + ENUMS ────────────────────────────────────
         if (erEl) {
-          function field(f) {
-            const isPK = f.includes("PK");
-            const isFK = f.includes("FK");
-            const clean = f.replace(" PK", "").replace(" FK", "");
-            const bg = isPK ? "#faf5ff" : isFK ? "#f0f9ff" : "transparent";
-            const tc = isPK ? "#6d28d9" : isFK ? "#0369a1" : "#374151";
-            const fw = isPK ? "600" : "400";
-            const badge = isPK
-              ? '<span style="font-size:9px;font-weight:700;color:#7c3aed;background:#ede9fe;padding:1px 6px;border-radius:3px;margin-left:5px;vertical-align:middle;">PK</span>'
-              : isFK
-                ? '<span style="font-size:9px;font-weight:700;color:#0369a1;background:#dbeafe;padding:1px 6px;border-radius:3px;margin-left:5px;vertical-align:middle;">FK</span>'
-                : "";
-            return `<tr style="background:${bg};border-bottom:1px solid #f1f5f9;">
+            function field(f) {
+                const isPK = f.includes("PK");
+                const isFK = f.includes("FK");
+                const clean = f.replace(" PK", "").replace(" FK", "");
+                const bg = isPK ? "#faf5ff" : isFK ? "#f0f9ff" : "transparent";
+                const tc = isPK ? "#6d28d9" : isFK ? "#0369a1" : "#374151";
+                const fw = isPK ? "600" : "400";
+                const badge = isPK
+                    ? '<span style="font-size:9px;font-weight:700;color:#7c3aed;background:#ede9fe;padding:1px 6px;border-radius:3px;margin-left:5px;vertical-align:middle;">PK</span>'
+                    : isFK
+                      ? '<span style="font-size:9px;font-weight:700;color:#0369a1;background:#dbeafe;padding:1px 6px;border-radius:3px;margin-left:5px;vertical-align:middle;">FK</span>'
+                      : "";
+                return `<tr style="background:${bg};border-bottom:1px solid #f1f5f9;">
         <td style="padding:4px 12px;font-size:11.5px;font-weight:${fw};color:${tc};font-family:monospace;white-space:nowrap;">${clean}${badge}</td>
       </tr>`;
-          }
+            }
 
-          function card(e, color, border) {
-            return `<div style="border:1.5px solid ${border};border-radius:10px;overflow:hidden;background:#fff;min-width:190px;flex:1 1 180px;box-shadow:0 1px 4px rgba(0,0,0,0.06);">
+            function card(e, color, border) {
+                return `<div style="border:1.5px solid ${border};border-radius:10px;overflow:hidden;background:#fff;min-width:190px;flex:1 1 180px;box-shadow:0 1px 4px rgba(0,0,0,0.06);">
         <div style="background:${color};color:#fff;font-size:12px;font-weight:700;padding:7px 12px;letter-spacing:.02em;">${e.name}</div>
         <table style="width:100%;border-collapse:collapse;">${e.fields.map(field).join("")}</table>
       </div>`;
-          }
+            }
 
-          function relBlock(rels, color) {
-            if (!rels || !rels.length) return "";
-            return `<div style="margin-top:14px;border:1px solid #e2e8f0;border-radius:10px;overflow:hidden;font-family:'Inter',sans-serif;">
+            function relBlock(rels, color) {
+                if (!rels || !rels.length) return "";
+                return `<div style="margin-top:14px;border:1px solid #e2e8f0;border-radius:10px;overflow:hidden;font-family:'Inter',sans-serif;">
         <div style="background:#f8fafc;padding:6px 14px;font-size:10.5px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.08em;border-bottom:1px solid #e2e8f0;">Relaciones</div>
         <div style="display:flex;flex-direction:column;gap:0;">
           ${rels
-            .map(
-              (r) => `
+              .map(
+                  (r) => `
           <div style="display:flex;align-items:center;gap:0;border-bottom:1px solid #f1f5f9;padding:7px 14px;flex-wrap:wrap;gap:8px;">
             <code style="font-size:12px;font-weight:600;color:#1e293b;background:#f1f5f9;padding:2px 7px;border-radius:4px;">${r.from}</code>
             <span style="font-size:13px;color:#94a3b8;margin:0 2px;">──</span>
@@ -1482,954 +1551,959 @@ const docs = [
             <code style="font-size:12px;font-weight:600;color:#1e293b;background:#f1f5f9;padding:2px 7px;border-radius:4px;">${r.to}</code>
             <span style="font-size:11.5px;color:#64748b;font-style:italic;margin-left:6px;">${r.label}</span>
           </div>`,
-            )
-            .join("")}
+              )
+              .join("")}
         </div>
       </div>`;
-          }
+            }
 
-          const groups = [
-            {
-              label: "Actores y sesiones",
-              color: "#7c3aed",
-              border: "#c4b5fd",
-              entities: [
-                {
-                  name: "Actor",
-                  fields: [
-                    "Integer id PK",
-                    "String user (username en DB)",
-                    "String email",
-                    "String password (bcrypt)",
-                    "String nombre, apellidos",
-                    "String telefono",
-                    "String avatar, avatarSource",
-                    "String googleId, googleAvatarUrl",
-                    "TipoCuenta tipoCuenta",
-                    "boolean cuentaVerificada",
-                    "boolean cuentaEliminada",
-                    "boolean baneado",
-                    "boolean twoFactorEnabled",
-                    "String twoFactorMethod",
-                    "int jwtVersion",
-                    "String stripeCustomerId",
-                    "String resetToken",
-                    "LocalDateTime fechaRegistro",
-                    "boolean onboardingCompletado",
-                  ],
-                },
-                {
-                  name: "Usuario",
-                  fields: [
-                    "Integer id PK",
-                    "String biografia",
-                    "String ubicacion",
-                    "double reputacion",
-                    "int totalVentas",
-                    "boolean esVerificado",
-                    "boolean cuentaPrivada",
-                    "boolean perfilPublico",
-                    "boolean terminosAceptados",
-                    "TipoCuenta tipoCuenta",
-                    "DireccionEnvio direccionPorDefecto (embedded)",
-                  ],
-                },
-                {
-                  name: "Empresa",
-                  fields: [
-                    "Integer id PK",
-                    "String cif (unique)",
-                    "String nombreComercial",
-                    "String descripcion",
-                    "String web, telefono",
-                    "String logo",
-                    "boolean verificada",
-                  ],
-                },
-                {
-                  name: "Admin",
-                  fields: ["Integer id PK", "Integer nivelAcceso (1/2/3)"],
-                },
-                {
-                  name: "SesionDispositivo",
-                  fields: [
-                    "Integer id PK",
-                    "String deviceId, deviceType",
-                    "String platform, browser",
-                    "String ipAddress",
-                    "boolean active",
-                    "String pushToken",
-                    "LocalDateTime lastLogin",
-                    "Integer usuarioId FK",
-                  ],
-                },
-                {
-                  name: "Bloqueo",
-                  fields: [
-                    "Integer id PK",
-                    "String motivo",
-                    "LocalDateTime fechaBloqueo",
-                    "Integer bloqueadorId FK",
-                    "Integer bloqueadoId FK",
-                  ],
-                },
-              ],
-              rels: [
-                {
-                  from: "Actor",
-                  card: "1 : 1",
-                  to: "Usuario",
-                  label: "hereda — JOINED (actor_id PK/FK)",
-                },
-                {
-                  from: "Actor",
-                  card: "1 : 1",
-                  to: "Empresa",
-                  label: "hereda — JOINED (actor_id PK/FK)",
-                },
-                {
-                  from: "Actor",
-                  card: "1 : 1",
-                  to: "Admin",
-                  label: "hereda — JOINED (actor_id PK/FK)",
-                },
-                {
-                  from: "Usuario",
-                  card: "1 : N",
-                  to: "SesionDispositivo",
-                  label: "un usuario tiene múltiples sesiones activas",
-                },
-                {
-                  from: "Actor",
-                  card: "1 : N",
-                  to: "Bloqueo",
-                  label: "un actor puede bloquear/ser bloqueado por otros",
-                },
-              ],
-            },
-            {
-              label: "Catálogo",
-              color: "#0369a1",
-              border: "#bae6fd",
-              entities: [
-                {
-                  name: "Categoria",
-                  fields: [
-                    "Integer id PK",
-                    "String nombre (unique)",
-                    "String slug (unique)",
-                    "String descripcion",
-                    "String icono, color",
-                    "Integer orden",
-                    "Boolean activa",
-                    "Integer parentId FK",
-                  ],
-                },
-                {
-                  name: "Producto",
-                  fields: [
-                    "Integer id PK",
-                    "String titulo",
-                    "String descripcion",
-                    "Double precio",
-                    "TipoOferta tipoOferta",
-                    "EstadoProducto estado",
-                    "CondicionProducto condicion",
-                    "String marca, modelo",
-                    "String ubicacion",
-                    "Boolean admiteEnvio",
-                    "Double precioEnvio, peso",
-                    "String imagenPrincipal",
-                    "boolean destacado, patrocinado",
-                    "LocalDateTime fechaPublicacion",
-                    "LocalDateTime fechaCaducidad",
-                    "Integer vendedorId FK",
-                    "Integer categoriaId FK",
-                  ],
-                },
-                {
-                  name: "Vehiculo",
-                  fields: [
-                    "Integer id PK",
-                    "String titulo",
-                    "String descripcion",
-                    "Double precio",
-                    "TipoVehiculo tipoVehiculo",
-                    "EstadoVehiculo estadoVehiculo",
-                    "TipoOferta tipoOferta",
-                    "CondicionProducto condicion",
-                    "String marca, modelo",
-                    "Integer anio, kilometros",
-                    "TipoCombustible combustible",
-                    "String cambio, color",
-                    "Integer potencia, cilindrada",
-                    "Integer numeroPuertas, plazas",
-                    "Boolean itv, garantia",
-                    "String ubicacion",
-                    "String imagenPrincipal",
-                    "boolean patrocinado",
-                    "LocalDateTime fechaPublicacion",
-                    "Integer publicadorId FK",
-                    "Integer categoriaId FK",
-                  ],
-                },
-                {
-                  name: "Oferta",
-                  fields: [
-                    "Integer id PK",
-                    "String titulo, descripcion",
-                    "Double precioOferta",
-                    "Double precioOriginal",
-                    "String tienda, urlOferta",
-                    "BadgeOferta badge",
-                    "EstadoOferta estado",
-                    "Boolean esActiva",
-                    "Integer sparkCount, dripCount",
-                    "Integer sparkScore",
-                    "String codigoDescuento",
-                    "Boolean esOnline, esFlash",
-                    "Boolean destacada, patrocinada",
-                    "LocalDateTime fechaPublicacion",
-                    "Integer actorId FK",
-                    "Integer categoriaId FK",
-                  ],
-                },
-              ],
-              rels: [
-                {
-                  from: "Categoria",
-                  card: "1 : N",
-                  to: "Categoria",
-                  label:
-                    "autoreferencia — categoría padre contiene subcategorías hijas",
-                },
-                {
-                  from: "Actor",
-                  card: "1 : N",
-                  to: "Producto",
-                  label: "un actor (vendedor_id) publica muchos productos",
-                },
-                {
-                  from: "Categoria",
-                  card: "1 : N",
-                  to: "Producto",
-                  label: "una categoría clasifica muchos productos",
-                },
-                {
-                  from: "Actor",
-                  card: "1 : N",
-                  to: "Vehiculo",
-                  label: "un actor (publicador_id) publica muchos vehículos",
-                },
-                {
-                  from: "Categoria",
-                  card: "1 : N",
-                  to: "Vehiculo",
-                  label: "una categoría clasifica muchos vehículos",
-                },
-                {
-                  from: "Actor",
-                  card: "1 : N",
-                  to: "Oferta",
-                  label: "un actor publica muchas ofertas del chollometro",
-                },
-                {
-                  from: "Categoria",
-                  card: "1 : N",
-                  to: "Oferta",
-                  label: "una categoría clasifica muchas ofertas",
-                },
-              ],
-            },
-            {
-              label: "Comercio y logística",
-              color: "#065f46",
-              border: "#86efac",
-              entities: [
-                {
-                  name: "Compra",
-                  fields: [
-                    "Integer id PK",
-                    "EstadoCompra estado",
-                    "Double precioFinal",
-                    "Double precioEnvio",
-                    "Double costoEnvio, comisionNexus",
-                    "MetodoEntrega metodoEntrega",
-                    "TipoEnvio tipoEnvio",
-                    "String stripePaymentIntentId",
-                    "String dirNombre, dirCalle",
-                    "String dirCiudad, dirPais",
-                    "String puntoRecogidaId",
-                    "LocalDateTime fechaCompra",
-                    "LocalDateTime fechaPago, fechaEnvio",
-                    "LocalDateTime fechaEntrega, fechaCompletada",
-                    "Integer compradorId FK",
-                    "Integer productoId FK",
-                  ],
-                },
-                {
-                  name: "Envio",
-                  fields: [
-                    "Integer id PK",
-                    "EstadoEnvio estado",
-                    "MetodoEntrega metodoEntrega",
-                    "String nombreDestinatario",
-                    "String direccion, ciudad, pais",
-                    "String transportista",
-                    "String numeroSeguimiento",
-                    "String codigoEnvio (SHIP-XXXXXXXX)",
-                    "String qrBase64",
-                    "Double pesoKg, precioEnvio",
-                    "String stripePaymentIntentId",
-                    "LocalDateTime fechaLimiteEnvio",
-                    "LocalDateTime fechaEnvio",
-                    "Integer compraId FK",
-                  ],
-                },
-                {
-                  name: "Devolucion",
-                  fields: [
-                    "Integer id PK",
-                    "MotivoDevolucion motivo",
-                    "String descripcion",
-                    "EstadoDevolucion estado",
-                    "String notaVendedor",
-                    "String trackingDevolucion",
-                    "Double importeDevolucion",
-                    "LocalDateTime fechaSolicitud",
-                    "Integer compraId FK",
-                  ],
-                },
-                {
-                  name: "Valoracion",
-                  fields: [
-                    "Integer id PK",
-                    "int puntuacion (1-5)",
-                    "String comentario",
-                    "String respuestaVendedor",
-                    "LocalDateTime fecha",
-                    "LocalDateTime fechaRespuesta",
-                    "Integer compradorId FK",
-                    "Integer vendedorId FK",
-                    "Integer compraId FK (unique)",
-                  ],
-                },
-                {
-                  name: "Cupon",
-                  fields: [
-                    "Integer id PK",
-                    "String codigo (unique, max 20)",
-                    "TipoDescuento tipo",
-                    "BigDecimal valor",
-                    "AlcanceCupon alcance",
-                    "Integer limiteUsoTotal",
-                    "Integer limiteUsoPorUsuario",
-                    "LocalDateTime fechaInicio, fechaFin",
-                    "String categoriasIds",
-                    "boolean activo",
-                    "Integer creadoPorAdminId",
-                  ],
-                },
-                {
-                  name: "CuponUso",
-                  fields: [
-                    "Integer id PK",
-                    "LocalDateTime fechaUso",
-                    "BigDecimal importeAhorro",
-                    "Integer cuponId FK",
-                    "Integer usuarioId FK",
-                    "Integer compraId FK",
-                  ],
-                },
-              ],
-              rels: [
-                {
-                  from: "Actor",
-                  card: "1 : N",
-                  to: "Compra",
-                  label: "un actor (comprador) realiza muchas compras",
-                },
-                {
-                  from: "Producto",
-                  card: "1 : N",
-                  to: "Compra",
-                  label: "un producto puede tener historial de compras",
-                },
-                {
-                  from: "Compra",
-                  card: "1 : 1",
-                  to: "Envio",
-                  label: "cada compra genera exactamente un envío",
-                },
-                {
-                  from: "Compra",
-                  card: "1 : 0..1",
-                  to: "Devolucion",
-                  label: "una compra puede tener una devolución opcional",
-                },
-                {
-                  from: "Compra",
-                  card: "1 : 1",
-                  to: "Valoracion",
-                  label:
-                    "cada compra genera como máximo una valoración (unique)",
-                },
-                {
-                  from: "Actor",
-                  card: "1 : N",
-                  to: "Valoracion",
-                  label: "Actor como comprador o vendedor en valoraciones",
-                },
-                {
-                  from: "Cupon",
-                  card: "1 : N",
-                  to: "CuponUso",
-                  label:
-                    "un cupón puede ser usado múltiples veces (con límites)",
-                },
-                {
-                  from: "Actor",
-                  card: "1 : N",
-                  to: "CuponUso",
-                  label: "un actor puede usar varios cupones distintos",
-                },
-                {
-                  from: "Compra",
-                  card: "1 : 0..1",
-                  to: "CuponUso",
-                  label: "una compra puede tener aplicado un cupón",
-                },
-              ],
-            },
-            {
-              label: "Social y mensajería",
-              color: "#b45309",
-              border: "#fde68a",
-              entities: [
-                {
-                  name: "ChatMensaje",
-                  fields: [
-                    "Integer id PK",
-                    "TipoMensaje tipo",
-                    "String texto",
-                    "String mediaUrl, mediaThumbnail",
-                    "Integer audioDuracionSegundos",
-                    "String roomId",
-                    "Boolean leido, recibido",
-                    "Double precioPropuesto",
-                    "String estadoPropuesta",
-                    "Boolean eliminadoParaRemitente",
-                    "Boolean eliminadoParaReceptor",
-                    "LocalDateTime fechaEnvio",
-                    "Integer remitenteId FK",
-                    "Integer receptorId FK",
-                    "Integer productoId FK",
-                  ],
-                },
-                {
-                  name: "Mensaje",
-                  fields: [
-                    "Integer id PK",
-                    "String texto",
-                    "Boolean estaActivo",
-                    "LocalDateTime fechaCreacion",
-                    "Integer usuarioId FK",
-                    "Integer productoId FK",
-                  ],
-                },
-                {
-                  name: "Comentario",
-                  fields: [
-                    "Integer id PK",
-                    "String texto",
-                    "String pollJson",
-                    "Boolean esReportado",
-                    "LocalDateTime fecha",
-                    "Integer actorId FK",
-                    "Integer ofertaId FK",
-                    "Integer vehiculoId FK",
-                  ],
-                },
-                {
-                  name: "SparkVoto",
-                  fields: [
-                    "Integer id PK",
-                    "Integer valor (+1 Spark / -1 Drip)",
-                    "LocalDateTime fechaVoto",
-                    "Integer actorId FK",
-                    "Integer ofertaId FK",
-                    "Integer productoId FK",
-                  ],
-                },
-                {
-                  name: "Favorito",
-                  fields: [
-                    "Integer id PK",
-                    "LocalDateTime fechaGuardado",
-                    "String nota",
-                    "Integer actorId FK",
-                    "Integer productoId FK",
-                    "Integer ofertaId FK",
-                    "Integer vehiculoId FK",
-                  ],
-                },
-                {
-                  name: "NotificacionInApp",
-                  fields: [
-                    "Integer id PK",
-                    "TipoNotificacion tipo",
-                    "String titulo, mensaje",
-                    "String url, metadata",
-                    "boolean leida, destacada",
-                    "LocalDateTime fecha",
-                    "Integer actorId FK",
-                  ],
-                },
-                {
-                  name: "Notificacion",
-                  fields: [
-                    "Integer id PK",
-                    "TipoNotificacion tipo",
-                    "String titulo, mensaje",
-                    "Boolean leida",
-                    "String urlDestino",
-                    "LocalDateTime fechaCreacion",
-                    "Integer usuarioId FK",
-                  ],
-                },
-              ],
-              rels: [
-                {
-                  from: "Actor",
-                  card: "1 : N",
-                  to: "ChatMensaje",
-                  label: "remitente y receptor (dos FK a Actor)",
-                },
-                {
-                  from: "Producto",
-                  card: "1 : N",
-                  to: "ChatMensaje",
-                  label: "conversación asociada a un producto",
-                },
-                {
-                  from: "Usuario",
-                  card: "1 : N",
-                  to: "Mensaje",
-                  label: "sistema legacy de mensajes por producto",
-                },
-                {
-                  from: "Producto",
-                  card: "1 : N",
-                  to: "Mensaje",
-                  label: "mensajes legacy asociados a producto",
-                },
-                {
-                  from: "Actor",
-                  card: "1 : N",
-                  to: "Comentario",
-                  label: "actor escribe comentarios en ofertas/vehículos",
-                },
-                {
-                  from: "Oferta",
-                  card: "1 : N",
-                  to: "Comentario",
-                  label: "oferta recibe comentarios de la comunidad",
-                },
-                {
-                  from: "Actor",
-                  card: "1 : N",
-                  to: "SparkVoto",
-                  label:
-                    "actor vota ofertas y productos (unique por actor+oferta+producto)",
-                },
-                {
-                  from: "Oferta",
-                  card: "1 : N",
-                  to: "SparkVoto",
-                  label: "oferta acumula votos Spark/Drip",
-                },
-                {
-                  from: "Actor",
-                  card: "1 : N",
-                  to: "Favorito",
-                  label:
-                    "actor guarda favoritos de productos/ofertas/vehículos",
-                },
-                {
-                  from: "Actor",
-                  card: "1 : N",
-                  to: "NotificacionInApp",
-                  label: "actor recibe notificaciones in-app (sistema nuevo)",
-                },
-                {
-                  from: "Usuario",
-                  card: "1 : N",
-                  to: "Notificacion",
-                  label: "usuario recibe notificaciones (sistema legacy)",
-                },
-              ],
-            },
-            {
-              label: "Negocio y administración",
-              color: "#9f1239",
-              border: "#fecdd3",
-              entities: [
-                {
-                  name: "Contrato",
-                  fields: [
-                    "Integer id PK",
-                    "TipoContrato tipoContrato",
-                    "EstadoContrato estado",
-                    "Double monto",
-                    "String descripcion",
-                    "String tipoItem (PRODUCTO/OFERTA/VEHICULO)",
-                    "Integer itemId",
-                    "String itemTitulo, itemImagen",
-                    "Integer diasPatrocinio",
-                    "String textoBanner, urlClick",
-                    "String stripeCheckoutSessionId",
-                    "String stripePaymentIntentId",
-                    "LocalDateTime fecha, fechaInicio, fechaFin",
-                    "Integer empresaId FK",
-                    "Integer actorId FK",
-                  ],
-                },
-                {
-                  name: "Reporte",
-                  fields: [
-                    "Integer id PK",
-                    "TipoReporte tipo",
-                    "MotivoReporte motivo",
-                    "EstadoReporte estado",
-                    "String descripcion, resolucion",
-                    "LocalDateTime fecha, fechaResolucion",
-                    "Integer reportadorId FK",
-                    "Integer actorDenunciadoId FK",
-                    "Integer productoDenunciadoId FK",
-                    "Integer ofertaDenunciadaId FK",
-                    "Integer vehiculoDenunciadoId FK",
-                    "Integer mensajeDenunciadoId FK",
-                    "Integer comentarioDenunciadoId FK",
-                    "Integer resoltorId FK",
-                  ],
-                },
-                {
-                  name: "AuditLog",
-                  fields: [
-                    "Long id PK",
-                    "Long adminId",
-                    "String adminUser",
-                    "String accion",
-                    "String entidadTipo",
-                    "Long entidadId",
-                    "String detalle",
-                    "String ip",
-                    "LocalDateTime timestamp",
-                  ],
-                },
-                {
-                  name: "NewsletterSuscripcion",
-                  fields: [
-                    "Integer id PK",
-                    "String email (unique)",
-                    "String nombre",
-                    "EstadoSuscripcion estado",
-                    "String tokenConfirmacion (unique)",
-                    "String tokenBaja (unique)",
-                    "String motivoBaja",
-                    "boolean recibirOfertas, recibirNoticias",
-                    "boolean recibirTrending",
-                    "String frecuencia",
-                    "LocalDateTime fechaConsentimiento",
-                    "String ipConsentimiento",
-                    "String versionPolitica",
-                  ],
-                },
-                {
-                  name: "PasswordResetToken",
-                  fields: [
-                    "Integer id PK",
-                    "String token (unique)",
-                    "LocalDateTime expiraEn",
-                    "Integer actorId FK",
-                    "@Deprecated — lógica migrada a Actor.resetToken",
-                  ],
-                },
-              ],
-              rels: [
-                {
-                  from: "Empresa",
-                  card: "1 : N",
-                  to: "Contrato",
-                  label:
-                    "empresa firma contratos publicitarios (banner/publicacion)",
-                },
-                {
-                  from: "Actor",
-                  card: "1 : N",
-                  to: "Contrato",
-                  label: "actor solicita patrocinios (actor_id en contrato)",
-                },
-                {
-                  from: "Actor",
-                  card: "1 : N",
-                  to: "Reporte",
-                  label: "actor reporta contenido (reportador_id)",
-                },
-                {
-                  from: "Actor",
-                  card: "1 : N",
-                  to: "PasswordResetToken",
-                  label:
-                    "@Deprecated — token de reset ahora vive en Actor.resetToken",
-                },
-              ],
-            },
-          ];
+            const groups = [
+                {
+                    label: "Actores y sesiones",
+                    color: "#7c3aed",
+                    border: "#c4b5fd",
+                    entities: [
+                        {
+                            name: "Actor",
+                            fields: [
+                                "Integer id PK",
+                                "String user (username en DB)",
+                                "String email",
+                                "String password (bcrypt)",
+                                "String nombre, apellidos",
+                                "String telefono",
+                                "String avatar, avatarSource",
+                                "String googleId, googleAvatarUrl",
+                                "TipoCuenta tipoCuenta",
+                                "boolean cuentaVerificada",
+                                "boolean cuentaEliminada",
+                                "boolean baneado",
+                                "boolean twoFactorEnabled",
+                                "String twoFactorMethod",
+                                "int jwtVersion",
+                                "String stripeCustomerId",
+                                "String resetToken",
+                                "LocalDateTime fechaRegistro",
+                                "boolean onboardingCompletado",
+                            ],
+                        },
+                        {
+                            name: "Usuario",
+                            fields: [
+                                "Integer id PK",
+                                "String biografia",
+                                "String ubicacion",
+                                "double reputacion",
+                                "int totalVentas",
+                                "boolean esVerificado",
+                                "boolean cuentaPrivada",
+                                "boolean perfilPublico",
+                                "boolean terminosAceptados",
+                                "TipoCuenta tipoCuenta",
+                                "DireccionEnvio direccionPorDefecto (embedded)",
+                            ],
+                        },
+                        {
+                            name: "Empresa",
+                            fields: [
+                                "Integer id PK",
+                                "String cif (unique)",
+                                "String nombreComercial",
+                                "String descripcion",
+                                "String web, telefono",
+                                "String logo",
+                                "boolean verificada",
+                            ],
+                        },
+                        {
+                            name: "Admin",
+                            fields: [
+                                "Integer id PK",
+                                "Integer nivelAcceso (1/2/3)",
+                            ],
+                        },
+                        {
+                            name: "SesionDispositivo",
+                            fields: [
+                                "Integer id PK",
+                                "String deviceId, deviceType",
+                                "String platform, browser",
+                                "String ipAddress",
+                                "boolean active",
+                                "String pushToken",
+                                "LocalDateTime lastLogin",
+                                "Integer usuarioId FK",
+                            ],
+                        },
+                        {
+                            name: "Bloqueo",
+                            fields: [
+                                "Integer id PK",
+                                "String motivo",
+                                "LocalDateTime fechaBloqueo",
+                                "Integer bloqueadorId FK",
+                                "Integer bloqueadoId FK",
+                            ],
+                        },
+                    ],
+                    rels: [
+                        {
+                            from: "Actor",
+                            card: "1 : 1",
+                            to: "Usuario",
+                            label: "hereda — JOINED (actor_id PK/FK)",
+                        },
+                        {
+                            from: "Actor",
+                            card: "1 : 1",
+                            to: "Empresa",
+                            label: "hereda — JOINED (actor_id PK/FK)",
+                        },
+                        {
+                            from: "Actor",
+                            card: "1 : 1",
+                            to: "Admin",
+                            label: "hereda — JOINED (actor_id PK/FK)",
+                        },
+                        {
+                            from: "Usuario",
+                            card: "1 : N",
+                            to: "SesionDispositivo",
+                            label: "un usuario tiene múltiples sesiones activas",
+                        },
+                        {
+                            from: "Actor",
+                            card: "1 : N",
+                            to: "Bloqueo",
+                            label: "un actor puede bloquear/ser bloqueado por otros",
+                        },
+                    ],
+                },
+                {
+                    label: "Catálogo",
+                    color: "#0369a1",
+                    border: "#bae6fd",
+                    entities: [
+                        {
+                            name: "Categoria",
+                            fields: [
+                                "Integer id PK",
+                                "String nombre (unique)",
+                                "String slug (unique)",
+                                "String descripcion",
+                                "String icono, color",
+                                "Integer orden",
+                                "Boolean activa",
+                                "Integer parentId FK",
+                            ],
+                        },
+                        {
+                            name: "Producto",
+                            fields: [
+                                "Integer id PK",
+                                "String titulo",
+                                "String descripcion",
+                                "Double precio",
+                                "TipoOferta tipoOferta",
+                                "EstadoProducto estado",
+                                "CondicionProducto condicion",
+                                "String marca, modelo",
+                                "String ubicacion",
+                                "Boolean admiteEnvio",
+                                "Double precioEnvio, peso",
+                                "String imagenPrincipal",
+                                "boolean destacado, patrocinado",
+                                "LocalDateTime fechaPublicacion",
+                                "LocalDateTime fechaCaducidad",
+                                "Integer vendedorId FK",
+                                "Integer categoriaId FK",
+                            ],
+                        },
+                        {
+                            name: "Vehiculo",
+                            fields: [
+                                "Integer id PK",
+                                "String titulo",
+                                "String descripcion",
+                                "Double precio",
+                                "TipoVehiculo tipoVehiculo",
+                                "EstadoVehiculo estadoVehiculo",
+                                "TipoOferta tipoOferta",
+                                "CondicionProducto condicion",
+                                "String marca, modelo",
+                                "Integer anio, kilometros",
+                                "TipoCombustible combustible",
+                                "String cambio, color",
+                                "Integer potencia, cilindrada",
+                                "Integer numeroPuertas, plazas",
+                                "Boolean itv, garantia",
+                                "String ubicacion",
+                                "String imagenPrincipal",
+                                "boolean patrocinado",
+                                "LocalDateTime fechaPublicacion",
+                                "Integer publicadorId FK",
+                                "Integer categoriaId FK",
+                            ],
+                        },
+                        {
+                            name: "Oferta",
+                            fields: [
+                                "Integer id PK",
+                                "String titulo, descripcion",
+                                "Double precioOferta",
+                                "Double precioOriginal",
+                                "String tienda, urlOferta",
+                                "BadgeOferta badge",
+                                "EstadoOferta estado",
+                                "Boolean esActiva",
+                                "Integer sparkCount, dripCount",
+                                "Integer sparkScore",
+                                "String codigoDescuento",
+                                "Boolean esOnline, esFlash",
+                                "Boolean destacada, patrocinada",
+                                "LocalDateTime fechaPublicacion",
+                                "Integer actorId FK",
+                                "Integer categoriaId FK",
+                            ],
+                        },
+                    ],
+                    rels: [
+                        {
+                            from: "Categoria",
+                            card: "1 : N",
+                            to: "Categoria",
+                            label: "autoreferencia — categoría padre contiene subcategorías hijas",
+                        },
+                        {
+                            from: "Actor",
+                            card: "1 : N",
+                            to: "Producto",
+                            label: "un actor (vendedor_id) publica muchos productos",
+                        },
+                        {
+                            from: "Categoria",
+                            card: "1 : N",
+                            to: "Producto",
+                            label: "una categoría clasifica muchos productos",
+                        },
+                        {
+                            from: "Actor",
+                            card: "1 : N",
+                            to: "Vehiculo",
+                            label: "un actor (publicador_id) publica muchos vehículos",
+                        },
+                        {
+                            from: "Categoria",
+                            card: "1 : N",
+                            to: "Vehiculo",
+                            label: "una categoría clasifica muchos vehículos",
+                        },
+                        {
+                            from: "Actor",
+                            card: "1 : N",
+                            to: "Oferta",
+                            label: "un actor publica muchas ofertas del chollometro",
+                        },
+                        {
+                            from: "Categoria",
+                            card: "1 : N",
+                            to: "Oferta",
+                            label: "una categoría clasifica muchas ofertas",
+                        },
+                    ],
+                },
+                {
+                    label: "Comercio y logística",
+                    color: "#065f46",
+                    border: "#86efac",
+                    entities: [
+                        {
+                            name: "Compra",
+                            fields: [
+                                "Integer id PK",
+                                "EstadoCompra estado",
+                                "Double precioFinal",
+                                "Double precioEnvio",
+                                "Double costoEnvio, comisionNexus",
+                                "MetodoEntrega metodoEntrega",
+                                "TipoEnvio tipoEnvio",
+                                "String stripePaymentIntentId",
+                                "String dirNombre, dirCalle",
+                                "String dirCiudad, dirPais",
+                                "String puntoRecogidaId",
+                                "LocalDateTime fechaCompra",
+                                "LocalDateTime fechaPago, fechaEnvio",
+                                "LocalDateTime fechaEntrega, fechaCompletada",
+                                "Integer compradorId FK",
+                                "Integer productoId FK",
+                            ],
+                        },
+                        {
+                            name: "Envio",
+                            fields: [
+                                "Integer id PK",
+                                "EstadoEnvio estado",
+                                "MetodoEntrega metodoEntrega",
+                                "String nombreDestinatario",
+                                "String direccion, ciudad, pais",
+                                "String transportista",
+                                "String numeroSeguimiento",
+                                "String codigoEnvio (SHIP-XXXXXXXX)",
+                                "String qrBase64",
+                                "Double pesoKg, precioEnvio",
+                                "String stripePaymentIntentId",
+                                "LocalDateTime fechaLimiteEnvio",
+                                "LocalDateTime fechaEnvio",
+                                "Integer compraId FK",
+                            ],
+                        },
+                        {
+                            name: "Devolucion",
+                            fields: [
+                                "Integer id PK",
+                                "MotivoDevolucion motivo",
+                                "String descripcion",
+                                "EstadoDevolucion estado",
+                                "String notaVendedor",
+                                "String trackingDevolucion",
+                                "Double importeDevolucion",
+                                "LocalDateTime fechaSolicitud",
+                                "Integer compraId FK",
+                            ],
+                        },
+                        {
+                            name: "Valoracion",
+                            fields: [
+                                "Integer id PK",
+                                "int puntuacion (1-5)",
+                                "String comentario",
+                                "String respuestaVendedor",
+                                "LocalDateTime fecha",
+                                "LocalDateTime fechaRespuesta",
+                                "Integer compradorId FK",
+                                "Integer vendedorId FK",
+                                "Integer compraId FK (unique)",
+                            ],
+                        },
+                        {
+                            name: "Cupon",
+                            fields: [
+                                "Integer id PK",
+                                "String codigo (unique, max 20)",
+                                "TipoDescuento tipo",
+                                "BigDecimal valor",
+                                "AlcanceCupon alcance",
+                                "Integer limiteUsoTotal",
+                                "Integer limiteUsoPorUsuario",
+                                "LocalDateTime fechaInicio, fechaFin",
+                                "String categoriasIds",
+                                "boolean activo",
+                                "Integer creadoPorAdminId",
+                            ],
+                        },
+                        {
+                            name: "CuponUso",
+                            fields: [
+                                "Integer id PK",
+                                "LocalDateTime fechaUso",
+                                "BigDecimal importeAhorro",
+                                "Integer cuponId FK",
+                                "Integer usuarioId FK",
+                                "Integer compraId FK",
+                            ],
+                        },
+                    ],
+                    rels: [
+                        {
+                            from: "Actor",
+                            card: "1 : N",
+                            to: "Compra",
+                            label: "un actor (comprador) realiza muchas compras",
+                        },
+                        {
+                            from: "Producto",
+                            card: "1 : N",
+                            to: "Compra",
+                            label: "un producto puede tener historial de compras",
+                        },
+                        {
+                            from: "Compra",
+                            card: "1 : 1",
+                            to: "Envio",
+                            label: "cada compra genera exactamente un envío",
+                        },
+                        {
+                            from: "Compra",
+                            card: "1 : 0..1",
+                            to: "Devolucion",
+                            label: "una compra puede tener una devolución opcional",
+                        },
+                        {
+                            from: "Compra",
+                            card: "1 : 1",
+                            to: "Valoracion",
+                            label: "cada compra genera como máximo una valoración (unique)",
+                        },
+                        {
+                            from: "Actor",
+                            card: "1 : N",
+                            to: "Valoracion",
+                            label: "Actor como comprador o vendedor en valoraciones",
+                        },
+                        {
+                            from: "Cupon",
+                            card: "1 : N",
+                            to: "CuponUso",
+                            label: "un cupón puede ser usado múltiples veces (con límites)",
+                        },
+                        {
+                            from: "Actor",
+                            card: "1 : N",
+                            to: "CuponUso",
+                            label: "un actor puede usar varios cupones distintos",
+                        },
+                        {
+                            from: "Compra",
+                            card: "1 : 0..1",
+                            to: "CuponUso",
+                            label: "una compra puede tener aplicado un cupón",
+                        },
+                    ],
+                },
+                {
+                    label: "Social y mensajería",
+                    color: "#b45309",
+                    border: "#fde68a",
+                    entities: [
+                        {
+                            name: "ChatMensaje",
+                            fields: [
+                                "Integer id PK",
+                                "TipoMensaje tipo",
+                                "String texto",
+                                "String mediaUrl, mediaThumbnail",
+                                "Integer audioDuracionSegundos",
+                                "String roomId",
+                                "Boolean leido, recibido",
+                                "Double precioPropuesto",
+                                "String estadoPropuesta",
+                                "Boolean eliminadoParaRemitente",
+                                "Boolean eliminadoParaReceptor",
+                                "LocalDateTime fechaEnvio",
+                                "Integer remitenteId FK",
+                                "Integer receptorId FK",
+                                "Integer productoId FK",
+                            ],
+                        },
+                        {
+                            name: "Mensaje",
+                            fields: [
+                                "Integer id PK",
+                                "String texto",
+                                "Boolean estaActivo",
+                                "LocalDateTime fechaCreacion",
+                                "Integer usuarioId FK",
+                                "Integer productoId FK",
+                            ],
+                        },
+                        {
+                            name: "Comentario",
+                            fields: [
+                                "Integer id PK",
+                                "String texto",
+                                "String pollJson",
+                                "Boolean esReportado",
+                                "LocalDateTime fecha",
+                                "Integer actorId FK",
+                                "Integer ofertaId FK",
+                                "Integer vehiculoId FK",
+                            ],
+                        },
+                        {
+                            name: "SparkVoto",
+                            fields: [
+                                "Integer id PK",
+                                "Integer valor (+1 Spark / -1 Drip)",
+                                "LocalDateTime fechaVoto",
+                                "Integer actorId FK",
+                                "Integer ofertaId FK",
+                                "Integer productoId FK",
+                            ],
+                        },
+                        {
+                            name: "Favorito",
+                            fields: [
+                                "Integer id PK",
+                                "LocalDateTime fechaGuardado",
+                                "String nota",
+                                "Integer actorId FK",
+                                "Integer productoId FK",
+                                "Integer ofertaId FK",
+                                "Integer vehiculoId FK",
+                            ],
+                        },
+                        {
+                            name: "NotificacionInApp",
+                            fields: [
+                                "Integer id PK",
+                                "TipoNotificacion tipo",
+                                "String titulo, mensaje",
+                                "String url, metadata",
+                                "boolean leida, destacada",
+                                "LocalDateTime fecha",
+                                "Integer actorId FK",
+                            ],
+                        },
+                        {
+                            name: "Notificacion",
+                            fields: [
+                                "Integer id PK",
+                                "TipoNotificacion tipo",
+                                "String titulo, mensaje",
+                                "Boolean leida",
+                                "String urlDestino",
+                                "LocalDateTime fechaCreacion",
+                                "Integer usuarioId FK",
+                            ],
+                        },
+                    ],
+                    rels: [
+                        {
+                            from: "Actor",
+                            card: "1 : N",
+                            to: "ChatMensaje",
+                            label: "remitente y receptor (dos FK a Actor)",
+                        },
+                        {
+                            from: "Producto",
+                            card: "1 : N",
+                            to: "ChatMensaje",
+                            label: "conversación asociada a un producto",
+                        },
+                        {
+                            from: "Usuario",
+                            card: "1 : N",
+                            to: "Mensaje",
+                            label: "sistema legacy de mensajes por producto",
+                        },
+                        {
+                            from: "Producto",
+                            card: "1 : N",
+                            to: "Mensaje",
+                            label: "mensajes legacy asociados a producto",
+                        },
+                        {
+                            from: "Actor",
+                            card: "1 : N",
+                            to: "Comentario",
+                            label: "actor escribe comentarios en ofertas/vehículos",
+                        },
+                        {
+                            from: "Oferta",
+                            card: "1 : N",
+                            to: "Comentario",
+                            label: "oferta recibe comentarios de la comunidad",
+                        },
+                        {
+                            from: "Actor",
+                            card: "1 : N",
+                            to: "SparkVoto",
+                            label: "actor vota ofertas y productos (unique por actor+oferta+producto)",
+                        },
+                        {
+                            from: "Oferta",
+                            card: "1 : N",
+                            to: "SparkVoto",
+                            label: "oferta acumula votos Spark/Drip",
+                        },
+                        {
+                            from: "Actor",
+                            card: "1 : N",
+                            to: "Favorito",
+                            label: "actor guarda favoritos de productos/ofertas/vehículos",
+                        },
+                        {
+                            from: "Actor",
+                            card: "1 : N",
+                            to: "NotificacionInApp",
+                            label: "actor recibe notificaciones in-app (sistema nuevo)",
+                        },
+                        {
+                            from: "Usuario",
+                            card: "1 : N",
+                            to: "Notificacion",
+                            label: "usuario recibe notificaciones (sistema legacy)",
+                        },
+                    ],
+                },
+                {
+                    label: "Negocio y administración",
+                    color: "#9f1239",
+                    border: "#fecdd3",
+                    entities: [
+                        {
+                            name: "Contrato",
+                            fields: [
+                                "Integer id PK",
+                                "TipoContrato tipoContrato",
+                                "EstadoContrato estado",
+                                "Double monto",
+                                "String descripcion",
+                                "String tipoItem (PRODUCTO/OFERTA/VEHICULO)",
+                                "Integer itemId",
+                                "String itemTitulo, itemImagen",
+                                "Integer diasPatrocinio",
+                                "String textoBanner, urlClick",
+                                "String stripeCheckoutSessionId",
+                                "String stripePaymentIntentId",
+                                "LocalDateTime fecha, fechaInicio, fechaFin",
+                                "Integer empresaId FK",
+                                "Integer actorId FK",
+                            ],
+                        },
+                        {
+                            name: "Reporte",
+                            fields: [
+                                "Integer id PK",
+                                "TipoReporte tipo",
+                                "MotivoReporte motivo",
+                                "EstadoReporte estado",
+                                "String descripcion, resolucion",
+                                "LocalDateTime fecha, fechaResolucion",
+                                "Integer reportadorId FK",
+                                "Integer actorDenunciadoId FK",
+                                "Integer productoDenunciadoId FK",
+                                "Integer ofertaDenunciadaId FK",
+                                "Integer vehiculoDenunciadoId FK",
+                                "Integer mensajeDenunciadoId FK",
+                                "Integer comentarioDenunciadoId FK",
+                                "Integer resoltorId FK",
+                            ],
+                        },
+                        {
+                            name: "AuditLog",
+                            fields: [
+                                "Long id PK",
+                                "Long adminId",
+                                "String adminUser",
+                                "String accion",
+                                "String entidadTipo",
+                                "Long entidadId",
+                                "String detalle",
+                                "String ip",
+                                "LocalDateTime timestamp",
+                            ],
+                        },
+                        {
+                            name: "NewsletterSuscripcion",
+                            fields: [
+                                "Integer id PK",
+                                "String email (unique)",
+                                "String nombre",
+                                "EstadoSuscripcion estado",
+                                "String tokenConfirmacion (unique)",
+                                "String tokenBaja (unique)",
+                                "String motivoBaja",
+                                "boolean recibirOfertas, recibirNoticias",
+                                "boolean recibirTrending",
+                                "String frecuencia",
+                                "LocalDateTime fechaConsentimiento",
+                                "String ipConsentimiento",
+                                "String versionPolitica",
+                            ],
+                        },
+                        {
+                            name: "PasswordResetToken",
+                            fields: [
+                                "Integer id PK",
+                                "String token (unique)",
+                                "LocalDateTime expiraEn",
+                                "Integer actorId FK",
+                                "@Deprecated — lógica migrada a Actor.resetToken",
+                            ],
+                        },
+                    ],
+                    rels: [
+                        {
+                            from: "Empresa",
+                            card: "1 : N",
+                            to: "Contrato",
+                            label: "empresa firma contratos publicitarios (banner/publicacion)",
+                        },
+                        {
+                            from: "Actor",
+                            card: "1 : N",
+                            to: "Contrato",
+                            label: "actor solicita patrocinios (actor_id en contrato)",
+                        },
+                        {
+                            from: "Actor",
+                            card: "1 : N",
+                            to: "Reporte",
+                            label: "actor reporta contenido (reportador_id)",
+                        },
+                        {
+                            from: "Actor",
+                            card: "1 : N",
+                            to: "PasswordResetToken",
+                            label: "@Deprecated — token de reset ahora vive en Actor.resetToken",
+                        },
+                    ],
+                },
+            ];
 
-          // ── ENUMS ─────────────────────────────────────────────────────
-          const enums = [
-            { name: "TipoCuenta", values: ["PERSONAL", "EMPRESA"] },
-            {
-              name: "TipoOferta",
-              values: [
-                "VENTA",
-                "DONACION",
-                "INTERCAMBIO",
-                "SUBASTA",
-                "ALQUILER",
-              ],
-            },
-            {
-              name: "EstadoProducto",
-              values: [
-                "DISPONIBLE",
-                "RESERVADO",
-                "VENDIDO",
-                "PAUSADO",
-                "ELIMINADO",
-                "SUSPENDIDO_ADMIN",
-                "EXPIRADO",
-              ],
-            },
-            {
-              name: "CondicionProducto",
-              values: [
-                "NUEVO",
-                "COMO_NUEVO",
-                "MUY_BUEN_ESTADO",
-                "BUEN_ESTADO",
-                "ACEPTABLE",
-              ],
-            },
-            {
-              name: "TipoVehiculo",
-              values: [
-                "COCHE",
-                "MOTO",
-                "FURGONETA",
-                "CAMION",
-                "CARAVANA",
-                "AUTOBUS",
-                "QUAD",
-                "SCOOTER",
-                "BARCO",
-                "OTRO",
-              ],
-            },
-            {
-              name: "EstadoVehiculo",
-              values: [
-                "DISPONIBLE",
-                "RESERVADO",
-                "VENDIDO",
-                "PAUSADO",
-                "ELIMINADO",
-                "EXPIRADO",
-              ],
-            },
-            {
-              name: "TipoCombustible",
-              values: [
-                "GASOLINA",
-                "DIESEL",
-                "ELECTRICO",
-                "HIBRIDO",
-                "HIBRIDO_ENCHUFABLE",
-                "GLP",
-                "GNC",
-                "HIDROGENO",
-                "OTRO",
-              ],
-            },
-            {
-              name: "BadgeOferta",
-              values: [
-                "CHOLLAZO",
-                "DESTACADA",
-                "NUEVA",
-                "EXPIRA_HOY",
-                "GRATUITA",
-                "PORCENTAJE",
-              ],
-            },
-            {
-              name: "EstadoOferta",
-              values: [
-                "ACTIVA",
-                "PAUSADA",
-                "AGOTADA",
-                "ELIMINADA",
-                "PENDIENTE_REVISION",
-                "RECHAZADA",
-              ],
-            },
-            {
-              name: "EstadoCompra",
-              values: [
-                "PENDIENTE",
-                "PAGADO",
-                "ENVIADO",
-                "ENTREGADO",
-                "EN_DISPUTA",
-                "REEMBOLSADA",
-                "CANCELADA",
-                "COMPLETADA",
-              ],
-            },
-            {
-              name: "EstadoEnvio",
-              values: [
-                "PENDIENTE_ENVIO",
-                "PREPARANDO",
-                "ENVIADO",
-                "EN_TRANSITO",
-                "EN_REPARTO",
-                "ENTREGADO",
-                "INCIDENCIA",
-                "DEVUELTO",
-                "CANCELADO",
-              ],
-            },
-            {
-              name: "MetodoEntrega",
-              values: ["ENVIO_PAQUETERIA", "ENTREGA_EN_PERSONA"],
-            },
-            {
-              name: "TipoEnvio",
-              values: ["DOMICILIO", "PUNTO_RECOGIDA", "RECOGIDA_PERSONAL"],
-            },
-            {
-              name: "MotivoDevolucion",
-              values: [
-                "PRODUCTO_DEFECTUOSO",
-                "PRODUCTO_NO_CORRESPONDE",
-                "DANO_EN_TRANSPORTE",
-                "CAMBIO_DE_OPINION",
-                "TALLA_INCORRECTA",
-                "DOBLE_PEDIDO",
-                "VENDEDOR_CANCELACION",
-                "OTRO",
-              ],
-            },
-            {
-              name: "EstadoDevolucion",
-              values: [
-                "SOLICITADA",
-                "ACEPTADA",
-                "RECHAZADA",
-                "DEVOLUCION_ENVIADA",
-                "COMPLETADA",
-              ],
-            },
-            { name: "TipoContrato", values: ["BANNER", "PUBLICACION"] },
-            {
-              name: "EstadoContrato",
-              values: [
-                "DRAFT",
-                "PROPUESTA_ADMIN",
-                "SOLICITUD_USUARIO",
-                "APROBADO_PENDIENTE_PAGO",
-                "PENDIENTE_PAGO",
-                "ACTIVE",
-                "RECHAZADO",
-                "EXPIRED",
-                "CANCELLED",
-              ],
-            },
-            {
-              name: "TipoDescuento",
-              values: ["PORCENTAJE", "FIJO", "ENVIO_GRATIS", "COMBINADO"],
-            },
-            { name: "AlcanceCupon", values: ["TODOS", "USUARIO", "GRUPO"] },
-            {
-              name: "TipoReporte",
-              values: [
-                "USUARIO",
-                "PRODUCTO",
-                "OFERTA",
-                "VEHICULO",
-                "MENSAJE",
-                "COMENTARIO",
-              ],
-            },
-            {
-              name: "MotivoReporte",
-              values: [
-                "SPAM",
-                "CONTENIDO_INAPROPIADO",
-                "PRODUCTO_FALSO",
-                "PRECIO_INCORRECTO",
-                "INFORMACION_FALSA",
-                "ACOSO",
-                "FRAUDE",
-                "DUPLICADO",
-                "PROHIBIDO",
-                "OTRO",
-              ],
-            },
-            {
-              name: "EstadoReporte",
-              values: ["PENDIENTE", "EN_REVISION", "RESUELTO", "DESESTIMADO"],
-            },
-            {
-              name: "TipoMensaje",
-              values: [
-                "TEXTO",
-                "IMAGEN",
-                "VIDEO",
-                "AUDIO",
-                "SISTEMA",
-                "OFERTA_PRECIO",
-                "GIF",
-              ],
-            },
-            {
-              name: "TipoNotificacion",
-              values: [
-                "NUEVO_MENSAJE",
-                "NUEVA_COMPRA",
-                "COMPRA_CONFIRMADA",
-                "ENVIO_ACTUALIZADO",
-                "NUEVA_VALORACION",
-                "SPARK_EN_OFERTA",
-                "NUEVO_COMENTARIO",
-                "DEVOLUCION",
-                "CADUCIDAD_ANUNCIO",
-                "CONTRATO_PROPUESTA",
-                "PATROCINIO_APROBADO",
-                "SISTEMA",
-                "...+12 más",
-              ],
-            },
-            {
-              name: "EstadoSuscripcion",
-              values: ["PENDIENTE", "ACTIVO", "BAJA", "BLOQUEADO"],
-            },
-          ];
+            // ── ENUMS ─────────────────────────────────────────────────────
+            const enums = [
+                { name: "TipoCuenta", values: ["PERSONAL", "EMPRESA"] },
+                {
+                    name: "TipoOferta",
+                    values: [
+                        "VENTA",
+                        "DONACION",
+                        "INTERCAMBIO",
+                        "SUBASTA",
+                        "ALQUILER",
+                    ],
+                },
+                {
+                    name: "EstadoProducto",
+                    values: [
+                        "DISPONIBLE",
+                        "RESERVADO",
+                        "VENDIDO",
+                        "PAUSADO",
+                        "ELIMINADO",
+                        "SUSPENDIDO_ADMIN",
+                        "EXPIRADO",
+                    ],
+                },
+                {
+                    name: "CondicionProducto",
+                    values: [
+                        "NUEVO",
+                        "COMO_NUEVO",
+                        "MUY_BUEN_ESTADO",
+                        "BUEN_ESTADO",
+                        "ACEPTABLE",
+                    ],
+                },
+                {
+                    name: "TipoVehiculo",
+                    values: [
+                        "COCHE",
+                        "MOTO",
+                        "FURGONETA",
+                        "CAMION",
+                        "CARAVANA",
+                        "AUTOBUS",
+                        "QUAD",
+                        "SCOOTER",
+                        "BARCO",
+                        "OTRO",
+                    ],
+                },
+                {
+                    name: "EstadoVehiculo",
+                    values: [
+                        "DISPONIBLE",
+                        "RESERVADO",
+                        "VENDIDO",
+                        "PAUSADO",
+                        "ELIMINADO",
+                        "EXPIRADO",
+                    ],
+                },
+                {
+                    name: "TipoCombustible",
+                    values: [
+                        "GASOLINA",
+                        "DIESEL",
+                        "ELECTRICO",
+                        "HIBRIDO",
+                        "HIBRIDO_ENCHUFABLE",
+                        "GLP",
+                        "GNC",
+                        "HIDROGENO",
+                        "OTRO",
+                    ],
+                },
+                {
+                    name: "BadgeOferta",
+                    values: [
+                        "CHOLLAZO",
+                        "DESTACADA",
+                        "NUEVA",
+                        "EXPIRA_HOY",
+                        "GRATUITA",
+                        "PORCENTAJE",
+                    ],
+                },
+                {
+                    name: "EstadoOferta",
+                    values: [
+                        "ACTIVA",
+                        "PAUSADA",
+                        "AGOTADA",
+                        "ELIMINADA",
+                        "PENDIENTE_REVISION",
+                        "RECHAZADA",
+                    ],
+                },
+                {
+                    name: "EstadoCompra",
+                    values: [
+                        "PENDIENTE",
+                        "PAGADO",
+                        "ENVIADO",
+                        "ENTREGADO",
+                        "EN_DISPUTA",
+                        "REEMBOLSADA",
+                        "CANCELADA",
+                        "COMPLETADA",
+                    ],
+                },
+                {
+                    name: "EstadoEnvio",
+                    values: [
+                        "PENDIENTE_ENVIO",
+                        "PREPARANDO",
+                        "ENVIADO",
+                        "EN_TRANSITO",
+                        "EN_REPARTO",
+                        "ENTREGADO",
+                        "INCIDENCIA",
+                        "DEVUELTO",
+                        "CANCELADO",
+                    ],
+                },
+                {
+                    name: "MetodoEntrega",
+                    values: ["ENVIO_PAQUETERIA", "ENTREGA_EN_PERSONA"],
+                },
+                {
+                    name: "TipoEnvio",
+                    values: [
+                        "DOMICILIO",
+                        "PUNTO_RECOGIDA",
+                        "RECOGIDA_PERSONAL",
+                    ],
+                },
+                {
+                    name: "MotivoDevolucion",
+                    values: [
+                        "PRODUCTO_DEFECTUOSO",
+                        "PRODUCTO_NO_CORRESPONDE",
+                        "DANO_EN_TRANSPORTE",
+                        "CAMBIO_DE_OPINION",
+                        "TALLA_INCORRECTA",
+                        "DOBLE_PEDIDO",
+                        "VENDEDOR_CANCELACION",
+                        "OTRO",
+                    ],
+                },
+                {
+                    name: "EstadoDevolucion",
+                    values: [
+                        "SOLICITADA",
+                        "ACEPTADA",
+                        "RECHAZADA",
+                        "DEVOLUCION_ENVIADA",
+                        "COMPLETADA",
+                    ],
+                },
+                { name: "TipoContrato", values: ["BANNER", "PUBLICACION"] },
+                {
+                    name: "EstadoContrato",
+                    values: [
+                        "DRAFT",
+                        "PROPUESTA_ADMIN",
+                        "SOLICITUD_USUARIO",
+                        "APROBADO_PENDIENTE_PAGO",
+                        "PENDIENTE_PAGO",
+                        "ACTIVE",
+                        "RECHAZADO",
+                        "EXPIRED",
+                        "CANCELLED",
+                    ],
+                },
+                {
+                    name: "TipoDescuento",
+                    values: ["PORCENTAJE", "FIJO", "ENVIO_GRATIS", "COMBINADO"],
+                },
+                { name: "AlcanceCupon", values: ["TODOS", "USUARIO", "GRUPO"] },
+                {
+                    name: "TipoReporte",
+                    values: [
+                        "USUARIO",
+                        "PRODUCTO",
+                        "OFERTA",
+                        "VEHICULO",
+                        "MENSAJE",
+                        "COMENTARIO",
+                    ],
+                },
+                {
+                    name: "MotivoReporte",
+                    values: [
+                        "SPAM",
+                        "CONTENIDO_INAPROPIADO",
+                        "PRODUCTO_FALSO",
+                        "PRECIO_INCORRECTO",
+                        "INFORMACION_FALSA",
+                        "ACOSO",
+                        "FRAUDE",
+                        "DUPLICADO",
+                        "PROHIBIDO",
+                        "OTRO",
+                    ],
+                },
+                {
+                    name: "EstadoReporte",
+                    values: [
+                        "PENDIENTE",
+                        "EN_REVISION",
+                        "RESUELTO",
+                        "DESESTIMADO",
+                    ],
+                },
+                {
+                    name: "TipoMensaje",
+                    values: [
+                        "TEXTO",
+                        "IMAGEN",
+                        "VIDEO",
+                        "AUDIO",
+                        "SISTEMA",
+                        "OFERTA_PRECIO",
+                        "GIF",
+                    ],
+                },
+                {
+                    name: "TipoNotificacion",
+                    values: [
+                        "NUEVO_MENSAJE",
+                        "NUEVA_COMPRA",
+                        "COMPRA_CONFIRMADA",
+                        "ENVIO_ACTUALIZADO",
+                        "NUEVA_VALORACION",
+                        "SPARK_EN_OFERTA",
+                        "NUEVO_COMENTARIO",
+                        "DEVOLUCION",
+                        "CADUCIDAD_ANUNCIO",
+                        "CONTRATO_PROPUESTA",
+                        "PATROCINIO_APROBADO",
+                        "SISTEMA",
+                        "...+12 más",
+                    ],
+                },
+                {
+                    name: "EstadoSuscripcion",
+                    values: ["PENDIENTE", "ACTIVO", "BAJA", "BLOQUEADO"],
+                },
+            ];
 
-          function enumCard(e) {
-            return `<div style="border:1.5px solid #d1d5db;border-radius:10px;overflow:hidden;background:#fff;min-width:170px;flex:1 1 160px;box-shadow:0 1px 3px rgba(0,0,0,0.04);">
+            function enumCard(e) {
+                return `<div style="border:1.5px solid #d1d5db;border-radius:10px;overflow:hidden;background:#fff;min-width:170px;flex:1 1 160px;box-shadow:0 1px 3px rgba(0,0,0,0.04);">
         <div style="background:#374151;color:#fff;font-size:11.5px;font-weight:700;padding:6px 12px;display:flex;align-items:center;gap:6px;">
           <span style="font-size:9px;background:rgba(255,255,255,0.2);padding:1px 5px;border-radius:3px;letter-spacing:.04em;">«enum»</span>
           ${e.name}
@@ -2438,13 +2512,13 @@ const docs = [
           ${e.values.map((v) => `<div style="font-size:11px;font-family:monospace;color:#374151;padding:2px 0;border-bottom:1px solid #f9fafb;">${v}</div>`).join("")}
         </div>
       </div>`;
-          }
+            }
 
-          erEl.innerHTML =
-            `<div style="padding:8px 0;font-family:'Inter',sans-serif;">` +
-            groups
-              .map(
-                (g) => `
+            erEl.innerHTML =
+                `<div style="padding:8px 0;font-family:'Inter',sans-serif;">` +
+                groups
+                    .map(
+                        (g) => `
         <div style="margin-bottom:36px;">
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
             <div style="width:4px;height:20px;background:${g.color};border-radius:2px;flex-shrink:0;"></div>
@@ -2455,9 +2529,9 @@ const docs = [
           </div>
           ${relBlock(g.rels, g.color)}
         </div>`,
-              )
-              .join("") +
-            `<div style="margin-bottom:20px;">
+                    )
+                    .join("") +
+                `<div style="margin-bottom:20px;">
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
           <div style="width:4px;height:20px;background:#374151;border-radius:2px;flex-shrink:0;"></div>
           <span style="font-size:12px;font-weight:700;color:#374151;text-transform:uppercase;letter-spacing:.08em;">Enumeraciones (23 enums)</span>
@@ -2466,257 +2540,593 @@ const docs = [
           ${enums.map(enumCard).join("")}
         </div>
       </div>` +
-            `</div>`;
+                `</div>`;
         }
-      })();
-    </script>
+    })();
+</script>
 
-    <!-- IMAGE ZOOM MODAL -->
-    <div id="img-modal" role="dialog" aria-modal="true" aria-label="Vista ampliada de imagen">
-      <div id="img-modal-overlay"></div>
-      <div id="img-modal-container">
+<!-- IMAGE ZOOM MODAL -->
+<div
+    id="img-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Vista ampliada de imagen"
+>
+    <div id="img-modal-overlay"></div>
+    <div id="img-modal-container">
         <div id="img-modal-toolbar">
-          <span id="img-modal-caption"></span>
-          <div id="img-modal-controls">
-            <button id="img-zoom-out" title="Reducir zoom" aria-label="Reducir zoom">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
-            </button>
-            <span id="img-zoom-level">100%</span>
-            <button id="img-zoom-in" title="Ampliar zoom" aria-label="Ampliar zoom">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
-            </button>
-            <button id="img-zoom-reset" title="Restablecer zoom" aria-label="Restablecer zoom">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
-            </button>
-            <button id="img-modal-close" title="Cerrar (Esc)" aria-label="Cerrar modal">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-            </button>
-          </div>
+            <span id="img-modal-caption"></span>
+            <div id="img-modal-controls">
+                <button
+                    id="img-zoom-out"
+                    title="Reducir zoom"
+                    aria-label="Reducir zoom"
+                >
+                    <svg
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        ><circle cx="11" cy="11" r="8"></circle><line
+                            x1="21"
+                            y1="21"
+                            x2="16.65"
+                            y2="16.65"></line><line
+                            x1="8"
+                            y1="11"
+                            x2="14"
+                            y2="11"></line></svg
+                    >
+                </button>
+                <span id="img-zoom-level">100%</span>
+                <button
+                    id="img-zoom-in"
+                    title="Ampliar zoom"
+                    aria-label="Ampliar zoom"
+                >
+                    <svg
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        ><circle cx="11" cy="11" r="8"></circle><line
+                            x1="21"
+                            y1="21"
+                            x2="16.65"
+                            y2="16.65"></line><line
+                            x1="11"
+                            y1="8"
+                            x2="11"
+                            y2="14"></line><line x1="8" y1="11" x2="14" y2="11"
+                        ></line></svg
+                    >
+                </button>
+                <button
+                    id="img-zoom-reset"
+                    title="Restablecer zoom"
+                    aria-label="Restablecer zoom"
+                >
+                    <svg
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        ><path
+                            d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"
+                        ></path><path d="M3 3v5h5"></path></svg
+                    >
+                </button>
+                <button
+                    id="img-modal-close"
+                    title="Cerrar (Esc)"
+                    aria-label="Cerrar modal"
+                >
+                    <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        ><line x1="18" y1="6" x2="6" y2="18"></line><line
+                            x1="6"
+                            y1="6"
+                            x2="18"
+                            y2="18"></line></svg
+                    >
+                </button>
+            </div>
         </div>
         <div id="img-modal-viewport">
-          <img id="img-modal-img" src="" alt="" draggable="false" />
+            <img id="img-modal-img" src="" alt="" draggable="false" />
         </div>
-        <div id="img-modal-hint">Rueda del raton para hacer zoom &nbsp;&middot;&nbsp; Arrastra para desplazar &nbsp;&middot;&nbsp; <kbd>Esc</kbd> para cerrar</div>
-      </div>
+        <div id="img-modal-hint">
+            Rueda del raton para hacer zoom &nbsp;&middot;&nbsp; Arrastra para
+            desplazar &nbsp;&middot;&nbsp; <kbd>Esc</kbd> para cerrar
+        </div>
     </div>
+</div>
 
-    <style is:global>
-      #img-modal {
-        position: fixed; inset: 0; z-index: 9999;
-        display: flex; align-items: center; justify-content: center;
-        opacity: 0; visibility: hidden;
-        transition: opacity 0.3s cubic-bezier(0.4,0,0.2,1), visibility 0.3s;
-      }
-      #img-modal.open { opacity: 1; visibility: visible; }
-      #img-modal-overlay {
-        position: absolute; inset: 0;
-        background: rgba(10,10,15,0.92);
-        backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-      }
-      #img-modal-container {
-        position: relative; z-index: 1;
-        display: flex; flex-direction: column;
-        width: calc(100vw - 48px); max-width: 1200px;
-        height: calc(100vh - 48px); max-height: 900px;
+<style is:global>
+    #img-modal {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        visibility: hidden;
+        transition:
+            opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+            visibility 0.3s;
+    }
+    #img-modal.open {
+        opacity: 1;
+        visibility: visible;
+    }
+    #img-modal-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(10, 10, 15, 0.92);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+    }
+    #img-modal-container {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        width: calc(100vw - 48px);
+        max-width: 1200px;
+        height: calc(100vh - 48px);
+        max-height: 900px;
         background: #18181b;
-        border: 1px solid rgba(255,255,255,0.08);
-        border-radius: 16px; overflow: hidden;
-        box-shadow: 0 32px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow:
+            0 32px 80px rgba(0, 0, 0, 0.6),
+            0 0 0 1px rgba(255, 255, 255, 0.04);
         transform: scale(0.94) translateY(12px);
-        transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
-      }
-      #img-modal.open #img-modal-container { transform: scale(1) translateY(0); }
-      #img-modal-toolbar {
-        display: flex; align-items: center; justify-content: space-between;
-        gap: 12px; padding: 12px 16px;
-        background: rgba(255,255,255,0.04);
-        border-bottom: 1px solid rgba(255,255,255,0.07);
+        transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    #img-modal.open #img-modal-container {
+        transform: scale(1) translateY(0);
+    }
+    #img-modal-toolbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 12px 16px;
+        background: rgba(255, 255, 255, 0.04);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.07);
         flex-shrink: 0;
-      }
-      #img-modal-caption {
-        font-family: 'Inter', sans-serif; font-size: 0.82rem; font-weight: 500;
-        color: rgba(255,255,255,0.55); white-space: nowrap;
-        overflow: hidden; text-overflow: ellipsis; max-width: calc(100% - 220px);
-      }
-      #img-modal-controls { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
-      #img-modal-controls button {
-        display: flex; align-items: center; justify-content: center;
-        width: 34px; height: 34px;
-        background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
-        border-radius: 8px; color: rgba(255,255,255,0.7);
-        cursor: pointer; padding: 0;
-        transition: background 0.2s, color 0.2s, border-color 0.2s;
-      }
-      #img-modal-controls button:hover {
-        background: rgba(157,90,229,0.25); border-color: rgba(157,90,229,0.5); color: #fff;
-      }
-      #img-modal-close {
-        width: 36px !important; height: 36px !important; margin-left: 4px;
-        background: rgba(239,68,68,0.12) !important; border-color: rgba(239,68,68,0.25) !important;
-        color: rgba(239,68,68,0.8) !important;
-      }
-      #img-modal-close:hover {
-        background: rgba(239,68,68,0.3) !important; border-color: rgba(239,68,68,0.6) !important;
+    }
+    #img-modal-caption {
+        font-family: "Inter", sans-serif;
+        font-size: 0.82rem;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.55);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: calc(100% - 220px);
+    }
+    #img-modal-controls {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        flex-shrink: 0;
+    }
+    #img-modal-controls button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 34px;
+        height: 34px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        color: rgba(255, 255, 255, 0.7);
+        cursor: pointer;
+        padding: 0;
+        transition:
+            background 0.2s,
+            color 0.2s,
+            border-color 0.2s;
+    }
+    #img-modal-controls button:hover {
+        background: rgba(157, 90, 229, 0.25);
+        border-color: rgba(157, 90, 229, 0.5);
+        color: #fff;
+    }
+    #img-modal-close {
+        width: 36px !important;
+        height: 36px !important;
+        margin-left: 4px;
+        background: rgba(239, 68, 68, 0.12) !important;
+        border-color: rgba(239, 68, 68, 0.25) !important;
+        color: rgba(239, 68, 68, 0.8) !important;
+    }
+    #img-modal-close:hover {
+        background: rgba(239, 68, 68, 0.3) !important;
+        border-color: rgba(239, 68, 68, 0.6) !important;
         color: #fff !important;
-      }
-      #img-zoom-level {
-        font-family: 'Inter', sans-serif; font-size: 0.78rem; font-weight: 700;
-        color: rgba(255,255,255,0.5); min-width: 42px; text-align: center; padding: 0 4px; user-select: none;
-      }
-      #img-modal-viewport {
-        flex: 1; overflow: hidden; position: relative; cursor: grab;
+    }
+    #img-zoom-level {
+        font-family: "Inter", sans-serif;
+        font-size: 0.78rem;
+        font-weight: 700;
+        color: rgba(255, 255, 255, 0.5);
+        min-width: 42px;
+        text-align: center;
+        padding: 0 4px;
+        user-select: none;
+    }
+    #img-modal-viewport {
+        flex: 1;
+        overflow: hidden;
+        position: relative;
+        cursor: grab;
         background:
-          radial-gradient(circle at 25% 25%, rgba(157,90,229,0.04) 0%, transparent 60%),
-          repeating-linear-gradient(0deg, transparent, transparent 24px, rgba(255,255,255,0.02) 24px, rgba(255,255,255,0.02) 25px),
-          repeating-linear-gradient(90deg, transparent, transparent 24px, rgba(255,255,255,0.02) 24px, rgba(255,255,255,0.02) 25px);
-      }
-      #img-modal-viewport.grabbing { cursor: grabbing; }
-      #img-modal-img {
-        position: absolute; top: 50%; left: 50%;
-        transform-origin: center center; border-radius: 6px;
-        box-shadow: 0 8px 40px rgba(0,0,0,0.5);
-        will-change: transform; user-select: none; pointer-events: none;
-        max-width: none; max-height: none;
-      }
-      #img-modal-hint {
-        font-family: 'Inter', sans-serif; font-size: 0.72rem;
-        color: rgba(255,255,255,0.25); text-align: center;
-        padding: 8px 16px; flex-shrink: 0;
-        border-top: 1px solid rgba(255,255,255,0.05); letter-spacing: 0.01em;
-      }
-      #img-modal-hint kbd {
-        font-family: 'Inter', sans-serif; font-size: 0.7rem;
-        background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15);
-        border-radius: 4px; padding: 1px 5px; color: rgba(255,255,255,0.4);
-      }
-      .pf-screenshot img {
+            radial-gradient(
+                circle at 25% 25%,
+                rgba(157, 90, 229, 0.04) 0%,
+                transparent 60%
+            ),
+            repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 24px,
+                rgba(255, 255, 255, 0.02) 24px,
+                rgba(255, 255, 255, 0.02) 25px
+            ),
+            repeating-linear-gradient(
+                90deg,
+                transparent,
+                transparent 24px,
+                rgba(255, 255, 255, 0.02) 24px,
+                rgba(255, 255, 255, 0.02) 25px
+            );
+    }
+    #img-modal-viewport.grabbing {
+        cursor: grabbing;
+    }
+    #img-modal-img {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform-origin: center center;
+        border-radius: 6px;
+        box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+        will-change: transform;
+        user-select: none;
+        pointer-events: none;
+        max-width: none;
+        max-height: none;
+    }
+    #img-modal-hint {
+        font-family: "Inter", sans-serif;
+        font-size: 0.72rem;
+        color: rgba(255, 255, 255, 0.25);
+        text-align: center;
+        padding: 8px 16px;
+        flex-shrink: 0;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+        letter-spacing: 0.01em;
+    }
+    #img-modal-hint kbd {
+        font-family: "Inter", sans-serif;
+        font-size: 0.7rem;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 4px;
+        padding: 1px 5px;
+        color: rgba(255, 255, 255, 0.4);
+    }
+    .pf-screenshot img,
+    .ut-shot img {
         cursor: zoom-in !important;
-        transition: opacity 0.2s, transform 0.2s !important;
-      }
-      .pf-screenshot img:hover { opacity: 0.9 !important; transform: scale(1.015) !important; }
-      @media (max-width: 600px) {
-        #img-modal-container { width: 100vw; height: 100dvh; max-width: 100vw; max-height: 100dvh; border-radius: 0; }
-        #img-modal-hint { display: none; }
-        #img-modal-caption { max-width: calc(100% - 160px); }
-      }
-    </style>
-
-    <script is:inline>
-      (function () {
-        var modal = document.getElementById('img-modal');
-        var overlay = document.getElementById('img-modal-overlay');
-        var modalImg = document.getElementById('img-modal-img');
-        var caption = document.getElementById('img-modal-caption');
-        var viewport = document.getElementById('img-modal-viewport');
-        var zoomLevelEl = document.getElementById('img-zoom-level');
-        var btnZoomIn = document.getElementById('img-zoom-in');
-        var btnZoomOut = document.getElementById('img-zoom-out');
-        var btnReset = document.getElementById('img-zoom-reset');
-        var btnClose = document.getElementById('img-modal-close');
-        if (!modal) return;
-        var scale=1,tx=0,ty=0,minS=0.4,maxS=6,isDrag=false,dsx=0,dsy=0,ltx=0,lty=0,lpd=0,pinch=false;
-        function upd(anim){
-          modalImg.style.transition=anim?'transform 0.25s cubic-bezier(0.4,0,0.2,1)':'none';
-          modalImg.style.transform='translate(calc(-50% + '+tx+'px), calc(-50% + '+ty+'px)) scale('+scale+')';
-          zoomLevelEl.textContent=Math.round(scale*100)+'%';
+        transition:
+            opacity 0.2s,
+            transform 0.2s !important;
+    }
+    .pf-screenshot img:hover,
+    .ut-shot img:hover {
+        opacity: 0.9 !important;
+        transform: scale(1.015) !important;
+    }
+    @media (max-width: 600px) {
+        #img-modal-container {
+            width: 100vw;
+            height: 100dvh;
+            max-width: 100vw;
+            max-height: 100dvh;
+            border-radius: 0;
         }
-        function clamp(){
-          if(scale<=1){tx=0;ty=0;return;}
-          var vw=viewport.clientWidth,vh=viewport.clientHeight;
-          var iw=modalImg.naturalWidth||modalImg.clientWidth,ih=modalImg.naturalHeight||modalImg.clientHeight;
-          var mx=Math.max(0,(iw*scale-vw)/2),my=Math.max(0,(ih*scale-vh)/2);
-          tx=Math.min(mx,Math.max(-mx,tx));ty=Math.min(my,Math.max(-my,ty));
+        #img-modal-hint {
+            display: none;
+        }
+        #img-modal-caption {
+            max-width: calc(100% - 160px);
+        }
+    }
+</style>
+
+<script is:inline>
+    (function () {
+        var modal = document.getElementById("img-modal");
+        var overlay = document.getElementById("img-modal-overlay");
+        var modalImg = document.getElementById("img-modal-img");
+        var caption = document.getElementById("img-modal-caption");
+        var viewport = document.getElementById("img-modal-viewport");
+        var zoomLevelEl = document.getElementById("img-zoom-level");
+        var btnZoomIn = document.getElementById("img-zoom-in");
+        var btnZoomOut = document.getElementById("img-zoom-out");
+        var btnReset = document.getElementById("img-zoom-reset");
+        var btnClose = document.getElementById("img-modal-close");
+        if (!modal) return;
+        var scale = 1,
+            tx = 0,
+            ty = 0,
+            minS = 0.4,
+            maxS = 6,
+            isDrag = false,
+            dsx = 0,
+            dsy = 0,
+            ltx = 0,
+            lty = 0,
+            lpd = 0,
+            pinch = false;
+        function upd(anim) {
+            modalImg.style.transition = anim
+                ? "transform 0.25s cubic-bezier(0.4,0,0.2,1)"
+                : "none";
+            modalImg.style.transform =
+                "translate(calc(-50% + " +
+                tx +
+                "px), calc(-50% + " +
+                ty +
+                "px)) scale(" +
+                scale +
+                ")";
+            zoomLevelEl.textContent = Math.round(scale * 100) + "%";
+        }
+        function clamp() {
+            if (scale <= 1) {
+                tx = 0;
+                ty = 0;
+                return;
+            }
+            var vw = viewport.clientWidth,
+                vh = viewport.clientHeight;
+            var iw = modalImg.naturalWidth || modalImg.clientWidth,
+                ih = modalImg.naturalHeight || modalImg.clientHeight;
+            var mx = Math.max(0, (iw * scale - vw) / 2),
+                my = Math.max(0, (ih * scale - vh) / 2);
+            tx = Math.min(mx, Math.max(-mx, tx));
+            ty = Math.min(my, Math.max(-my, ty));
         }
         function fitScale() {
-          var vw = viewport.clientWidth   || 800;
-          var vh = viewport.clientHeight  || 600;
-          var iw = modalImg.naturalWidth  || modalImg.width  || vw;
-          var ih = modalImg.naturalHeight || modalImg.height || vh;
-          if (!iw || !ih) return 1;
-          var s = Math.min(vw / iw, vh / ih);
-          return Math.min(s, 1); // never enlarge beyond 100%
+            var vw = viewport.clientWidth || 800;
+            var vh = viewport.clientHeight || 600;
+            var iw = modalImg.naturalWidth || modalImg.width || vw;
+            var ih = modalImg.naturalHeight || modalImg.height || vh;
+            if (!iw || !ih) return 1;
+            var s = Math.min(vw / iw, vh / ih);
+            return Math.min(s, 1); // never enlarge beyond 100%
         }
-        function open(src,alt){
-          modal.classList.add('open');
-          document.body.style.overflow='hidden';
-          caption.textContent=alt||'';
-          tx=0;ty=0;
-          modalImg.style.transition='none';
-          modalImg.alt=alt||'';
-          modalImg.src=src;
-          // wait for image to load to get natural dimensions, then fit
-          modalImg.onload=function(){
-            scale=fitScale();
-            upd(false);
-            modalImg.onload=null;
-          };
-          // if already cached (complete), trigger immediately
-          if(modalImg.complete&&modalImg.naturalWidth){
-            scale=fitScale();
-            upd(false);
-            modalImg.onload=null;
-          } else {
-            scale=0.64; upd(false); // fallback while loading
-          }
+        function open(src, alt) {
+            modal.classList.add("open");
+            document.body.style.overflow = "hidden";
+            caption.textContent = alt || "";
+            tx = 0;
+            ty = 0;
+            modalImg.style.transition = "none";
+            modalImg.alt = alt || "";
+            modalImg.src = src;
+            // wait for image to load to get natural dimensions, then fit
+            modalImg.onload = function () {
+                scale = fitScale();
+                upd(false);
+                modalImg.onload = null;
+            };
+            // if already cached (complete), trigger immediately
+            if (modalImg.complete && modalImg.naturalWidth) {
+                scale = fitScale();
+                upd(false);
+                modalImg.onload = null;
+            } else {
+                scale = 0.64;
+                upd(false); // fallback while loading
+            }
         }
-        function close(){modal.classList.remove('open');document.body.style.overflow='';setTimeout(function(){modalImg.src='';},350);}
-        function zoomAt(f,cx,cy){
-          var ns=Math.min(maxS,Math.max(minS,scale*f));if(ns===scale)return;
-          var vw=viewport.clientWidth,vh=viewport.clientHeight;
-          var px=(cx-vw/2)-tx,py=(cy-vh/2)-ty,r=ns/scale;
-          tx-=px*(r-1);ty-=py*(r-1);scale=ns;clamp();upd(false);
+        function close() {
+            modal.classList.remove("open");
+            document.body.style.overflow = "";
+            setTimeout(function () {
+                modalImg.src = "";
+            }, 350);
+        }
+        function zoomAt(f, cx, cy) {
+            var ns = Math.min(maxS, Math.max(minS, scale * f));
+            if (ns === scale) return;
+            var vw = viewport.clientWidth,
+                vh = viewport.clientHeight;
+            var px = cx - vw / 2 - tx,
+                py = cy - vh / 2 - ty,
+                r = ns / scale;
+            tx -= px * (r - 1);
+            ty -= py * (r - 1);
+            scale = ns;
+            clamp();
+            upd(false);
         }
         // Event delegation: capture clicks on any img inside .pf-screenshot anywhere in the document
-        document.addEventListener('click', function(e) {
-          var target = e.target;
-          if (target && target.tagName === 'IMG' && target.closest && target.closest('.pf-screenshot')) {
-            e.stopPropagation();
-            open(target.src, target.alt);
-          }
-        }, true);
-        btnClose.addEventListener('click',close);
-        overlay.addEventListener('click',close);
-        document.addEventListener('keydown',function(e){
-          if(!modal.classList.contains('open'))return;
-          if(e.key==='Escape')close();
-          var c=viewport.clientWidth/2,m=viewport.clientHeight/2;
-          if(e.key==='+'||e.key==='='){zoomAt(1.3,c,m);upd(true);}
-          if(e.key==='-'){zoomAt(1/1.3,c,m);upd(true);}
-          if(e.key==='0'){scale=1;tx=0;ty=0;upd(true);}
+        document.addEventListener(
+            "click",
+            function (e) {
+                var target = e.target;
+                if (
+                    target &&
+                    target.tagName === "IMG" &&
+                    target.closest &&
+                    (target.closest(".pf-screenshot") ||
+                        target.closest(".ut-shot"))
+                ) {
+                    e.stopPropagation();
+                    open(target.src, target.alt);
+                }
+            },
+            true,
+        );
+        btnClose.addEventListener("click", close);
+        overlay.addEventListener("click", close);
+        document.addEventListener("keydown", function (e) {
+            if (!modal.classList.contains("open")) return;
+            if (e.key === "Escape") close();
+            var c = viewport.clientWidth / 2,
+                m = viewport.clientHeight / 2;
+            if (e.key === "+" || e.key === "=") {
+                zoomAt(1.3, c, m);
+                upd(true);
+            }
+            if (e.key === "-") {
+                zoomAt(1 / 1.3, c, m);
+                upd(true);
+            }
+            if (e.key === "0") {
+                scale = 1;
+                tx = 0;
+                ty = 0;
+                upd(true);
+            }
         });
-        btnZoomIn.addEventListener('click',function(){zoomAt(1.4,viewport.clientWidth/2,viewport.clientHeight/2);upd(true);});
-        btnZoomOut.addEventListener('click',function(){zoomAt(1/1.4,viewport.clientWidth/2,viewport.clientHeight/2);upd(true);});
-        btnReset.addEventListener('click',function(){scale=fitScale();tx=0;ty=0;upd(true);});
-        viewport.addEventListener('wheel',function(e){
-          e.preventDefault();var r=viewport.getBoundingClientRect();
-          zoomAt(e.deltaY<0?1.12:1/1.12,e.clientX-r.left,e.clientY-r.top);
-        },{passive:false});
-        viewport.addEventListener('mousedown',function(e){
-          if(e.button!==0)return;isDrag=true;dsx=e.clientX;dsy=e.clientY;ltx=tx;lty=ty;
-          viewport.classList.add('grabbing');e.preventDefault();
+        btnZoomIn.addEventListener("click", function () {
+            zoomAt(1.4, viewport.clientWidth / 2, viewport.clientHeight / 2);
+            upd(true);
         });
-        window.addEventListener('mousemove',function(e){
-          if(!isDrag)return;tx=ltx+e.clientX-dsx;ty=lty+e.clientY-dsy;clamp();upd(false);
+        btnZoomOut.addEventListener("click", function () {
+            zoomAt(
+                1 / 1.4,
+                viewport.clientWidth / 2,
+                viewport.clientHeight / 2,
+            );
+            upd(true);
         });
-        window.addEventListener('mouseup',function(){if(isDrag){isDrag=false;viewport.classList.remove('grabbing');}});
-        var tsx=0,tsy=0,tlx=0,tly=0;
-        viewport.addEventListener('touchstart',function(e){
-          if(e.touches.length===2){pinch=true;var dx=e.touches[0].clientX-e.touches[1].clientX,dy=e.touches[0].clientY-e.touches[1].clientY;lpd=Math.sqrt(dx*dx+dy*dy);}
-          else if(e.touches.length===1){pinch=false;tsx=e.touches[0].clientX;tsy=e.touches[0].clientY;tlx=tx;tly=ty;}
-        },{passive:true});
-        viewport.addEventListener('touchmove',function(e){
-          if(e.touches.length===2&&pinch){
+        btnReset.addEventListener("click", function () {
+            scale = fitScale();
+            tx = 0;
+            ty = 0;
+            upd(true);
+        });
+        viewport.addEventListener(
+            "wheel",
+            function (e) {
+                e.preventDefault();
+                var r = viewport.getBoundingClientRect();
+                zoomAt(
+                    e.deltaY < 0 ? 1.12 : 1 / 1.12,
+                    e.clientX - r.left,
+                    e.clientY - r.top,
+                );
+            },
+            { passive: false },
+        );
+        viewport.addEventListener("mousedown", function (e) {
+            if (e.button !== 0) return;
+            isDrag = true;
+            dsx = e.clientX;
+            dsy = e.clientY;
+            ltx = tx;
+            lty = ty;
+            viewport.classList.add("grabbing");
             e.preventDefault();
-            var dx=e.touches[0].clientX-e.touches[1].clientX,dy=e.touches[0].clientY-e.touches[1].clientY;
-            var d=Math.sqrt(dx*dx+dy*dy),r=viewport.getBoundingClientRect();
-            var cx=(e.touches[0].clientX+e.touches[1].clientX)/2-r.left,cy=(e.touches[0].clientY+e.touches[1].clientY)/2-r.top;
-            zoomAt(d/lpd,cx,cy);lpd=d;
-          } else if(e.touches.length===1&&!pinch&&scale>1){
-            e.preventDefault();tx=tlx+e.touches[0].clientX-tsx;ty=tly+e.touches[0].clientY-tsy;clamp();upd(false);
-          }
-        },{passive:false});
-        viewport.addEventListener('touchend',function(e){if(e.touches.length<2)pinch=false;},{passive:true});
-      })();
-    </script>
-  </body>
-</html>
+        });
+        window.addEventListener("mousemove", function (e) {
+            if (!isDrag) return;
+            tx = ltx + e.clientX - dsx;
+            ty = lty + e.clientY - dsy;
+            clamp();
+            upd(false);
+        });
+        window.addEventListener("mouseup", function () {
+            if (isDrag) {
+                isDrag = false;
+                viewport.classList.remove("grabbing");
+            }
+        });
+        var tsx = 0,
+            tsy = 0,
+            tlx = 0,
+            tly = 0;
+        viewport.addEventListener(
+            "touchstart",
+            function (e) {
+                if (e.touches.length === 2) {
+                    pinch = true;
+                    var dx = e.touches[0].clientX - e.touches[1].clientX,
+                        dy = e.touches[0].clientY - e.touches[1].clientY;
+                    lpd = Math.sqrt(dx * dx + dy * dy);
+                } else if (e.touches.length === 1) {
+                    pinch = false;
+                    tsx = e.touches[0].clientX;
+                    tsy = e.touches[0].clientY;
+                    tlx = tx;
+                    tly = ty;
+                }
+            },
+            { passive: true },
+        );
+        viewport.addEventListener(
+            "touchmove",
+            function (e) {
+                if (e.touches.length === 2 && pinch) {
+                    e.preventDefault();
+                    var dx = e.touches[0].clientX - e.touches[1].clientX,
+                        dy = e.touches[0].clientY - e.touches[1].clientY;
+                    var d = Math.sqrt(dx * dx + dy * dy),
+                        r = viewport.getBoundingClientRect();
+                    var cx =
+                            (e.touches[0].clientX + e.touches[1].clientX) / 2 -
+                            r.left,
+                        cy =
+                            (e.touches[0].clientY + e.touches[1].clientY) / 2 -
+                            r.top;
+                    zoomAt(d / lpd, cx, cy);
+                    lpd = d;
+                } else if (e.touches.length === 1 && !pinch && scale > 1) {
+                    e.preventDefault();
+                    tx = tlx + e.touches[0].clientX - tsx;
+                    ty = tly + e.touches[0].clientY - tsy;
+                    clamp();
+                    upd(false);
+                }
+            },
+            { passive: false },
+        );
+        viewport.addEventListener(
+            "touchend",
+            function (e) {
+                if (e.touches.length < 2) pinch = false;
+            },
+            { passive: true },
+        );
+    })();
+</script>

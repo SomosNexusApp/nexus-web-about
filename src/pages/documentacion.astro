@@ -2712,7 +2712,542 @@ import DocLayout from "../layouts/DocLayout.astro";
     </div>
 
     <h3 class="subsection-title">Pruebas unitarias</h3>
-    <p>Contenido pendiente de redactar</p>
+    <p>A continuación se documentan las pruebas unitarias diseñadas para validar las funcionalidades más críticas del sistema Nexus. Cada prueba está asociada a una captura funcional real del sistema, analiza el código implicado en el frontend y el backend, y especifica la lógica que se valida, el comportamiento esperado y los errores que previene. La selección prioriza las funcionalidades con mayor complejidad lógica, mayor impacto en la seguridad del sistema o mayor integración entre capas.</p>
+
+    <style is:global>
+      .ut-section { margin: 2.5rem 0 3rem; border: 1px solid #e0e7ff; border-radius: 14px; overflow: hidden; box-shadow: 0 2px 20px rgba(79,70,229,0.07); }
+      .ut-header { background: linear-gradient(135deg, #f0f4ff 0%, #faf5ff 100%); border-bottom: 1px solid #e0e7ff; padding: 18px 24px; display: flex; align-items: flex-start; gap: 14px; }
+      .ut-badge { display: inline-flex; align-items: center; justify-content: center; min-width: 52px; height: 52px; border-radius: 10px; background: #4f46e5; color: white; font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; flex-shrink: 0; line-height: 1.2; text-align: center; padding: 4px; }
+      .ut-header-text h4 { font-size: 1.05rem; font-weight: 700; color: #111827; margin: 0 0 4px; }
+      .ut-header-text p { font-size: 0.82rem; color: #6b7280; margin: 0; line-height: 1.4; }
+      .ut-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+      .ut-tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
+      .ut-tag.front { background: #dbeafe; color: #1e40af; }
+      .ut-tag.back { background: #d1fae5; color: #065f46; }
+      .ut-tag.security { background: #fce7f3; color: #9d174d; }
+      .ut-tag.payments { background: #fef3c7; color: #92400e; }
+      .ut-tag.realtime { background: #ede9fe; color: #6d28d9; }
+      /* body: vertical stack */
+      .ut-body { padding: 20px 24px 24px; display: flex; flex-direction: column; gap: 14px; }
+      /* macOS window chrome */
+      .ut-mac-win { border-radius: 10px; overflow: hidden; border: 1px solid #e2e8f0; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+      .ut-mac-bar { padding: 9px 14px; display: flex; align-items: center; gap: 10px; }
+      .ut-mac-dots { display: flex; gap: 6px; flex-shrink: 0; }
+      .ut-mac-dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+      .ut-mac-dot.r { background: #ff5f57; border: 1px solid #e0443e; }
+      .ut-mac-dot.y { background: #ffbd2e; border: 1px solid #dea123; }
+      .ut-mac-dot.g { background: #28c840; border: 1px solid #1aab29; }
+      .ut-mac-label { font-size: 0.71rem; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; }
+      .ut-mac-win.front .ut-mac-bar { background: #eef2ff; }
+      .ut-mac-win.front .ut-mac-label { color: #4338ca; }
+      .ut-mac-win.back .ut-mac-bar { background: #ecfdf5; }
+      .ut-mac-win.back .ut-mac-label { color: #065f46; }
+      .ut-mac-win.test .ut-mac-bar { background: #f5f3ff; }
+      .ut-mac-win.test .ut-mac-label { color: #6d28d9; }
+      .ut-mac-content { background: white; padding: 16px 18px; }
+      .ut-mac-content p { font-size: 0.84rem; color: #374151; line-height: 1.65; margin: 0 0 10px; }
+      .ut-mac-content p:last-child { margin-bottom: 0; }
+      .ut-mac-content code { font-family: 'Fira Code','Cascadia Code','Courier New',monospace; font-size: 0.79em; background: #eef2ff; color: #3730a3; padding: 1px 5px; border-radius: 3px; }
+      .ut-mac-content ul { margin: 8px 0 10px; padding-left: 20px; }
+      .ut-mac-content ul li { font-size: 0.84rem; color: #374151; line-height: 1.65; margin-bottom: 6px; }
+      .ut-mac-content ul li:last-child { margin-bottom: 0; }
+      /* 2-col grid for front+back */
+      .ut-analysis-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+      /* result block inside test window */
+      .ut-result-block { background: #f0fdf4; border: 1px solid #86efac; border-radius: 6px; padding: 10px 14px; margin-top: 12px; }
+      .ut-result-block p { font-size: 0.82rem; color: #065f46; margin: 0 !important; line-height: 1.55; }
+      .ut-result-block strong { color: #047857; }
+      /* screenshots strip at the bottom */
+      .ut-shots { display: flex; gap: 10px; flex-wrap: wrap; }
+      .ut-shot { flex: 1 1 180px; border: 1px solid #e5e7eb; border-radius: 8px; overflow: hidden; background: #fafafa; min-width: 150px; }
+      .ut-shot img { width: 100%; height: auto; display: block; }
+      .ut-shot-cap { font-size: 0.73rem; font-weight: 600; color: #6b7280; text-align: center; padding: 5px 8px; background: #f9fafb; border-top: 1px solid #f3f4f6; }
+      .ut-shots-label { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #9ca3af; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+      .ut-shots-label::after { content: ''; flex: 1; height: 1px; background: #f3f4f6; }
+      @media (max-width: 820px) {
+        .ut-analysis-grid { grid-template-columns: 1fr; }
+        .ut-shots { flex-direction: column; }
+        .ut-shot { flex: 1 1 auto; }
+      }
+    </style>
+
+    <!-- ══════════════════════════════════════════
+         UT-01: Autenticación JWT con jwtVersion
+    ══════════════════════════════════════════ -->
+    <div class="ut-section">
+      <div class="ut-header">
+        <div class="ut-badge">UT<br/>01</div>
+        <div class="ut-header-text">
+          <h4>Validación unitaria del proceso de autenticación y generación de JWT con invalidación por versión</h4>
+          <p>Cubre el flujo completo de login con credenciales locales, generación del token JWT firmado con HMAC-SHA256 y la lógica de invalidación global mediante el campo <code>jwtVersion</code>.</p>
+          <div class="ut-tags">
+            <span class="ut-tag front">Angular — AuthService</span>
+            <span class="ut-tag back">Spring — AuthController · JWTUtils</span>
+            <span class="ut-tag security">Seguridad crítica</span>
+          </div>
+        </div>
+      </div>
+      <div class="ut-body">
+        <div class="ut-analysis-grid">
+          <div class="ut-mac-win front">
+            <div class="ut-mac-bar">
+              <div class="ut-mac-dots"><span class="ut-mac-dot r"></span><span class="ut-mac-dot y"></span><span class="ut-mac-dot g"></span></div>
+              <span class="ut-mac-label">Frontend — Angular</span>
+            </div>
+            <div class="ut-mac-content">
+              <p>El componente de login invoca <code>AuthService.login()</code>, que construye el payload con el campo <code>user</code> (acepta username o email indistintamente) más <code>password</code> y <code>captchaToken</code> generado por reCAPTCHA v3. La petición se hace a <code>POST /auth/login</code>.</p>
+              <p>Si el backend responde con <code>requires2FA: true</code>, el flujo se detiene y se muestra el segundo paso. En caso contrario, <code>AuthService</code> llama a <code>JwtService.saveToken()</code> para persistir el JWT en <code>localStorage</code> y después a <code>loadCurrentUser()</code> para cargar el perfil completo en el <code>AuthStore</code> mediante Signals de Angular. El <code>AuthStore</code> expone <code>isLoggedIn</code> como <code>computed()</code>, actualizando la interfaz de forma reactiva sin emisor manual.</p>
+              <p>El interceptor HTTP de Angular adjunta automáticamente el JWT en el header <code>Authorization: Bearer &lt;token&gt;</code> en todas las peticiones autenticadas posteriores.</p>
+            </div>
+          </div>
+          <div class="ut-mac-win back">
+            <div class="ut-mac-bar">
+              <div class="ut-mac-dots"><span class="ut-mac-dot r"></span><span class="ut-mac-dot y"></span><span class="ut-mac-dot g"></span></div>
+              <span class="ut-mac-label">Backend — Spring Boot</span>
+            </div>
+            <div class="ut-mac-content">
+              <p><code>AuthController.login()</code> recibe el <code>LoginRequest</code>. Antes de procesar el login, invoca <code>CaptchaService.verify(captchaToken)</code>; si la puntuación es inferior a 0.5, rechaza la petición con HTTP 400. Tras validar el captcha, delega en <code>AuthenticationManager.authenticate()</code> de Spring Security, que llama a <code>UsuarioService.loadUserByUsername()</code> para buscar el actor por username o email.</p>
+              <p>Si las credenciales son válidas, <code>JWTUtils.generateToken(authentication)</code> genera el JWT: firma HMAC-SHA256, <code>subject</code> = username, claim <code>rol</code> = <code>ROLE_USER / ROLE_ADMIN / ROLE_EMPRESA</code>, y expiración a 24 horas. El <code>JWTAuthenticationFilter</code> valida en cada petición que el token tenga firma correcta y que la <code>jwtVersion</code> coincida con la del <code>Actor</code> en base de datos. Incrementar <code>jwtVersion</code> (por baneo, cambio de contraseña o logout forzado) invalida todos los tokens emitidos anteriormente.</p>
+            </div>
+          </div>
+        </div>
+        <div class="ut-mac-win test">
+          <div class="ut-mac-bar">
+            <div class="ut-mac-dots"><span class="ut-mac-dot r"></span><span class="ut-mac-dot y"></span><span class="ut-mac-dot g"></span></div>
+            <span class="ut-mac-label">Especificación de la prueba unitaria — JWTUtils.generateToken() · validateToken()</span>
+          </div>
+          <div class="ut-mac-content">
+            <ul>
+              <li><strong>Caso 1 — Token válido:</strong> dado un <code>Authentication</code> con rol <code>ROLE_USER</code>, se genera un token, se llama a <code>validateToken()</code> y se espera <code>true</code>. Se extrae el <code>subject</code> con <code>getUsernameOfToken()</code> y se verifica que coincide con el username de entrada.</li>
+              <li><strong>Caso 2 — Token con firma manipulada:</strong> se modifica el payload del JWT antes de validarlo. Se espera que <code>validateToken()</code> devuelva <code>false</code> sin lanzar excepción.</li>
+              <li><strong>Caso 3 — Invalidación por versión:</strong> se mockea el <code>ActorRepository</code> para devolver un <code>Actor</code> con <code>jwtVersion = 2</code>; el token fue emitido con versión 1. Se espera que el filtro rechace la petición con HTTP 401.</li>
+              <li><strong>Caso 4 — reCAPTCHA rechazado:</strong> se mockea <code>CaptchaService</code> para devolver puntuación 0.3. Se espera respuesta HTTP 400 con mensaje de error antes de cualquier consulta a la base de datos.</li>
+            </ul>
+            <div class="ut-result-block">
+              <p><strong>Resultado esperado:</strong> El sistema genera tokens firmados correctamente, los invalida de forma fiable cuando <code>jwtVersion</code> cambia, y rechaza tokens manipulados o captchas inválidos en todos los casos de prueba.</p>
+            </div>
+          </div>
+        </div>
+        <div>
+          <p class="ut-shots-label">Capturas de referencia</p>
+          <div class="ut-shots">
+            <div class="ut-shot"><img src="/assets/img-pruebas/inicio-sesion-normal.png" alt="Formulario de inicio de sesión" loading="lazy" /><p class="ut-shot-cap">Formulario de login con email/password</p></div>
+            <div class="ut-shot"><img src="/assets/img-pruebas/inicio-sesion-normal-2.png" alt="Validación 2FA tras login" loading="lazy" /><p class="ut-shot-cap">Paso de verificación 2FA</p></div>
+            <div class="ut-shot"><img src="/assets/img-pruebas/registro-eleccion-seguridad.png" alt="Onboarding seguridad" loading="lazy" /><p class="ut-shot-cap">Configuración de seguridad en onboarding</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         UT-02: Autenticación de dos factores TOTP
+    ══════════════════════════════════════════ -->
+    <div class="ut-section">
+      <div class="ut-header">
+        <div class="ut-badge">UT<br/>02</div>
+        <div class="ut-header-text">
+          <h4>Prueba unitaria del servicio de autenticación de dos factores TOTP con generación de QR</h4>
+          <p>Valida la generación del secreto TOTP, la construcción del código QR en base64 mediante ZXing, y la verificación del código de 6 dígitos con la librería <code>dev.samstevens.totp</code>.</p>
+          <div class="ut-tags">
+            <span class="ut-tag front">Angular — flujo 2FA</span>
+            <span class="ut-tag back">Spring — TwoFactorAuthService · AdminSeguridadController</span>
+            <span class="ut-tag security">Seguridad crítica</span>
+          </div>
+        </div>
+      </div>
+      <div class="ut-body">
+        <div class="ut-analysis-grid">
+          <div class="ut-mac-win front">
+            <div class="ut-mac-bar">
+              <div class="ut-mac-dots"><span class="ut-mac-dot r"></span><span class="ut-mac-dot y"></span><span class="ut-mac-dot g"></span></div>
+              <span class="ut-mac-label">Frontend — Angular</span>
+            </div>
+            <div class="ut-mac-content">
+              <p>El flujo de activación del 2FA se gestiona desde el módulo de seguridad de la cuenta. El componente realiza <code>GET /auth/2fa/setup</code> que devuelve <code>&#123; secret, qrCodeImage &#125;</code>; el <code>qrCodeImage</code> es un Data URI base64 de la imagen PNG generada por ZXing, mostrado directamente con <code>&lt;img [src]="qrCodeImage"&gt;</code>. El usuario escanea el QR con Google Authenticator o Authy e introduce el código de 6 dígitos para confirmar la activación. El frontend lo envía a <code>POST /auth/2fa/verify-setup</code>.</p>
+              <p>En el flujo de login, si el backend responde con <code>requires2FA: true</code>, el componente muestra el campo de código TOTP. El código se envía a <code>POST /auth/2fa/verify</code> y, si es válido, el backend responde con el JWT definitivo. Si es incorrecto, se muestra un error sin consumir el código (el código TOTP cambia cada 30 segundos).</p>
+            </div>
+          </div>
+          <div class="ut-mac-win back">
+            <div class="ut-mac-bar">
+              <div class="ut-mac-dots"><span class="ut-mac-dot r"></span><span class="ut-mac-dot y"></span><span class="ut-mac-dot g"></span></div>
+              <span class="ut-mac-label">Backend — Spring Boot</span>
+            </div>
+            <div class="ut-mac-content">
+              <p><code>TwoFactorAuthService.generateNewSecret()</code> utiliza <code>DefaultSecretGenerator</code> de la librería <code>dev.samstevens.totp</code> para generar un secreto Base32 aleatorio de 32 caracteres. <code>getQrCodeImage(secret, label)</code> construye el URI otpauth con <code>QrData.Builder</code> (SHA-1, 6 dígitos, período 30 s) y genera la imagen PNG con <code>ZxingPngQrGenerator</code>, devolviendo el Data URI en base64.</p>
+              <p><code>isCodeValid(secret, code)</code> delega en <code>DefaultCodeVerifier</code> combinado con <code>SystemTimeProvider</code>; tolera una ventana de ±1 período (30 s) para compensar desfases de reloj entre dispositivo y servidor. Los secretos TOTP se persisten encriptados en el campo <code>totpSecret</code> de la entidad <code>Actor</code> y nunca se exponen en el API de lectura.</p>
+            </div>
+          </div>
+        </div>
+        <div class="ut-mac-win test">
+          <div class="ut-mac-bar">
+            <div class="ut-mac-dots"><span class="ut-mac-dot r"></span><span class="ut-mac-dot y"></span><span class="ut-mac-dot g"></span></div>
+            <span class="ut-mac-label">Especificación de la prueba unitaria — TwoFactorAuthService.generateNewSecret() · isCodeValid()</span>
+          </div>
+          <div class="ut-mac-content">
+            <ul>
+              <li><strong>Caso 1 — Secreto único:</strong> se llama a <code>generateNewSecret()</code> dos veces y se verifica que los secretos generados son diferentes (aleatoriedad suficiente).</li>
+              <li><strong>Caso 2 — QR bien formado:</strong> se verifica que el Data URI devuelto por <code>getQrCodeImage()</code> comienza por <code>data:image/png;base64,</code> y que el payload Base64 es decodificable sin errores.</li>
+              <li><strong>Caso 3 — Código correcto:</strong> se genera un secreto TOTP real, se calcula el código TOTP actual usando la misma librería y se verifica que <code>isCodeValid(secret, code)</code> devuelve <code>true</code>.</li>
+              <li><strong>Caso 4 — Código incorrecto:</strong> se pasa un código arbitrario (<code>"000000"</code>) y se verifica que <code>isCodeValid()</code> devuelve <code>false</code>.</li>
+              <li><strong>Caso 5 — Código expirado:</strong> se genera un código con un timestamp 90 s en el pasado (fuera de la ventana de tolerancia) y se verifica que es rechazado.</li>
+            </ul>
+            <div class="ut-result-block">
+              <p><strong>Resultado esperado:</strong> Cada secreto generado es único, el QR es válido y decodificable, los códigos correctos son aceptados, y los incorrectos o expirados son rechazados de forma determinista.</p>
+            </div>
+          </div>
+        </div>
+        <div>
+          <p class="ut-shots-label">Capturas de referencia</p>
+          <div class="ut-shots">
+            <div class="ut-shot"><img src="/assets/img-pruebas-admin/2fa-qr.png" alt="QR de activación 2FA TOTP" loading="lazy" /><p class="ut-shot-cap">QR de vinculación con Google Authenticator</p></div>
+            <div class="ut-shot"><img src="/assets/img-pruebas-admin/2fa-activado.png" alt="2FA activado" loading="lazy" /><p class="ut-shot-cap">Estado 2FA activado correctamente</p></div>
+            <div class="ut-shot"><img src="/assets/img-pruebas-admin/login-2fa-activado.png" alt="Login con 2FA obligatorio" loading="lazy" /><p class="ut-shot-cap">Login con validación TOTP obligatoria</p></div>
+            <div class="ut-shot"><img src="/assets/img-pruebas-admin/2fa-desactivado.png" alt="2FA desactivado" loading="lazy" /><p class="ut-shot-cap">Estado 2FA desactivado</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         UT-03: Validación de cupones de descuento
+    ══════════════════════════════════════════ -->
+    <div class="ut-section">
+      <div class="ut-header">
+        <div class="ut-badge">UT<br/>03</div>
+        <div class="ut-header-text">
+          <h4>Prueba unitaria del servicio de validación y aplicación de cupones de descuento</h4>
+          <p>Valida las reglas de negocio del <code>CuponValidacionService</code>: vigencia temporal, límites de uso global y por usuario, importe mínimo, alcance por categoría, y cálculo del descuento para tipos FIJO, PORCENTAJE, ENVIO_GRATIS y COMBINADO.</p>
+          <div class="ut-tags">
+            <span class="ut-tag front">Angular — checkout flow</span>
+            <span class="ut-tag back">Spring — CuponValidacionService · PublicCuponesController</span>
+            <span class="ut-tag payments">Lógica de negocio</span>
+          </div>
+        </div>
+      </div>
+      <div class="ut-body">
+        <div class="ut-analysis-grid">
+          <div class="ut-mac-win front">
+            <div class="ut-mac-bar">
+              <div class="ut-mac-dots"><span class="ut-mac-dot r"></span><span class="ut-mac-dot y"></span><span class="ut-mac-dot g"></span></div>
+              <span class="ut-mac-label">Frontend — Angular</span>
+            </div>
+            <div class="ut-mac-content">
+              <p>Durante el proceso de checkout, el usuario introduce el código de cupón en el campo correspondiente. El componente llama al endpoint <code>POST /public/cupones/validar</code> con el body <code>&#123; codigo, usuarioId, importeTotal, costeEnvio, categoriaId &#125;</code>. El servicio devuelve un <code>ValidacionResult</code> con los campos <code>valido</code>, <code>mensaje</code>, <code>tipo</code>, <code>descuento</code> e <code>importeFinal</code>. Si es válido, el precio total mostrado al usuario se actualiza de forma reactiva y el código se almacena para incluirse en el <code>PaymentIntent</code>.</p>
+              <p>El frontend aplica validación de formato básica antes de enviar la petición (el campo no puede estar vacío y tiene un máximo de 20 caracteres), reduciendo peticiones innecesarias al backend.</p>
+            </div>
+          </div>
+          <div class="ut-mac-win back">
+            <div class="ut-mac-bar">
+              <div class="ut-mac-dots"><span class="ut-mac-dot r"></span><span class="ut-mac-dot y"></span><span class="ut-mac-dot g"></span></div>
+              <span class="ut-mac-label">Backend — Spring Boot</span>
+            </div>
+            <div class="ut-mac-content">
+              <p><code>CuponValidacionService.validar()</code> recibe el record <code>AplicarCuponRequest</code> y ejecuta una cadena de validaciones en orden determinista: (1) normalización del código a mayúsculas; (2) existencia en BD mediante <code>CuponRepository.findByCodigoIgnoreCase()</code>; (3) estado activo; (4) ventana temporal (<code>fechaInicio / fechaFin</code>); (5) límite de uso total; (6) alcance (GLOBAL, USUARIO, GRUPO); (7) límite por usuario con <code>CuponUsoRepository</code>; (8) importe mínimo; (9) restricción por categoría.</p>
+              <p>El cálculo del descuento en <code>calcularDescuento()</code> usa <code>BigDecimal</code> para evitar errores de punto flotante, y aplica el tope máximo (<code>topeMaximo</code>) en los tipos PORCENTAJE y COMBINADO.</p>
+            </div>
+          </div>
+        </div>
+        <div class="ut-mac-win test">
+          <div class="ut-mac-bar">
+            <div class="ut-mac-dots"><span class="ut-mac-dot r"></span><span class="ut-mac-dot y"></span><span class="ut-mac-dot g"></span></div>
+            <span class="ut-mac-label">Especificación de la prueba unitaria — CuponValidacionService.validar() · calcularDescuento()</span>
+          </div>
+          <div class="ut-mac-content">
+            <ul>
+              <li><strong>Caso 1 — Cupón expirado:</strong> <code>fechaFin</code> en el pasado → <code>ValidacionResult.valido = false</code> con mensaje "El cupón ha caducado".</li>
+              <li><strong>Caso 2 — Límite global agotado:</strong> <code>totalUsos == limiteUsoTotal</code> → rechazado con mensaje de agotamiento.</li>
+              <li><strong>Caso 3 — Cupón personal ajeno:</strong> <code>alcance = USUARIO</code> con <code>usuario.id ≠ req.usuarioId</code> → rechazado con "no te pertenece".</li>
+              <li><strong>Caso 4 — Importe insuficiente:</strong> <code>importeTotal &lt; importeMinimo</code> → rechazado con importe mínimo en el mensaje.</li>
+              <li><strong>Caso 5 — Descuento PORCENTAJE con tope:</strong> cupón de 20% con <code>topeMaximo = 10 €</code> sobre un total de 100 € → descuento = 10 € (no 20 €).</li>
+              <li><strong>Caso 6 — Descuento ENVIO_GRATIS:</strong> el descuento calculado debe ser igual al valor del campo <code>costeEnvio</code> del request.</li>
+              <li><strong>Caso 7 — Cupón válido completo:</strong> todas las condiciones superadas → <code>valido = true</code> e <code>importeFinal = importeTotal - descuento</code> con <code>BigDecimal</code> exacto.</li>
+            </ul>
+            <div class="ut-result-block">
+              <p><strong>Resultado esperado:</strong> Cada regla de negocio se evalúa en el orden correcto, el cálculo del descuento es exacto con <code>BigDecimal</code>, y no puede aplicarse ningún cupón inválido, expirado, ajeno o agotado bajo ninguna circunstancia.</p>
+            </div>
+          </div>
+        </div>
+        <div>
+          <p class="ut-shots-label">Capturas de referencia</p>
+          <div class="ut-shots">
+            <div class="ut-shot"><img src="/assets/img-pruebas-compra/pc/datos_pago_pc.png" alt="Datos de pago con cupón" loading="lazy" /><p class="ut-shot-cap">Aplicación de cupón en el checkout</p></div>
+            <div class="ut-shot"><img src="/assets/img-pruebas-admin/modal-crear-cupon-1.png" alt="Modal crear cupón admin paso 1" loading="lazy" /><p class="ut-shot-cap">Creación del cupón — paso 1</p></div>
+            <div class="ut-shot"><img src="/assets/img-pruebas-admin/modal-crear-cupon-2.png" alt="Modal crear cupón admin paso 2" loading="lazy" /><p class="ut-shot-cap">Creación del cupón — paso 2</p></div>
+            <div class="ut-shot"><img src="/assets/img-pruebas-admin/cupones.png" alt="Listado de cupones" loading="lazy" /><p class="ut-shot-cap">Listado de cupones en admin</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         UT-04: Flujo de compra con Stripe (escrow)
+    ══════════════════════════════════════════ -->
+    <div class="ut-section">
+      <div class="ut-header">
+        <div class="ut-badge">UT<br/>04</div>
+        <div class="ut-header-text">
+          <h4>Prueba unitaria del flujo de compra segura con Stripe — modelo escrow y máquina de estados</h4>
+          <p>Valida la creación del <code>PaymentIntent</code> en Stripe, las guardas de estado de la compra (PENDIENTE → PAGADO), el cambio de estado del producto (DISPONIBLE → VENDIDO) y las comprobaciones de negocio que previenen compras inválidas.</p>
+          <div class="ut-tags">
+            <span class="ut-tag front">Angular — CompraService</span>
+            <span class="ut-tag back">Spring — CompraController · CompraService · StripeService</span>
+            <span class="ut-tag payments">Pagos críticos</span>
+          </div>
+        </div>
+      </div>
+      <div class="ut-body">
+        <div class="ut-analysis-grid">
+          <div class="ut-mac-win front">
+            <div class="ut-mac-bar">
+              <div class="ut-mac-dots"><span class="ut-mac-dot r"></span><span class="ut-mac-dot y"></span><span class="ut-mac-dot g"></span></div>
+              <span class="ut-mac-label">Frontend — Angular</span>
+            </div>
+            <div class="ut-mac-content">
+              <p><code>CompraService.iniciarPago()</code> realiza <code>POST /compra/intent</code> con parámetros <code>productoId</code>, <code>compradorId</code>, <code>tipoEnvio</code> y <code>esRecogida</code>. El backend responde con <code>&#123; clientSecret, compraId, precioProducto, costoEnvio, comisionNexus, total &#125;</code>. El frontend usa el <code>clientSecret</code> para inicializar <code>Stripe.js</code> y mostrar el formulario de tarjeta seguro (los datos de tarjeta nunca pasan por Angular, siempre por el iframe de Stripe).</p>
+              <p>Tras la confirmación en Stripe.js, el componente llama a <code>CompraService.confirmarPago(compraId, body)</code> enviando el <code>paymentIntentId</code>, los datos de entrega y el método seleccionado. Solo en ese momento el backend reserva el producto y crea el envío con código QR. Esta secuencia de dos pasos garantiza que ningún producto queda bloqueado si el usuario abandona el checkout antes de pagar.</p>
+            </div>
+          </div>
+          <div class="ut-mac-win back">
+            <div class="ut-mac-bar">
+              <div class="ut-mac-dots"><span class="ut-mac-dot r"></span><span class="ut-mac-dot y"></span><span class="ut-mac-dot g"></span></div>
+              <span class="ut-mac-label">Backend — Spring Boot</span>
+            </div>
+            <div class="ut-mac-content">
+              <p><code>CompraController.crearIntentoPago()</code> ejecuta las siguientes guardas antes de llamar a Stripe: (1) existencia del producto y comprador; (2) estado <code>DISPONIBLE</code> del producto; (3) el comprador no es el mismo que el vendedor; (4) ninguno de los dos tiene bloqueado al otro mediante <code>BloqueoService</code>. Si hay precio negociado por chat, se usa ese valor en lugar del precio del anuncio.</p>
+              <p><code>CompraService.confirmarPago()</code> es transaccional (<code>@Transactional</code>) y actúa como máquina de estados: verifica que la compra esté en <code>PENDIENTE</code> antes de avanzar, pone el producto en <code>VENDIDO</code>, crea el <code>Envio</code> con QR base64, y dispara notificaciones in-app y emails a comprador y vendedor. Si el producto ya no está disponible (condición de carrera), lanza <code>IllegalStateException</code>.</p>
+            </div>
+          </div>
+        </div>
+        <div class="ut-mac-win test">
+          <div class="ut-mac-bar">
+            <div class="ut-mac-dots"><span class="ut-mac-dot r"></span><span class="ut-mac-dot y"></span><span class="ut-mac-dot g"></span></div>
+            <span class="ut-mac-label">Especificación de la prueba unitaria — CompraService.confirmarPago() · guardas del CompraController</span>
+          </div>
+          <div class="ut-mac-content">
+            <ul>
+              <li><strong>Caso 1 — Compra de producto propio:</strong> <code>comprador.id == vendedor.id</code> → HTTP 400, sin llamar a Stripe.</li>
+              <li><strong>Caso 2 — Producto no disponible:</strong> se mockea el producto con estado <code>RESERVADO</code> → HTTP 400 "El producto ya no está disponible".</li>
+              <li><strong>Caso 3 — Usuarios bloqueados:</strong> se mockea <code>BloqueoService.estaBloqueado()</code> devolviendo <code>true</code> → HTTP 403 sin llamar a Stripe.</li>
+              <li><strong>Caso 4 — Flujo correcto:</strong> se mockean <code>StripeService.crearIntentoPago()</code> y el repositorio. Se verifica que la entidad <code>Compra</code> se guarda con estado <code>PAGADO</code>, que el producto pasa a <code>VENDIDO</code> y que se invocan <code>notificacionService.notificarNuevaCompraVendedor()</code> y <code>emailService.enviarConfirmacionCompra()</code>.</li>
+              <li><strong>Caso 5 — Condición de carrera:</strong> el producto cambia de <code>DISPONIBLE</code> a <code>VENDIDO</code> entre el <code>crearIntento</code> y el <code>confirmarPago</code> → <code>IllegalStateException</code> propagada como HTTP 400.</li>
+            </ul>
+            <div class="ut-result-block">
+              <p><strong>Resultado esperado:</strong> La máquina de estados de la compra es idempotente y libre de condiciones de carrera. Ninguna compra inválida llega a Stripe. El producto siempre refleja su estado real en la base de datos.</p>
+            </div>
+          </div>
+        </div>
+        <div>
+          <p class="ut-shots-label">Capturas de referencia</p>
+          <div class="ut-shots">
+            <div class="ut-shot"><img src="/assets/img-pruebas-compra/pc/datos_personales_pedido.png" alt="Datos del pedido" loading="lazy" /><p class="ut-shot-cap">Paso 1 — Datos personales del pedido</p></div>
+            <div class="ut-shot"><img src="/assets/img-pruebas-compra/pc/metodo_envio_1_pc.png" alt="Selección método de envío" loading="lazy" /><p class="ut-shot-cap">Paso 2 — Selección del método de envío</p></div>
+            <div class="ut-shot"><img src="/assets/img-pruebas-compra/pc/confirmacion_pago_pc.png" alt="Confirmación de pago" loading="lazy" /><p class="ut-shot-cap">Paso 3 — Confirmación de pago exitosa</p></div>
+            <div class="ut-shot"><img src="/assets/img-pruebas-compra/pc/gmail_compra_auriculares_pc.png" alt="Email de confirmación" loading="lazy" /><p class="ut-shot-cap">Email de confirmación enviado al comprador</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         UT-05: Sistema de mensajería y chat WebSocket
+    ══════════════════════════════════════════ -->
+    <div class="ut-section">
+      <div class="ut-header">
+        <div class="ut-badge">UT<br/>05</div>
+        <div class="ut-header-text">
+          <h4>Prueba unitaria del sistema de mensajería en tiempo real — WebSocket STOMP y propuesta de precio</h4>
+          <p>Valida el guardado de mensajes de tipo TEXTO y OFERTA_PRECIO, la lógica de aceptación/rechazo de propuestas de precio negociado, la distribución en tiempo real por WebSocket y el filtrado de contenido mediante el servicio de moderación.</p>
+          <div class="ut-tags">
+            <span class="ut-tag front">Angular — WebSocketService · ChatService</span>
+            <span class="ut-tag back">Spring — ChatWebSocketController · ChatService · ModerationService</span>
+            <span class="ut-tag realtime">WebSocket en tiempo real</span>
+          </div>
+        </div>
+      </div>
+      <div class="ut-body">
+        <div class="ut-analysis-grid">
+          <div class="ut-mac-win front">
+            <div class="ut-mac-bar">
+              <div class="ut-mac-dots"><span class="ut-mac-dot r"></span><span class="ut-mac-dot y"></span><span class="ut-mac-dot g"></span></div>
+              <span class="ut-mac-label">Frontend — Angular</span>
+            </div>
+            <div class="ut-mac-content">
+              <p><code>WebSocketService</code> gestiona la conexión STOMP sobre SockJS con reconexión automática cada 3 segundos. Al conectar, el cliente envía el JWT en los <code>connectHeaders: &#123; Authorization: 'Bearer ...' &#125;</code>. Se suscribe al topic <code>/topic/chat/&#123;roomId&#125;</code> para recibir los mensajes de la sala activa y al canal privado <code>/user/queue/notificaciones</code> para notificaciones de conversaciones no abiertas.</p>
+              <p>Para enviar texto, el componente publica en <code>/app/chat.enviar</code> con el payload <code>&#123; productoId, remitenteId, receptorId, texto, tipo: 'TEXTO' &#125;</code>. Para propuestas de precio, usa <code>tipo: 'OFERTA_PRECIO'</code> con el campo <code>precioPropuesto</code>. El multimedia pasa por el endpoint REST <code>POST /chat/media</code>. El <code>unreadConvCount</code> se actualiza mediante un Signal de Angular sin necesidad de polling.</p>
+            </div>
+          </div>
+          <div class="ut-mac-win back">
+            <div class="ut-mac-bar">
+              <div class="ut-mac-dots"><span class="ut-mac-dot r"></span><span class="ut-mac-dot y"></span><span class="ut-mac-dot g"></span></div>
+              <span class="ut-mac-label">Backend — Spring Boot</span>
+            </div>
+            <div class="ut-mac-content">
+              <p><code>ChatWebSocketController</code> está anotado con <code>@MessageMapping("/chat.enviar")</code> y recibe el payload deserializado automáticamente por STOMP. Para mensajes de tipo <code>TEXTO</code>, delega en <code>ChatService.guardarMensajeTexto()</code>, que aplica <code>ModerationService.censurarTexto()</code> antes de persistir, sustituyendo palabras de una lista negra por asteriscos. Para <code>OFERTA_PRECIO</code>, persiste el <code>precioPropuesto</code> con <code>estadoPropuesta = PENDIENTE</code>.</p>
+              <p>Tras persistir, <code>SimpMessagingTemplate.convertAndSend("/topic/chat/" + roomId, msg)</code> distribuye el mensaje a todos los suscriptores. Si el receptor no está suscrito, se le envía una notificación in-app. La aceptación de una propuesta queda disponible para <code>CompraService</code> mediante <code>ChatService.getPrecioNegociado(productoId, compradorId)</code>.</p>
+            </div>
+          </div>
+        </div>
+        <div class="ut-mac-win test">
+          <div class="ut-mac-bar">
+            <div class="ut-mac-dots"><span class="ut-mac-dot r"></span><span class="ut-mac-dot y"></span><span class="ut-mac-dot g"></span></div>
+            <span class="ut-mac-label">Especificación de la prueba unitaria — ChatService.guardarMensajeTexto() · lógica de propuesta de precio</span>
+          </div>
+          <div class="ut-mac-content">
+            <ul>
+              <li><strong>Caso 1 — Mensaje vacío rechazado:</strong> texto <code>null</code> o en blanco → el controlador REST <code>MensajeController.enviar()</code> devuelve HTTP 400 sin persistir nada.</li>
+              <li><strong>Caso 2 — Moderación de contenido:</strong> se mockea <code>ModerationService</code> para censurar "palabrota" → el texto almacenado en BD contiene "********" en lugar del original.</li>
+              <li><strong>Caso 3 — Distribución STOMP:</strong> se verifica que <code>SimpMessagingTemplate.convertAndSend()</code> es invocado con el topic correcto (<code>/topic/chat/&#123;roomId&#125;</code>) y con el objeto <code>ChatMensaje</code> persistido.</li>
+              <li><strong>Caso 4 — Propuesta de precio PENDIENTE:</strong> mensaje con <code>tipo = OFERTA_PRECIO</code> y <code>precioPropuesto = 250.0</code> → se persiste con <code>estadoPropuesta = PENDIENTE</code>.</li>
+              <li><strong>Caso 5 — Precio negociado disponible para compra:</strong> tras aceptar la propuesta, <code>ChatService.getPrecioNegociado(productoId, compradorId)</code> devuelve el precio pactado, que <code>CompraService</code> usará en lugar del precio original del anuncio.</li>
+            </ul>
+            <div class="ut-result-block">
+              <p><strong>Resultado esperado:</strong> Los mensajes vacíos son rechazados, el contenido inapropiado se censura antes de persistirse, los mensajes llegan en tiempo real al topic correcto y el precio negociado queda disponible para el flujo de compra de forma consistente.</p>
+            </div>
+          </div>
+        </div>
+        <div>
+          <p class="ut-shots-label">Capturas de referencia</p>
+          <div class="ut-shots">
+            <div class="ut-shot"><img src="/assets/img-pruebas-msg-editoranuncios-reservas/pc/pantalla_mensajes_pc.png" alt="Pantalla de mensajes PC" loading="lazy" /><p class="ut-shot-cap">Pantalla de conversaciones en escritorio</p></div>
+            <div class="ut-shot"><img src="/assets/img-pruebas-msg-editoranuncios-reservas/pc/envio_mensaje_pc.png" alt="Envío de mensaje" loading="lazy" /><p class="ut-shot-cap">Envío de mensaje de texto</p></div>
+            <div class="ut-shot"><img src="/assets/img-pruebas-msg-editoranuncios-reservas/pc/envio_propuesta_precio.png" alt="Propuesta de precio" loading="lazy" /><p class="ut-shot-cap">Envío de propuesta de precio</p></div>
+            <div class="ut-shot"><img src="/assets/img-pruebas-msg-editoranuncios-reservas/pc/recepcion_propuesta_pc.png" alt="Recepción de propuesta" loading="lazy" /><p class="ut-shot-cap">Recepción y aceptación de propuesta</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         UT-06: Motor de búsqueda con sinónimos y filtro geográfico
+    ══════════════════════════════════════════ -->
+    <div class="ut-section">
+      <div class="ut-header">
+        <div class="ut-badge">UT<br/>06</div>
+        <div class="ut-header-text">
+          <h4>Prueba unitaria del motor de búsqueda unificado — expansión de sinónimos y filtro geográfico por bounding box</h4>
+          <p>Valida la expansión de términos sinónimos con <code>SynonymService</code>, el cálculo trigonométrico del bounding box geográfico para búsquedas por proximidad y la integración de filtros combinados en <code>ProductoService.buscarConFiltrosPaginado()</code>.</p>
+          <div class="ut-tags">
+            <span class="ut-tag front">Angular — SearchService</span>
+            <span class="ut-tag back">Spring — MarketplaceSearchService · SynonymService · ProductoService</span>
+          </div>
+        </div>
+      </div>
+      <div class="ut-body">
+        <div class="ut-analysis-grid">
+          <div class="ut-mac-win front">
+            <div class="ut-mac-bar">
+              <div class="ut-mac-dots"><span class="ut-mac-dot r"></span><span class="ut-mac-dot y"></span><span class="ut-mac-dot g"></span></div>
+              <span class="ut-mac-label">Frontend — Angular</span>
+            </div>
+            <div class="ut-mac-content">
+              <p><code>SearchService</code> del frontend construye los parámetros de búsqueda y realiza <code>GET /search?q=ps5&amp;tipo=PRODUCTO&amp;lat=37.38&amp;lng=-5.99&amp;radius=50</code>. Cuando el usuario activa la búsqueda por ubicación, el navegador solicita los permisos de geolocalización mediante la API nativa <code>navigator.geolocation.getCurrentPosition()</code>; las coordenadas se adjuntan como parámetros <code>lat</code>, <code>lng</code> y <code>radius</code>. La respuesta paginada incluye los campos <code>contenido</code>, <code>totalElementos</code>, <code>totalPaginas</code> y <code>paginaActual</code>, que el componente de resultados renderiza con scroll infinito.</p>
+            </div>
+          </div>
+          <div class="ut-mac-win back">
+            <div class="ut-mac-bar">
+              <div class="ut-mac-dots"><span class="ut-mac-dot r"></span><span class="ut-mac-dot y"></span><span class="ut-mac-dot g"></span></div>
+              <span class="ut-mac-label">Backend — Spring Boot</span>
+            </div>
+            <div class="ut-mac-content">
+              <p><code>SynonymService</code> mantiene un mapa estático de más de 200 entradas. El método <code>expand(busqueda)</code> normaliza el término a minúsculas y busca su entrada en el mapa; si existe, devuelve la lista original más todos los sinónimos declarados. Por ejemplo, <code>expand("ps5")</code> devuelve <code>["ps5", "playstation 5", "play station 5", "ps five", ...]</code>. Si no existe entrada, devuelve una lista con el término original.</p>
+              <p>El bounding box geográfico se calcula en <code>MarketplaceSearchService</code> con la fórmula: <code>deltaLat = radius / 111.1</code> y <code>deltaLng = radius / (111.1 × cos(lat))</code>. Esta corrección por latitud evita que el radio en longitud se distorsione en latitudes alejadas del ecuador. Los límites <code>minLat</code>, <code>maxLat</code>, <code>minLng</code>, <code>maxLng</code> se pasan al repositorio para filtrar por las columnas <code>lat / lng</code> del anuncio.</p>
+            </div>
+          </div>
+        </div>
+        <div class="ut-mac-win test">
+          <div class="ut-mac-bar">
+            <div class="ut-mac-dots"><span class="ut-mac-dot r"></span><span class="ut-mac-dot y"></span><span class="ut-mac-dot g"></span></div>
+            <span class="ut-mac-label">Especificación de la prueba unitaria — SynonymService.expand() · cálculo del bounding box</span>
+          </div>
+          <div class="ut-mac-content">
+            <ul>
+              <li><strong>Caso 1 — Expansión de sinónimo conocido:</strong> <code>expand("ps5")</code> → la lista devuelta contiene "playstation 5" y "sony playstation 5". El término original "ps5" también está incluido.</li>
+              <li><strong>Caso 2 — Término sin sinónimos:</strong> <code>expand("silla")</code> → devuelve una lista con un único elemento: <code>["silla"]</code>.</li>
+              <li><strong>Caso 3 — Insensibilidad a mayúsculas:</strong> <code>expand("PS5")</code> y <code>expand("ps5")</code> deben devolver la misma lista de sinónimos.</li>
+              <li><strong>Caso 4 — Bounding box simétrico:</strong> dado el punto <code>(lat=40.4168, lng=-3.7038, radius=50)</code>, se verifica que <code>maxLat - minLat ≈ 0.9</code> (50 km / 111.1) y que <code>maxLng - minLng &lt; maxLat - minLat</code> por la corrección del coseno (en Madrid, la longitud se contrae).</li>
+              <li><strong>Caso 5 — Reducción del radio filtra resultados:</strong> con un conjunto de productos mockeados, al reducir el radio de 50 km a 10 km el número de resultados devueltos disminuye, validando que el bounding box se aplica correctamente.</li>
+            </ul>
+            <div class="ut-result-block">
+              <p><strong>Resultado esperado:</strong> La expansión de sinónimos es determinista, insensible a mayúsculas y no modifica términos desconocidos. El bounding box geográfico aplica la corrección trigonométrica por latitud y filtra con precisión los resultados según el radio configurado por el usuario.</p>
+            </div>
+          </div>
+        </div>
+        <div>
+          <p class="ut-shots-label">Capturas de referencia</p>
+          <div class="ut-shots">
+            <div class="ut-shot"><img src="/assets/img-pruebas/pantalla-cerca-de-ti-50km-2coches.png" alt="Búsqueda 50km 2 coches" loading="lazy" /><p class="ut-shot-cap">Radio 50 km — 2 resultados</p></div>
+            <div class="ut-shot"><img src="/assets/img-pruebas/pantalla-prueba-cerca-de-ti-radar-10km-1coche.png" alt="Búsqueda 10km 1 coche" loading="lazy" /><p class="ut-shot-cap">Radio 10 km — 1 resultado</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         UT-07: Sistema de votación Spark/Drip
+    ══════════════════════════════════════════ -->
+    <div class="ut-section">
+      <div class="ut-header">
+        <div class="ut-badge">UT<br/>07</div>
+        <div class="ut-header-text">
+          <h4>Prueba unitaria del sistema de votación Spark/Drip — toggle, contadores y difusión en tiempo real</h4>
+          <p>Valida la lógica de toggle de votos (volver a votar lo mismo elimina el voto), el incremento y decremento de contadores <code>sparkCount / dripCount</code>, el cambio de voto (de positivo a negativo y viceversa) y la difusión del resultado actualizado por WebSocket al topic de la oferta.</p>
+          <div class="ut-tags">
+            <span class="ut-tag front">Angular — detalle de oferta</span>
+            <span class="ut-tag back">Spring — SparkVotoService · SparkVotoController</span>
+            <span class="ut-tag realtime">WebSocket en tiempo real</span>
+          </div>
+        </div>
+      </div>
+      <div class="ut-body">
+        <div class="ut-analysis-grid">
+          <div class="ut-mac-win front">
+            <div class="ut-mac-bar">
+              <div class="ut-mac-dots"><span class="ut-mac-dot r"></span><span class="ut-mac-dot y"></span><span class="ut-mac-dot g"></span></div>
+              <span class="ut-mac-label">Frontend — Angular</span>
+            </div>
+            <div class="ut-mac-content">
+              <p>El componente de detalle de oferta muestra los contadores <code>sparkCount</code> y <code>dripCount</code> actualizados en tiempo real. Se suscribe al topic STOMP <code>/topic/votos/oferta/&#123;ofertaId&#125;</code>, que el backend usa para difundir el resultado tras cada voto. Al recibir el evento, el componente actualiza los valores directamente en la vista sin recargar la página ni volver a consultar el API REST.</p>
+              <p>Al pulsar el botón de Spark o Drip, el componente llama a <code>POST /spark/oferta/&#123;ofertaId&#125;?actorId=X&amp;valor=1</code> (o <code>valor=-1</code> para Drip). El estado visual del botón (activo/inactivo) se gestiona con el campo <code>votoActual</code> consultado al cargar el detalle mediante <code>GET /spark/oferta/&#123;ofertaId&#125;/voto?actorId=X</code>.</p>
+            </div>
+          </div>
+          <div class="ut-mac-win back">
+            <div class="ut-mac-bar">
+              <div class="ut-mac-dots"><span class="ut-mac-dot r"></span><span class="ut-mac-dot y"></span><span class="ut-mac-dot g"></span></div>
+              <span class="ut-mac-label">Backend — Spring Boot</span>
+            </div>
+            <div class="ut-mac-content">
+              <p><code>SparkVotoService.votarOferta(actorId, ofertaId, valor)</code> implementa una lógica de tres ramas: (1) si no existe voto previo, se crea y se incrementa el contador correspondiente (<code>sparkCount</code> o <code>dripCount</code>); (2) si ya existe voto con el mismo valor, se elimina (toggle off) y se decrementa el contador; (3) si ya existe voto con valor distinto, se actualiza el voto y se ajustan ambos contadores. Los contadores nunca caen por debajo de cero gracias a <code>Math.max(0, ...)</code>.</p>
+              <p>Tras actualizar la entidad <code>Oferta</code>, el servicio llama a <code>SimpMessagingTemplate.convertAndSend("/topic/votos/oferta/" + ofertaId, Map.of(...))</code> con los nuevos valores de <code>sparkCount</code>, <code>dripCount</code> y el <code>score</code> neto calculado. Esta llamada es sincrónica y forma parte de la misma transacción, garantizando coherencia entre el dato persistido y el dato difundido.</p>
+            </div>
+          </div>
+        </div>
+        <div class="ut-mac-win test">
+          <div class="ut-mac-bar">
+            <div class="ut-mac-dots"><span class="ut-mac-dot r"></span><span class="ut-mac-dot y"></span><span class="ut-mac-dot g"></span></div>
+            <span class="ut-mac-label">Especificación de la prueba unitaria — SparkVotoService.votarOferta() · tres ramas del toggle</span>
+          </div>
+          <div class="ut-mac-content">
+            <ul>
+              <li><strong>Caso 1 — Primer voto positivo (Spark):</strong> no hay voto previo → se crea <code>SparkVoto</code> con <code>valor = 1</code>, <code>oferta.sparkCount</code> incrementa en 1. Se verifica invocación de <code>ofertaRepository.save()</code>.</li>
+              <li><strong>Caso 2 — Toggle off (mismo voto):</strong> ya existe un <code>SparkVoto</code> con <code>valor = 1</code> → se elimina y <code>sparkCount</code> decrece en 1. No debe quedar registro en <code>SparkVotoRepository</code>.</li>
+              <li><strong>Caso 3 — Cambio de voto (Spark → Drip):</strong> existe voto con <code>valor = 1</code>, se llama con <code>valor = -1</code> → <code>sparkCount</code> baja 1, <code>dripCount</code> sube 1. El <code>SparkVoto</code> existente se actualiza, no se crea uno nuevo.</li>
+              <li><strong>Caso 4 — Contador nunca negativo:</strong> <code>oferta.sparkCount = 0</code>, se hace toggle off de un voto Spark → se verifica que <code>sparkCount</code> permanece en 0 (no baja a -1).</li>
+              <li><strong>Caso 5 — Difusión WebSocket:</strong> se mockea <code>SimpMessagingTemplate</code> y se verifica que <code>convertAndSend()</code> es invocado exactamente una vez con el topic <code>/topic/votos/oferta/&#123;ofertaId&#125;</code> y el mapa correcto de <code>sparkCount</code>, <code>dripCount</code> y <code>score</code>.</li>
+            </ul>
+            <div class="ut-result-block">
+              <p><strong>Resultado esperado:</strong> La lógica de toggle es determinista en las tres ramas, los contadores son siempre no negativos, y cada voto dispara exactamente una difusión WebSocket con los valores actualizados correctos, garantizando coherencia entre el dato en base de datos y la actualización en tiempo real en el cliente.</p>
+            </div>
+          </div>
+        </div>
+        <div>
+          <p class="ut-shots-label">Capturas de referencia</p>
+          <div class="ut-shots">
+            <div class="ut-shot"><img src="/assets/img-pruebas/oferta-producto-detail.png" alt="Detalle de oferta cabecera" loading="lazy" /><p class="ut-shot-cap">Detalle de oferta — cabecera</p></div>
+            <div class="ut-shot"><img src="/assets/img-pruebas/oferta-producto-detail-2.png" alt="Detalle de oferta votos Spark/Drip" loading="lazy" /><p class="ut-shot-cap">Botones <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="#f59e0b" style="display:inline;vertical-align:middle;"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> Spark y <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="#6b9ede" style="display:inline;vertical-align:middle;"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg> Drip con contadores</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
   </section>
 
   <section id="despliegue">
