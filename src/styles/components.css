@@ -107,15 +107,23 @@
 
 /* Navigation Brutalista */
 nav.site-nav {
-  position: absolute;
+  position: fixed;
   top: 0; left: 0; width: 100%;
-  z-index: 100;
+  z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0;
   background: transparent;
-  border-bottom: 1px solid var(--border-light);
+  border-bottom: 1px solid transparent;
+  transition: background-color 0.4s ease, border-bottom 0.4s ease, backdrop-filter 0.4s ease;
+}
+
+nav.site-nav.scrolled {
+  background-color: rgba(10, 10, 10, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .nav-brand {
@@ -230,7 +238,7 @@ nav.site-nav {
 }
 
 .site-nav.scrolled .hamburger-line {
-  background-color: #000000;
+  background-color: var(--text-primary);
 }
 
 @media (max-width: 1023px) {
