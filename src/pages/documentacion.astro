@@ -961,20 +961,1758 @@ import DocLayout from "../layouts/DocLayout.astro";
     </p>
 
     <h3 class="subsection-title">Pruebas funcionales</h3>
-    <p>Se realizaron pruebas manuales sobre los flujos principales del sistema en el entorno de producción real (Render + Vercel), cubriendo los siguientes escenarios críticos:</p>
-    <ul>
-      <li>Registro, verificación de email y login (con y sin 2FA TOTP y Email OTP)</li>
-      <li>Publicación de productos, ofertas y vehículos con subida de imágenes a Cloudinary</li>
-      <li>Flujo completo de compra con Stripe en modo Test (Payment Intent &rarr; webhook &rarr; creación de compra)</li>
-      <li>Chat en tiempo real entre dos usuarios con WebSocket STOMP (mensajes de texto, imágenes y propuestas de precio)</li>
-      <li>Solicitud y gestión de devoluciones con reembolso en Stripe</li>
-      <li>Contratación de patrocinio por empresa con Stripe Checkout</li>
-      <li>Moderación desde el panel de administración (bans, sanciones, cupones, newsletter)</li>
-      <li>Compilación y prueba de la app como APK Android con Capacitor 8</li>
-    </ul>
+    <p>Se realizaron pruebas manuales sobre los flujos principales del sistema en el entorno de producción real (Render + Vercel), validando el comportamiento de cada módulo funcional de extremo a extremo. A continuación se documenta visualmente cada flujo probado, cubriendo la aplicación web de usuario, la aplicación móvil Android (compilada con Capacitor 8) y el panel de administración.</p>
+
+    <style is:global>
+      .pf-section { margin: 2.5rem 0 3.5rem; border: 1px solid #eef0f2; border-radius: 12px; overflow: hidden; }
+      .pf-section-header { background: #f8f9fa; border-bottom: 1px solid #eef0f2; padding: 16px 24px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+      .pf-badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; background: #ede9fe; color: #6d28d9; }
+      .pf-badge.admin { background: #fce7f3; color: #9d174d; }
+      .pf-badge.mobile { background: #d1fae5; color: #065f46; }
+      .pf-badge.commerce { background: #fef3c7; color: #92400e; }
+      .pf-badge.msg { background: #dbeafe; color: #1e40af; }
+      .pf-section-header h4 { font-size: 1rem; font-weight: 700; color: #1a1a1a; margin: 0; }
+      .pf-items { padding: 0 24px 24px; }
+      .pf-item { margin-top: 24px; padding-bottom: 24px; border-bottom: 1px solid #f3f4f6; }
+      .pf-item:last-child { border-bottom: none; padding-bottom: 0; }
+      .pf-item-title { font-size: 0.95rem; font-weight: 700; color: #111827; margin-bottom: 6px; }
+      .pf-item-desc { font-size: 0.875rem; color: #6b7280; line-height: 1.6; margin-bottom: 12px; }
+      .pf-screenshot { border: 1px solid #e5e7eb; border-radius: 8px; overflow: hidden; background: #fafafa; }
+      .pf-screenshot img { width: 100%; height: auto; display: block; }
+      .pf-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+      .pf-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+      .pf-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+      .pf-grid-item { display: flex; flex-direction: column; gap: 6px; }
+      .pf-caption { font-size: 0.78rem; font-weight: 600; color: #6b7280; text-align: center; padding: 4px 0; }
+      .pf-mobile-grid { display: flex; flex-wrap: wrap; gap: 12px; }
+      .pf-mobile-item { flex: 0 0 calc(25% - 9px); min-width: 140px; display: flex; flex-direction: column; gap: 6px; }
+      .pf-mobile-item .pf-screenshot { }
+      @media (max-width: 768px) {
+        .pf-grid-2, .pf-grid-3 { grid-template-columns: 1fr; }
+        .pf-mobile-item { flex: 0 0 calc(50% - 6px); }
+      }
+    </style>
+
+    <!-- ════════════════════════════════════════════════════════
+         1. REGISTRO E INICIO DE SESIÓN (Web)
+    ════════════════════════════════════════════════════════ -->
+    <div class="pf-section">
+      <div class="pf-section-header">
+        <span class="pf-badge">Autenticación</span>
+        <h4>Registro, Verificación e Inicio de Sesión — Web</h4>
+      </div>
+      <div class="pf-items">
+
+        <div class="pf-item">
+          <p class="pf-item-title">Formulario de registro con email y contraseña</p>
+          <p class="pf-item-desc">El visitante accede al formulario de registro e introduce username, email y contraseña. El sistema valida la fortaleza de la contraseña en tiempo real y protege el envío con reCAPTCHA v3. Al completar el formulario, el backend crea el usuario con la contraseña hasheada en BCrypt y envía un código OTP de 6 dígitos al email.</p>
+          <div class="pf-screenshot"><img src="/assets/img-pruebas/registro-normal.png" alt="Registro normal con email y contraseña" loading="lazy" /></div>
+        </div>
+
+        <div class="pf-item">
+          <p class="pf-item-title">Verificación del email mediante código OTP</p>
+          <p class="pf-item-desc">Tras el registro, el usuario recibe un código OTP de 6 dígitos con una validez de 30 minutos. El sistema valida el código en el backend y activa la cuenta para continuar con el wizard de onboarding. Se muestran ambas pantallas: la de solicitud de código y la de introducción del OTP recibido.</p>
+          <div class="pf-grid-2">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/verificacion-registro.png" alt="Pantalla de verificación de registro" loading="lazy" /></div>
+              <p class="pf-caption">Pantalla de verificación</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/verificacion-registro-prueba.png" alt="Código OTP de verificación introducido" loading="lazy" /></div>
+              <p class="pf-caption">Introducción del código OTP</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="pf-item">
+          <p class="pf-item-title">Wizard de onboarding — Elección de identidad, seguridad y estilo</p>
+          <p class="pf-item-desc">Una vez verificada la cuenta, el sistema guía al usuario por un wizard de configuración inicial: elección de identidad personal (foto de perfil y datos), configuración de seguridad (activación opcional de 2FA) y selección de estilo visual de la plataforma. Estos pasos son obligatorios antes del primer acceso completo.</p>
+          <div class="pf-grid-3">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/registro-eleccon-identidad-personal.png" alt="Onboarding: identidad personal" loading="lazy" /></div>
+              <p class="pf-caption">Identidad personal</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/registro-eleccion-seguridad.png" alt="Onboarding: seguridad y 2FA" loading="lazy" /></div>
+              <p class="pf-caption">Configuración de seguridad</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/registro-eleccion-estilo-predeterminado.png" alt="Onboarding: elección de estilo" loading="lazy" /></div>
+              <p class="pf-caption">Estilo predeterminado</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="pf-item">
+          <p class="pf-item-title">Inicio de sesión con email y contraseña (con validación 2FA)</p>
+          <p class="pf-item-desc">El usuario introduce sus credenciales en el formulario de login. El backend valida el token reCAPTCHA v3 y las credenciales con BCrypt. Si el actor tiene 2FA activado, el sistema devuelve <code>twoFactorRequired: true</code> y solicita el código TOTP antes de emitir el JWT de acceso.</p>
+          <div class="pf-grid-2">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/inicio-sesion-normal.png" alt="Formulario de inicio de sesión" loading="lazy" /></div>
+              <p class="pf-caption">Formulario de login</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/inicio-sesion-normal-2.png" alt="Login con validación 2FA" loading="lazy" /></div>
+              <p class="pf-caption">Validación 2FA TOTP</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="pf-item">
+          <p class="pf-item-title">Inicio de sesión con Google OAuth 2.0</p>
+          <p class="pf-item-desc">El usuario puede autenticarse directamente con su cuenta de Google. El backend verifica el ID token de Google con la librería de Google API Client, crea o recupera el actor asociado al googleId y emite un JWT propio de Nexus. El proceso no requiere contraseña ni verificación OTP adicional.</p>
+          <div class="pf-grid-2">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/inicio-sesion-google.png" alt="Login con Google OAuth" loading="lazy" /></div>
+              <p class="pf-caption">Inicio con Google</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/inicio-sesion-google-2.png" alt="Selección de cuenta Google" loading="lazy" /></div>
+              <p class="pf-caption">Selección de cuenta Google</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="pf-item">
+          <p class="pf-item-title">Recuperación de contraseña mediante email</p>
+          <p class="pf-item-desc">El usuario solicita la recuperación de contraseña introduciendo su email. El backend genera un token UUID con caducidad de 15 minutos almacenado en la entidad Actor y envía un enlace al email. El usuario accede al enlace e introduce su nueva contraseña, que se hashea con BCrypt y se actualiza. El campo <code>jwtVersion</code> se incrementa para invalidar todos los tokens activos.</p>
+          <div class="pf-grid-2">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/recuperar-contrasena.png" alt="Solicitud de recuperación de contraseña" loading="lazy" /></div>
+              <p class="pf-caption">Solicitud de recuperación</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/recuperar-contrasena-2.png" alt="Formulario de nueva contraseña" loading="lazy" /></div>
+              <p class="pf-caption">Introducción de nueva contraseña</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════
+         2. PANTALLA PRINCIPAL Y NAVEGACIÓN (Web)
+    ════════════════════════════════════════════════════════ -->
+    <div class="pf-section">
+      <div class="pf-section-header">
+        <span class="pf-badge">Navegación</span>
+        <h4>Pantalla Principal y Navegación General — Web</h4>
+      </div>
+      <div class="pf-items">
+
+        <div class="pf-item">
+          <p class="pf-item-title">Pantalla de inicio en modo visitante (sin sesión)</p>
+          <p class="pf-item-desc">El visitante no registrado accede a la pantalla de inicio de Nexus. Puede navegar el catálogo, explorar categorías y ver ofertas públicas sin necesidad de autenticación. El sistema muestra un popup sugiriendo el registro al intentar interactuar con funcionalidades que requieren cuenta.</p>
+          <div class="pf-screenshot"><img src="/assets/img-pruebas/pantalla-inicio-invitado.png" alt="Pantalla de inicio modo visitante" loading="lazy" /></div>
+        </div>
+
+        <div class="pf-item">
+          <p class="pf-item-title">Secciones de la pantalla principal</p>
+          <p class="pf-item-desc">La pantalla principal carga con múltiples secciones: chollos del día (ofertas más votadas), sección "Explora por categoría" con las categorías activas, "Lo último en Nexus" con los anuncios más recientes y el ranking de top chollos flash con ofertas con fecha límite. Cada sección se renderiza de forma independiente y lazy-loaded desde el backend.</p>
+          <div class="pf-grid-2">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/pantalla-principal-Chollos-del-dia.png" alt="Sección chollos del día" loading="lazy" /></div>
+              <p class="pf-caption">Chollos del día</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/pantalla-principal-Explora-por-categoria.png" alt="Explorar por categoría" loading="lazy" /></div>
+              <p class="pf-caption">Explorar por categoría</p>
+            </div>
+          </div>
+          <div class="pf-grid-2" style="margin-top:12px">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/pantalla-principal-Lo-ultimo-en-nexus.png" alt="Lo último en Nexus" loading="lazy" /></div>
+              <p class="pf-caption">Lo último en Nexus</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/pantalla-principal-top-chollos-flash.png" alt="Top chollos flash" loading="lazy" /></div>
+              <p class="pf-caption">Top chollos flash</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="pf-item">
+          <p class="pf-item-title">Menús desplegables: categorías y perfil de usuario</p>
+          <p class="pf-item-desc">El header de la aplicación incluye dos desplegables principales: el menú de categorías (accesible desde el icono de navegación lateral), que lista todas las categorías activas con sus subcategorías y colores; y el desplegable del perfil de usuario, que muestra accesos rápidos a Mi Cuenta, Mis Compras, Mis Ventas, configuración y cierre de sesión.</p>
+          <div class="pf-grid-2">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/desplegable-izquierda-categorias.png" alt="Desplegable de categorías" loading="lazy" /></div>
+              <p class="pf-caption">Menú de categorías</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/desplegable-perfil.png" alt="Desplegable de perfil de usuario" loading="lazy" /></div>
+              <p class="pf-caption">Menú del perfil</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="pf-item">
+          <p class="pf-item-title">Centro de notificaciones in-app</p>
+          <p class="pf-item-desc">El usuario accede al centro de notificaciones desde el icono de la campana en el header. El sistema muestra las notificaciones in-app ordenadas por fecha, diferenciando las leídas de las no leídas. Cada notificación incluye un enlace directo al recurso relacionado (compra, mensaje, anuncio, etc.).</p>
+          <div class="pf-screenshot"><img src="/assets/img-pruebas/menu-notificaciones.png" alt="Centro de notificaciones in-app" loading="lazy" /></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════
+         3. EXPLORACIÓN DE CATÁLOGO (Web)
+    ════════════════════════════════════════════════════════ -->
+    <div class="pf-section">
+      <div class="pf-section-header">
+        <span class="pf-badge">Catálogo</span>
+        <h4>Exploración de Categorías, Filtros y Secciones Especiales — Web</h4>
+      </div>
+      <div class="pf-items">
+
+        <div class="pf-item">
+          <p class="pf-item-title">Categoría de coches y vista de vehículos</p>
+          <p class="pf-item-desc">El usuario navega a la categoría de coches desde el menú principal. El listado muestra los vehículos disponibles con sus datos principales (marca, modelo, año, kilómetros, precio y ubicación). Los filtros de búsqueda permiten acotar por tipo de vehículo, combustible, precio y otros parámetros técnicos específicos del catálogo de vehículos.</p>
+          <div class="pf-grid-2">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/pantalla-categoria-coches.png" alt="Categoría de coches" loading="lazy" /></div>
+              <p class="pf-caption">Categoría coches</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/pantalla-vehiculos.png" alt="Vista general de vehículos" loading="lazy" /></div>
+              <p class="pf-caption">Vista general de vehículos</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="pf-item">
+          <p class="pf-item-title">Sección "Cerca de ti" — Filtro geográfico por radar</p>
+          <p class="pf-item-desc">La sección "Cerca de ti" usa la geolocalización del dispositivo para mostrar productos y vehículos en un radio configurable. Se prueba con dos radios distintos: 50km (muestra 2 coches encontrados) y 10km (muestra 1 coche). El backend convierte las coordenadas GPS en un bounding box lat/lon con trigonometría esférica para filtrar los anuncios geolocalizados.</p>
+          <div class="pf-grid-2">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/pantalla-cerca-de-ti-50km-2coches.png" alt="Cerca de ti: 50km con 2 coches" loading="lazy" /></div>
+              <p class="pf-caption">Radio 50km — 2 resultados</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/pantalla-prueba-cerca-de-ti-radar-10km-1coche.png" alt="Cerca de ti: 10km con 1 coche" loading="lazy" /></div>
+              <p class="pf-caption">Radio 10km — 1 resultado</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="pf-item">
+          <p class="pf-item-title">Secciones especiales: Ofertas Flash, Gratis, Viajes y Favoritos</p>
+          <p class="pf-item-desc">La plataforma incluye secciones especializadas: "Ofertas Flash" (chollos con fecha de caducidad próxima y unidades limitadas), "Gratis" (productos con tipo de oferta DONACION), "Viajes" (categoría específica de viajes y experiencias) y "Favoritos" (anuncios marcados por el usuario autenticado). Cada sección se alimenta de endpoints específicos del backend con filtros precalculados.</p>
+          <div class="pf-grid-2">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/pantalla-ofertas-flash.png" alt="Pantalla de ofertas flash" loading="lazy" /></div>
+              <p class="pf-caption">Ofertas flash</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/pantalla-gratis.png" alt="Pantalla de productos gratis" loading="lazy" /></div>
+              <p class="pf-caption">Productos gratuitos</p>
+            </div>
+          </div>
+          <div class="pf-grid-2" style="margin-top:12px">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/pantalla-viajes.png" alt="Pantalla de viajes" loading="lazy" /></div>
+              <p class="pf-caption">Viajes</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/pantalla-favoritos.png" alt="Pantalla de favoritos" loading="lazy" /></div>
+              <p class="pf-caption">Favoritos</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════
+         4. DETALLE DE PRODUCTO, VEHÍCULO Y OFERTA (Web)
+    ════════════════════════════════════════════════════════ -->
+    <div class="pf-section">
+      <div class="pf-section-header">
+        <span class="pf-badge">Catálogo</span>
+        <h4>Detalle de Producto, Vehículo y Oferta — Web</h4>
+      </div>
+      <div class="pf-items">
+
+        <div class="pf-item">
+          <p class="pf-item-title">Página de detalle de producto de segunda mano</p>
+          <p class="pf-item-desc">El usuario accede al detalle de un producto publicado por otro usuario. La página muestra la galería de imágenes, el precio, la condición, la descripción completa, la ubicación, los datos del vendedor con su puntuación de reputación y los botones de acción: "Comprar", "Contactar" y "Añadir a favoritos". El botón de compra está deshabilitado para el propio publicador.</p>
+          <div class="pf-grid-2">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/producto-detail.png" alt="Detalle de producto - parte superior" loading="lazy" /></div>
+              <p class="pf-caption">Detalle del producto (cabecera)</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/producto-detail-2.png" alt="Detalle de producto - parte inferior" loading="lazy" /></div>
+              <p class="pf-caption">Descripción y vendedor</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="pf-item">
+          <p class="pf-item-title">Página de detalle de vehículo</p>
+          <p class="pf-item-desc">El detalle de vehículo presenta la ficha técnica completa: marca, modelo, año de fabricación, kilometraje, tipo de combustible, caja de cambios, potencia, cilindrada, número de puertas y plazas, color, estado de ITV, garantía y lista de extras. La galería soporta múltiples imágenes. El sistema muestra el precio y la ubicación con mapa embebido.</p>
+          <div class="pf-grid-2">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/coche-detail.png" alt="Detalle de vehículo - ficha técnica" loading="lazy" /></div>
+              <p class="pf-caption">Ficha técnica del vehículo</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/coche-detail-2.png" alt="Detalle de vehículo - galería y precio" loading="lazy" /></div>
+              <p class="pf-caption">Galería y datos del vendedor</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="pf-item">
+          <p class="pf-item-title">Página de detalle de oferta/chollo</p>
+          <p class="pf-item-desc">El detalle de oferta muestra el precio original y el precio de oferta con el porcentaje de descuento calculado, el badge automático asignado (NUEVA, CHOLLAZO, PORCENTAJE, GRATUITA o EXPIRA_HOY), el código de descuento si lo tiene, el enlace a la tienda externa, los contadores Spark/Drip con el botón de votación activo para usuarios autenticados y la sección de comentarios de la comunidad.</p>
+          <div class="pf-grid-2">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/oferta-producto-detail.png" alt="Detalle de oferta - parte superior" loading="lazy" /></div>
+              <p class="pf-caption">Detalle de oferta (cabecera)</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/oferta-producto-detail-2.png" alt="Detalle de oferta - votos y comentarios" loading="lazy" /></div>
+              <p class="pf-caption">Votos Spark/Drip y comunidad</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════
+         5. PUBLICACIÓN DE ANUNCIOS (Web)
+    ════════════════════════════════════════════════════════ -->
+    <div class="pf-section">
+      <div class="pf-section-header">
+        <span class="pf-badge">Publicación</span>
+        <h4>Publicación de Productos, Vehículos y Ofertas — Web</h4>
+      </div>
+      <div class="pf-items">
+
+        <div class="pf-item">
+          <p class="pf-item-title">Pantalla de selección de tipo de publicación</p>
+          <p class="pf-item-desc">El usuario autenticado accede a la pantalla de publicación desde el botón "Publicar" del header. Se le presentan tres opciones: publicar un producto de segunda mano, publicar un vehículo o publicar una oferta/chollo. Cada opción redirige al formulario de publicación multistep correspondiente.</p>
+          <div class="pf-screenshot"><img src="/assets/img-pruebas/publicar.png" alt="Pantalla de selección de tipo de publicación" loading="lazy" /></div>
+        </div>
+
+        <div class="pf-item">
+          <p class="pf-item-title">Flujo completo de publicación de producto de segunda mano</p>
+          <p class="pf-item-desc">El formulario multistep guía al usuario por cuatro pasos: (1) detalles básicos (título, categoría, condición, tipo de oferta), (2) fotos y descripción (subida de hasta 6 imágenes a Cloudinary con previalización en tiempo real), (3) precio y ubicación (precio, si admite envío, peso y dirección de recogida), (4) revisión final antes de publicar. Al confirmar, el backend crea el producto con <code>fechaCaducidad</code> a 180 días y lo muestra en el catálogo.</p>
+          <div class="pf-grid-2">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/publicar-producto-detalles-basicos.png" alt="Detalles básicos del producto" loading="lazy" /></div>
+              <p class="pf-caption">Paso 1: Detalles básicos</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/publicar-subir-producto-Fotos-y-descripcion.png" alt="Fotos y descripción del producto" loading="lazy" /></div>
+              <p class="pf-caption">Paso 2: Fotos y descripción</p>
+            </div>
+          </div>
+          <div class="pf-grid-2" style="margin-top:12px">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/publicar-subir-producto-Precio-y-ubicacion.png" alt="Precio y ubicación del producto" loading="lazy" /></div>
+              <p class="pf-caption">Paso 3: Precio y ubicación</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/publicar-subir-producto-Revision-final.png" alt="Revisión final antes de publicar" loading="lazy" /></div>
+              <p class="pf-caption">Paso 4: Revisión final</p>
+            </div>
+          </div>
+          <div class="pf-grid-2" style="margin-top:12px">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/publicar-producto-coche-Revisar-y-publicar.png" alt="Revisar y publicar producto" loading="lazy" /></div>
+              <p class="pf-caption">Confirmación de publicación</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/publicar-producto-publicado.png" alt="Producto publicado correctamente" loading="lazy" /></div>
+              <p class="pf-caption">Producto publicado</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="pf-item">
+          <p class="pf-item-title">Flujo completo de publicación de vehículo</p>
+          <p class="pf-item-desc">El formulario de vehículo incluye pasos específicos para el catálogo de automoción: tipo de vehículo y datos básicos (marca, modelo, año), detalles técnicos (combustible, cambio, potencia, cilindrada, puertas, plazas, color, ITV, garantía y extras), estado y precio de venta, y subida de fotos con descripción. El vehículo publicado aparece en el catálogo de vehículos.</p>
+          <div class="pf-grid-2">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/publicar-vehiculo.png" alt="Inicio de publicación de vehículo" loading="lazy" /></div>
+              <p class="pf-caption">Inicio: tipo de vehículo</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/publicar-vehiculo-coche-1.png" alt="Datos básicos del vehículo" loading="lazy" /></div>
+              <p class="pf-caption">Datos básicos</p>
+            </div>
+          </div>
+          <div class="pf-grid-2" style="margin-top:12px">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/publicar-vehiculo-coche-2.png" alt="Detalles técnicos del vehículo" loading="lazy" /></div>
+              <p class="pf-caption">Detalles técnicos</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/publicar-vehiculo-coche-Estado-precio.png" alt="Estado y precio del vehículo" loading="lazy" /></div>
+              <p class="pf-caption">Estado y precio</p>
+            </div>
+          </div>
+          <div class="pf-grid-item" style="margin-top:12px; max-width:50%">
+            <div class="pf-screenshot"><img src="/assets/img-pruebas/publicar-vehiculo-coche-Fotos-y-descripcion.png" alt="Fotos y descripción del vehículo" loading="lazy" /></div>
+            <p class="pf-caption">Fotos y descripción</p>
+          </div>
+        </div>
+
+        <div class="pf-item">
+          <p class="pf-item-title">Flujo completo de publicación de oferta/chollo</p>
+          <p class="pf-item-desc">El formulario de oferta permite publicar chollos con precios de tiendas externas. El usuario completa: título, tienda, precio original y precio de oferta (el sistema calcula el porcentaje de descuento automáticamente), categoría, código de descuento, URL de la oferta externa, imagen subida a Cloudinary y opcionalmente marcarlo como flash sale con fecha de fin y número de unidades limitadas.</p>
+          <div class="pf-grid-3">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/publicar-subir-una-oferta.png" alt="Selección de tipo de oferta" loading="lazy" /></div>
+              <p class="pf-caption">Selección de tipo</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/publicar-oferta-1.png" alt="Formulario de oferta - paso 1" loading="lazy" /></div>
+              <p class="pf-caption">Datos de la oferta</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/publicar-oferta-2.png" alt="Formulario de oferta - paso 2" loading="lazy" /></div>
+              <p class="pf-caption">Detalles adicionales</p>
+            </div>
+          </div>
+          <div class="pf-grid-item" style="margin-top:12px; max-width:50%">
+            <div class="pf-screenshot"><img src="/assets/img-pruebas/publicar-oferta-publicada.png" alt="Oferta publicada correctamente" loading="lazy" /></div>
+            <p class="pf-caption">Oferta publicada</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════
+         6. PERFIL Y CONFIGURACIÓN DE CUENTA (Web)
+    ════════════════════════════════════════════════════════ -->
+    <div class="pf-section">
+      <div class="pf-section-header">
+        <span class="pf-badge">Perfil</span>
+        <h4>Gestión del Perfil y Configuración de Cuenta — Web</h4>
+      </div>
+      <div class="pf-items">
+
+        <div class="pf-item">
+          <p class="pf-item-title">Resumen del perfil y estadísticas de usuario</p>
+          <p class="pf-item-desc">La página de perfil privado muestra el resumen de la actividad del usuario: reputación (puntuación 0-5 estrellas calculada a partir de las valoraciones de compradores), total de ventas, productos activos, favoritos guardados y las valoraciones recibidas. La sección de estadísticas proporciona métricas de rendimiento de los anuncios publicados.</p>
+          <div class="pf-grid-2">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/perfil-resumen.png" alt="Resumen del perfil de usuario" loading="lazy" /></div>
+              <p class="pf-caption">Resumen del perfil</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/perfil-estadisticas.png" alt="Estadísticas del perfil" loading="lazy" /></div>
+              <p class="pf-caption">Estadísticas</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="pf-item">
+          <p class="pf-item-title">Secciones del perfil: productos, vehículos y ofertas publicadas</p>
+          <p class="pf-item-desc">El perfil agrupa en secciones diferenciadas todos los anuncios del usuario: "Mis productos" (con estado vacío y con artículos publicados), "Mis vehículos" y "Mis ofertas". Cada sección muestra el estado actual de cada anuncio y permite acceder al detalle o editar directamente desde el listado.</p>
+          <div class="pf-grid-3">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/perfil-mis-productos.png" alt="Mis productos sin anuncios" loading="lazy" /></div>
+              <p class="pf-caption">Mis productos (vacío)</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/perfil-mis-productos-con-productos.png" alt="Mis productos con anuncios" loading="lazy" /></div>
+              <p class="pf-caption">Mis productos (con anuncios)</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/perfil-Mis-vehiculos-con-vehiculo.png" alt="Mis vehículos" loading="lazy" /></div>
+              <p class="pf-caption">Mis vehículos</p>
+            </div>
+          </div>
+          <div class="pf-grid-2" style="margin-top:12px">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/perfil-mis-ofertas.png" alt="Mis ofertas sin anuncios" loading="lazy" /></div>
+              <p class="pf-caption">Mis ofertas (vacío)</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/perfil-Mis-ofertas-con-oferta.png" alt="Mis ofertas con anuncios" loading="lazy" /></div>
+              <p class="pf-caption">Mis ofertas (con anuncios)</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="pf-item">
+          <p class="pf-item-title">Historial de compras, ventas, buzón y ayuda</p>
+          <p class="pf-item-desc">El perfil incluye secciones para "Mis compras" (historial de compras realizadas como comprador), "Mis ventas" (historial como vendedor), "Buzón" (mensajes recibidos y conversaciones activas) y "Ayuda" (acceso al centro de soporte con el asistente IA). Estas secciones están disponibles exclusivamente para usuarios autenticados.</p>
+          <div class="pf-grid-2">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/perfil-mis-compras.png" alt="Mis compras" loading="lazy" /></div>
+              <p class="pf-caption">Mis compras</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/perfil-mis-ventas.png" alt="Mis ventas" loading="lazy" /></div>
+              <p class="pf-caption">Mis ventas</p>
+            </div>
+          </div>
+          <div class="pf-grid-3" style="margin-top:12px">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/perfil-buzon.png" alt="Buzón de mensajes" loading="lazy" /></div>
+              <p class="pf-caption">Buzón</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/perfil-ayuda-1.png" alt="Ayuda - parte 1" loading="lazy" /></div>
+              <p class="pf-caption">Ayuda (1)</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/perfil-ayuda-2.png" alt="Ayuda - parte 2" loading="lazy" /></div>
+              <p class="pf-caption">Ayuda (2)</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="pf-item">
+          <p class="pf-item-title">Sección de publicidad y métodos de pago en el perfil</p>
+          <p class="pf-item-desc">El perfil incluye acceso a "Publicidad" (para usuarios con cuenta de empresa, donde se gestionan los contratos activos y patrocinios), y "Métodos de pago" (gestión de las tarjetas y métodos de pago registrados en Stripe para acelerar futuras compras).</p>
+          <div class="pf-grid-2">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/perfil-publicidad.png" alt="Sección de publicidad en el perfil" loading="lazy" /></div>
+              <p class="pf-caption">Publicidad</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/perfil-Metodos-de-pago.png" alt="Métodos de pago" loading="lazy" /></div>
+              <p class="pf-caption">Métodos de pago</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="pf-item">
+          <p class="pf-item-title">Configuración de Mi Cuenta: datos, privacidad, seguridad y notificaciones</p>
+          <p class="pf-item-desc">La sección "Mi Cuenta" agrupa toda la configuración del usuario en pestañas: datos del perfil (edición de nombre, avatar, ubicación y datos personales), datos y privacidad (configuración de visibilidad de la cuenta, RGPD y cookies), notificaciones (preferencias de qué eventos generan notificación), privacidad (gestión del consentimiento), seguridad (cambio de contraseña y gestión de 2FA) y tipo de cuenta (conversión a cuenta empresa).</p>
+          <div class="pf-grid-3">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/micuenta-datos-del-perfil.png" alt="Mi cuenta: datos del perfil" loading="lazy" /></div>
+              <p class="pf-caption">Datos del perfil</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/micuenta-datos-y-privacidad.png" alt="Mi cuenta: datos y privacidad" loading="lazy" /></div>
+              <p class="pf-caption">Datos y privacidad</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/micuenta-notificaciones.png" alt="Mi cuenta: notificaciones" loading="lazy" /></div>
+              <p class="pf-caption">Notificaciones</p>
+            </div>
+          </div>
+          <div class="pf-grid-3" style="margin-top:12px">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/micuenta-privacidad.png" alt="Mi cuenta: privacidad" loading="lazy" /></div>
+              <p class="pf-caption">Privacidad</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/micuenta-seguridad.png" alt="Mi cuenta: seguridad y 2FA" loading="lazy" /></div>
+              <p class="pf-caption">Seguridad y 2FA</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/micuenta-tipo-de-cuenta.png" alt="Mi cuenta: tipo de cuenta" loading="lazy" /></div>
+              <p class="pf-caption">Tipo de cuenta</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════
+         7. FLUJO DE COMPRA — PC
+    ════════════════════════════════════════════════════════ -->
+    <div class="pf-section">
+      <div class="pf-section-header">
+        <span class="pf-badge commerce">Compra</span>
+        <h4>Flujo Completo de Compra con Stripe — PC (Web)</h4>
+      </div>
+      <div class="pf-items">
+
+        <div class="pf-item">
+          <p class="pf-item-title">Búsqueda y vista de producto a comprar</p>
+          <p class="pf-item-desc">El comprador localiza el producto mediante el buscador unificado o navegando por el catálogo. Al encontrar el producto deseado, accede a su página de detalle donde puede consultar la descripción, estado, fotos, precio y datos del vendedor antes de iniciar el proceso de compra.</p>
+          <div class="pf-grid-2">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-compra/pc/busqueda_producto_pc.png" alt="Búsqueda del producto en PC" loading="lazy" /></div>
+              <p class="pf-caption">Búsqueda del producto</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-compra/pc/vista_producto_pc.png" alt="Vista del producto en PC" loading="lazy" /></div>
+              <p class="pf-caption">Vista de detalle del producto</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="pf-item">
+          <p class="pf-item-title">Formulario de datos del pedido y selección de envío</p>
+          <p class="pf-item-desc">El comprador introduce sus datos personales para el pedido (nombre, dirección de entrega, teléfono de contacto) y selecciona el método de entrega: envío postal con cálculo automático del coste según el peso del producto, o recogida en mano en la ubicación del vendedor. El sistema calcula el precio total incluyendo los gastos de envío antes de proceder al pago.</p>
+          <div class="pf-grid-3">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-compra/pc/datos_personales_pedido.png" alt="Datos personales del pedido" loading="lazy" /></div>
+              <p class="pf-caption">Datos del pedido</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-compra/pc/metodo_envio_1_pc.png" alt="Método de envío paso 1" loading="lazy" /></div>
+              <p class="pf-caption">Método de envío (1)</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-compra/pc/metodo_envio_2_pc.png" alt="Método de envío paso 2" loading="lazy" /></div>
+              <p class="pf-caption">Método de envío (2)</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="pf-item">
+          <p class="pf-item-title">Pago con Stripe y confirmación de compra</p>
+          <p class="pf-item-desc">El sistema crea un Stripe Payment Intent y devuelve el <code>clientSecret</code>. El formulario de pago de Stripe.js se inicializa con ese secreto y el comprador introduce sus datos de tarjeta en el elemento seguro de Stripe. Una vez procesado el pago, el webhook <code>payment_intent.succeeded</code> confirma la transacción y el sistema crea la compra en estado PAGADO, generando el código QR de envío.</p>
+          <div class="pf-grid-2">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-compra/pc/datos_pago_pc.png" alt="Formulario de pago Stripe en PC" loading="lazy" /></div>
+              <p class="pf-caption">Formulario de pago Stripe</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-compra/pc/confirmacion_pago_pc.png" alt="Confirmación de pago exitoso" loading="lazy" /></div>
+              <p class="pf-caption">Confirmación de pago</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="pf-item">
+          <p class="pf-item-title">Seguimiento del pedido y notificaciones</p>
+          <p class="pf-item-desc">Tras la confirmación del pago, el comprador puede consultar el estado de su pedido en "Mis compras". El detalle del pedido muestra el código de envío, el estado actual (PAGADO → ENVIADO → ENTREGADO → COMPLETADA), el número de seguimiento del transportista cuando el vendedor lo registra, y las fechas de cada hito. El comprador y el vendedor reciben notificaciones in-app y por correo electrónico en cada cambio de estado. El campo "movimientos" registra el historial de estados del pedido.</p>
+          <div class="pf-grid-2">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-compra/pc/detalles_pedido_pc.png" alt="Detalles del pedido" loading="lazy" /></div>
+              <p class="pf-caption">Detalle del pedido</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-compra/pc/detalles_pedido_2_pc.png" alt="Detalles del pedido - información adicional" loading="lazy" /></div>
+              <p class="pf-caption">Información adicional del pedido</p>
+            </div>
+          </div>
+          <div class="pf-grid-2" style="margin-top:12px">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-compra/pc/movimientos_pedidos_pc.png" alt="Historial de movimientos del pedido" loading="lazy" /></div>
+              <p class="pf-caption">Historial de movimientos</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-compra/pc/notificacion_compra_pc.png" alt="Notificación in-app de compra" loading="lazy" /></div>
+              <p class="pf-caption">Notificación in-app</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="pf-item">
+          <p class="pf-item-title">Correos transaccionales de confirmación y detalle de pago</p>
+          <p class="pf-item-desc">El sistema envía automáticamente correos transaccionales vía Gmail SMTP para las compras completadas: un email de confirmación de compra con el resumen del pedido y un email con el detalle del cargo de Stripe. En caso de cancelación o reembolso, se envía un email de notificación de la devolución.</p>
+          <div class="pf-grid-3">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-compra/pc/gmail_compra_auriculares_pc.png" alt="Gmail: confirmación de compra" loading="lazy" /></div>
+              <p class="pf-caption">Email confirmación de compra</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-compra/pc/gmail_detalle_pago_pc.png" alt="Gmail: detalle de pago" loading="lazy" /></div>
+              <p class="pf-caption">Email detalle del pago</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-compra/pc/gmail_cancelacion_reembolso.png" alt="Gmail: cancelación y reembolso" loading="lazy" /></div>
+              <p class="pf-caption">Email cancelación/reembolso</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="pf-item">
+          <p class="pf-item-title">Sincronización entre dispositivos: compra desde móvil visible en PC</p>
+          <p class="pf-item-desc">Se valida la sincronización entre dispositivos: una compra realizada desde la app móvil aparece correctamente en el historial de pedidos de la aplicación web de PC, confirmando que el backend gestiona el estado de forma centralizada y consistente independientemente del cliente que inició la transacción.</p>
+          <div class="pf-screenshot"><img src="/assets/img-pruebas-compra/pc/producto_comprado_desde_movil_pc.png" alt="Producto comprado desde móvil visible en PC" loading="lazy" /></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════
+         8. FLUJO DE COMPRA — MÓVIL
+    ════════════════════════════════════════════════════════ -->
+    <div class="pf-section">
+      <div class="pf-section-header">
+        <span class="pf-badge mobile">Compra Móvil</span>
+        <h4>Flujo Completo de Compra con Stripe — Aplicación Móvil Android</h4>
+      </div>
+      <div class="pf-items">
+
+        <div class="pf-item">
+          <p class="pf-item-title">Búsqueda y compra de producto en la app móvil</p>
+          <p class="pf-item-desc">Se prueba el flujo completo de compra en la app Android compilada con Capacitor 8. El comprador busca el producto, accede al detalle, inicia el proceso de compra, introduce sus datos de entrega, selecciona el método de envío y completa el pago con el formulario de Stripe.js adaptado a pantalla móvil. Las 14 capturas documentan cada paso del flujo desde la búsqueda hasta el seguimiento del pedido.</p>
+          <div class="pf-mobile-grid">
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-compra/movil/busqueda_producto_movil.png" alt="Búsqueda de producto en móvil" loading="lazy" /></div>
+              <p class="pf-caption">Búsqueda</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-compra/movil/vista_producto_movil.png" alt="Vista del producto en móvil" loading="lazy" /></div>
+              <p class="pf-caption">Vista del producto</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-compra/movil/pagina_compra_movil.png" alt="Página de compra en móvil" loading="lazy" /></div>
+              <p class="pf-caption">Iniciar compra</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-compra/movil/datos_personales_pedido_movil.png" alt="Datos del pedido en móvil" loading="lazy" /></div>
+              <p class="pf-caption">Datos del pedido</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-compra/movil/pantalla_envio_1_movil.png" alt="Selección de envío en móvil (1)" loading="lazy" /></div>
+              <p class="pf-caption">Envío (1)</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-compra/movil/pantalla_envio_2_movil.png" alt="Selección de envío en móvil (2)" loading="lazy" /></div>
+              <p class="pf-caption">Envío (2)</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-compra/movil/pantalla_datos_pago_movil.png" alt="Datos de pago Stripe en móvil" loading="lazy" /></div>
+              <p class="pf-caption">Pago Stripe</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-compra/movil/confirmacion_pago_movil.png" alt="Confirmación de pago en móvil" loading="lazy" /></div>
+              <p class="pf-caption">Confirmación</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-compra/movil/confirmacion_pago_2_movil.png" alt="Detalle confirmación de pago en móvil" loading="lazy" /></div>
+              <p class="pf-caption">Detalle confirmación</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-compra/movil/seguimiento_compra_pedido_1_movil.png" alt="Seguimiento del pedido en móvil (1)" loading="lazy" /></div>
+              <p class="pf-caption">Seguimiento (1)</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-compra/movil/seguimiento_compra_pedido_2_movil.png" alt="Seguimiento del pedido en móvil (2)" loading="lazy" /></div>
+              <p class="pf-caption">Seguimiento (2)</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-compra/movil/notificacion_compra_movil.png" alt="Notificación in-app de compra en móvil" loading="lazy" /></div>
+              <p class="pf-caption">Notificación</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-compra/movil/gmail_confirmacion_compra_movil.png" alt="Gmail: confirmación de compra en móvil" loading="lazy" /></div>
+              <p class="pf-caption">Email confirmación</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-compra/movil/gmail_detalle_pago_movil.png" alt="Gmail: detalle de pago en móvil" loading="lazy" /></div>
+              <p class="pf-caption">Email detalle pago</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════
+         9. GESTIÓN DE COMPRAS — PANEL ADMIN
+    ════════════════════════════════════════════════════════ -->
+    <div class="pf-section">
+      <div class="pf-section-header">
+        <span class="pf-badge admin">Admin</span>
+        <h4>Gestión de Compras y Reembolsos — Panel de Administración</h4>
+      </div>
+      <div class="pf-items">
+
+        <div class="pf-item">
+          <p class="pf-item-title">Listado de compras, filtrado y proceso de reembolso desde el panel</p>
+          <p class="pf-item-desc">El administrador accede al módulo de compras del panel, donde puede consultar todas las transacciones del sistema filtradas por estado (pendiente, pagado, enviado, entregado, cancelado). Desde el detalle de una compra, puede iniciar un reembolso directamente en Stripe mediante el modal de reembolso, que procesa la devolución del importe al comprador y actualiza el estado de la compra a REEMBOLSADA.</p>
+          <div class="pf-grid-3">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-compra/administracion/pantalla_compras.png" alt="Pantalla de compras en el panel admin" loading="lazy" /></div>
+              <p class="pf-caption">Listado de compras</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-compra/administracion/filtro_compras_pagadas.png" alt="Filtro: compras pagadas" loading="lazy" /></div>
+              <p class="pf-caption">Filtro por estado PAGADO</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-compra/administracion/cancelacion_compra.png" alt="Modal de cancelación y reembolso" loading="lazy" /></div>
+              <p class="pf-caption">Modal de reembolso/cancelación</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════
+         10. MENSAJERÍA EN TIEMPO REAL — PC
+    ════════════════════════════════════════════════════════ -->
+    <div class="pf-section">
+      <div class="pf-section-header">
+        <span class="pf-badge msg">Mensajería</span>
+        <h4>Mensajería en Tiempo Real con WebSocket STOMP — PC (Web)</h4>
+      </div>
+      <div class="pf-items">
+
+        <div class="pf-item">
+          <p class="pf-item-title">Pantalla de mensajes e inicio de conversación desde el detalle del producto</p>
+          <p class="pf-item-desc">El comprador interesado en un producto puede contactar al vendedor directamente desde el botón "Contactar" en la página de detalle del producto. Esto abre una conversación en el sistema de mensajería asociada al <code>roomId</code> calculado de forma determinista a partir de los IDs de ambos participantes y el ID del producto. La pantalla de mensajes lista todas las conversaciones activas del usuario autenticado.</p>
+          <div class="pf-grid-2">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-msg-editoranuncios-reservas/pc/vista_producto_contactar_pc.png" alt="Botón de contactar en el producto" loading="lazy" /></div>
+              <p class="pf-caption">Contactar desde el producto</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-msg-editoranuncios-reservas/pc/pantalla_mensajes_pc.png" alt="Pantalla de mensajes en PC" loading="lazy" /></div>
+              <p class="pf-caption">Pantalla de mensajes</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="pf-item">
+          <p class="pf-item-title">Envío y recepción de mensajes de texto e imágenes</p>
+          <p class="pf-item-desc">La conversación soporta múltiples tipos de mensaje: texto plano, imágenes (subidas a Cloudinary), vídeo, audio y GIFs. Los mensajes se entregan en tiempo real mediante el protocolo WebSocket STOMP. El sistema marca los mensajes como leídos/recibidos y mantiene el historial completo en la base de datos. Se valida la entrega bidireccional entre el comprador y el vendedor.</p>
+          <div class="pf-grid-2">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-msg-editoranuncios-reservas/pc/envio_mensaje_pc.png" alt="Envío de mensaje de texto" loading="lazy" /></div>
+              <p class="pf-caption">Envío de mensaje</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-msg-editoranuncios-reservas/pc/recepción_mensaje.png" alt="Recepción de mensaje de texto" loading="lazy" /></div>
+              <p class="pf-caption">Recepción de mensaje</p>
+            </div>
+          </div>
+          <div class="pf-grid-2" style="margin-top:12px">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-msg-editoranuncios-reservas/pc/envio_fotos_pc.png" alt="Envío de imágenes en el chat" loading="lazy" /></div>
+              <p class="pf-caption">Envío de imágenes</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-msg-editoranuncios-reservas/pc/recepcion_fotos.png" alt="Recepción de imágenes en el chat" loading="lazy" /></div>
+              <p class="pf-caption">Recepción de imágenes</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="pf-item">
+          <p class="pf-item-title">Propuesta de precio y negociación en el chat</p>
+          <p class="pf-item-desc">El sistema de mensajería incluye el tipo de mensaje OFERTA_PRECIO, que permite al comprador proponer un precio personalizado al vendedor directamente en la conversación. El mensaje de propuesta muestra el precio propuesto y dos botones de acción (aceptar/rechazar) para el vendedor. Al aceptar, el sistema actualiza el estado de la propuesta y notifica al comprador para que proceda a la compra al precio negociado.</p>
+          <div class="pf-grid-2">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-msg-editoranuncios-reservas/pc/envio_propuesta_precio.png" alt="Envío de propuesta de precio" loading="lazy" /></div>
+              <p class="pf-caption">Propuesta de precio enviada</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-msg-editoranuncios-reservas/pc/recepcion_propuesta_pc.png" alt="Recepción y respuesta a propuesta de precio" loading="lazy" /></div>
+              <p class="pf-caption">Recepción de propuesta</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════
+         11. RESERVAS Y EDICIÓN DE ANUNCIOS — PC
+    ════════════════════════════════════════════════════════ -->
+    <div class="pf-section">
+      <div class="pf-section-header">
+        <span class="pf-badge msg">Reservas</span>
+        <h4>Reservas de Productos y Edición de Anuncios — PC (Web)</h4>
+      </div>
+      <div class="pf-items">
+
+        <div class="pf-item">
+          <p class="pf-item-title">Flujo de reserva de un producto</p>
+          <p class="pf-item-desc">El vendedor puede marcar un producto como reservado para un comprador específico. Desde la lista de productos disponibles, el vendedor accede al popup de reserva, selecciona al comprador y confirma. El producto pasa a estado RESERVADO y aparece marcado con la etiqueta correspondiente en el catálogo. El filtro de la vista de admin de productos también puede filtrar por estado reservado.</p>
+          <div class="pf-grid-3">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-msg-editoranuncios-reservas/pc/pagina_productos_reservar.png" alt="Listado de productos con opción de reservar" loading="lazy" /></div>
+              <p class="pf-caption">Productos disponibles</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-msg-editoranuncios-reservas/pc/popup_reserva_pc.png" alt="Popup de confirmación de reserva" loading="lazy" /></div>
+              <p class="pf-caption">Popup de reserva</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-msg-editoranuncios-reservas/pc/reservado_pc.png" alt="Producto marcado como reservado" loading="lazy" /></div>
+              <p class="pf-caption">Producto reservado</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="pf-item">
+          <p class="pf-item-title">Editor de anuncios publicados — PC</p>
+          <p class="pf-item-desc">El vendedor puede editar sus anuncios publicados en cualquier momento desde la página de detalle del producto. El editor permite modificar el título, descripción, precio, categoría, condición, imágenes y ubicación. Los cambios se sincronizan inmediatamente con el catálogo. Se prueba el flujo completo de edición con múltiples pasos.</p>
+          <div class="pf-grid-2">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-msg-editoranuncios-reservas/pc/botones_y_editar_anuncio.png" alt="Botones de acción y acceso al editor" loading="lazy" /></div>
+              <p class="pf-caption">Acceso al editor de anuncio</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-msg-editoranuncios-reservas/pc/edicion_anuncio_1_pc.png" alt="Editor de anuncio - paso 1" loading="lazy" /></div>
+              <p class="pf-caption">Edición paso 1</p>
+            </div>
+          </div>
+          <div class="pf-grid-3" style="margin-top:12px">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-msg-editoranuncios-reservas/pc/edicion_anuncio_2_pc.png" alt="Editor de anuncio - paso 2" loading="lazy" /></div>
+              <p class="pf-caption">Edición paso 2</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-msg-editoranuncios-reservas/pc/edicion_anuncio_3_pc.pnmg.png" alt="Editor de anuncio - paso 3" loading="lazy" /></div>
+              <p class="pf-caption">Edición paso 3</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-msg-editoranuncios-reservas/pc/edicion_anuncio_4_pc.png" alt="Editor de anuncio - paso 4" loading="lazy" /></div>
+              <p class="pf-caption">Edición paso 4</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════
+         12. MENSAJERÍA Y EDICIÓN — MÓVIL
+    ════════════════════════════════════════════════════════ -->
+    <div class="pf-section">
+      <div class="pf-section-header">
+        <span class="pf-badge mobile">Mensajería Móvil</span>
+        <h4>Mensajería y Edición de Anuncios — Aplicación Móvil Android</h4>
+      </div>
+      <div class="pf-items">
+
+        <div class="pf-item">
+          <p class="pf-item-title">Chat y edición de anuncios en la app móvil</p>
+          <p class="pf-item-desc">Se validan en la app móvil Android las funcionalidades de mensajería (contactar desde el producto, pantalla de mensajes, recepción de mensajes en tiempo real vía WebSocket) y el editor de anuncios (acceso al editor desde el listado de publicaciones propias, modificación de datos en múltiples pasos y guardado de cambios). Las 8 capturas documentan el flujo completo en pantalla móvil.</p>
+          <div class="pf-mobile-grid">
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-msg-editoranuncios-reservas/movil/vista_producto_contactar_movil.png" alt="Contactar desde producto en móvil" loading="lazy" /></div>
+              <p class="pf-caption">Contactar (móvil)</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-msg-editoranuncios-reservas/movil/pantalla_mensajes_movil.png" alt="Pantalla de mensajes en móvil" loading="lazy" /></div>
+              <p class="pf-caption">Mensajes</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-msg-editoranuncios-reservas/movil/recepcion_mensaje_movil.png" alt="Recepción de mensaje en móvil" loading="lazy" /></div>
+              <p class="pf-caption">Recepción</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-msg-editoranuncios-reservas/movil/editar_anuncio_movil.png" alt="Editar anuncio en móvil" loading="lazy" /></div>
+              <p class="pf-caption">Editar anuncio</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-msg-editoranuncios-reservas/movil/detalles_edicion_anuncio_1_movil.png" alt="Edición anuncio paso 1 en móvil" loading="lazy" /></div>
+              <p class="pf-caption">Edición (1)</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-msg-editoranuncios-reservas/movil/detalles_edicion_anuncio_2_moivl.png" alt="Edición anuncio paso 2 en móvil" loading="lazy" /></div>
+              <p class="pf-caption">Edición (2)</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-msg-editoranuncios-reservas/movil/detalles_Edicion_anuncio_3_movil.png" alt="Edición anuncio paso 3 en móvil" loading="lazy" /></div>
+              <p class="pf-caption">Edición (3)</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-msg-editoranuncios-reservas/movil/detalles_edicion_anuncio_4_movil.png" alt="Edición anuncio paso 4 en móvil" loading="lazy" /></div>
+              <p class="pf-caption">Edición (4)</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════
+         13. PUBLICIDAD Y PATROCINIOS (Web)
+    ════════════════════════════════════════════════════════ -->
+    <div class="pf-section">
+      <div class="pf-section-header">
+        <span class="pf-badge commerce">Publicidad</span>
+        <h4>Sistema de Publicidad y Patrocinios con Stripe Checkout — Web</h4>
+      </div>
+      <div class="pf-items">
+
+        <div class="pf-item">
+          <p class="pf-item-title">Solicitud de patrocinio y gestión de contratos</p>
+          <p class="pf-item-desc">Una empresa autenticada accede al módulo de publicidad para solicitar un patrocinio (BANNER o PUBLICACION). El proceso consta de tres pasos: selección del tipo de contrato y el ítem a patrocinar, especificación de los días de duración y revisión de la solicitud antes de enviarla. La solicitud queda en estado DRAFT hasta que un administrador la revise y establezca el precio.</p>
+          <div class="pf-grid-3">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/publicidad-paso-1.png" alt="Publicidad: selección de tipo" loading="lazy" /></div>
+              <p class="pf-caption">Paso 1: Tipo de contrato</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/publicidad-paso-2.png" alt="Publicidad: duración y detalles" loading="lazy" /></div>
+              <p class="pf-caption">Paso 2: Duración</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/publicidad-paso-3.png" alt="Publicidad: revisión y envío" loading="lazy" /></div>
+              <p class="pf-caption">Paso 3: Revisión</p>
+            </div>
+          </div>
+          <div class="pf-grid-item" style="margin-top:12px; max-width:50%">
+            <div class="pf-screenshot"><img src="/assets/img-pruebas/publicidad-mis-solicitudes.png" alt="Mis solicitudes de publicidad" loading="lazy" /></div>
+            <p class="pf-caption">Mis solicitudes</p>
+          </div>
+        </div>
+
+        <div class="pf-item">
+          <p class="pf-item-title">Pago de patrocinio con Stripe Checkout</p>
+          <p class="pf-item-desc">Una vez que el administrador aprueba la solicitud y establece el precio, la empresa recibe una notificación y puede proceder al pago. El sistema genera una Stripe Checkout Session y redirige al portal de Stripe para el pago. Tras el pago exitoso, el webhook <code>checkout.session.completed</code> activa el contrato y el ítem aparece con la etiqueta "Patrocinado" en el catálogo.</p>
+          <div class="pf-grid-3">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/pagar-patrocinio-paso-1.png" alt="Pagar patrocinio - paso 1" loading="lazy" /></div>
+              <p class="pf-caption">Pago patrocinio (1)</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/pagar-patrociono-paso-2.png" alt="Pagar patrocinio - paso 2" loading="lazy" /></div>
+              <p class="pf-caption">Pago patrocinio (2)</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/pagar-patrociono-paso-3.png" alt="Pagar patrocinio - paso 3: Stripe Checkout" loading="lazy" /></div>
+              <p class="pf-caption">Stripe Checkout</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════
+         14. CHAT DE SOPORTE IA (Web)
+    ════════════════════════════════════════════════════════ -->
+    <div class="pf-section">
+      <div class="pf-section-header">
+        <span class="pf-badge">Soporte IA</span>
+        <h4>Asistente de Soporte con IA y Escalación a Agente Humano — Web</h4>
+      </div>
+      <div class="pf-items">
+
+        <div class="pf-item">
+          <p class="pf-item-title">Chat de soporte con IA, escalación a humano y cierre de sesión</p>
+          <p class="pf-item-desc">El sistema de soporte integra un chatbot basado en Google Gemini 1.5-flash (con Groq como alternativa). El usuario inicia una sesión de soporte, formula su consulta y el asistente responde de forma contextualizada. Si la consulta supera las capacidades del bot, el sistema escala automáticamente a un agente humano, que continúa la conversación desde el panel de administración. Al resolver la incidencia, el agente puede cerrar la sesión y el sistema solicita una valoración de la atención recibida.</p>
+          <div class="pf-grid-3">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/soporte-chat-con-ia-normal.png" alt="Chat de soporte con IA" loading="lazy" /></div>
+              <p class="pf-caption">Soporte con IA</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/soporte-chat-con-humano.png" alt="Escalación a agente humano" loading="lazy" /></div>
+              <p class="pf-caption">Escalación a agente humano</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas/soporte-chat-finalizado.png" alt="Chat de soporte finalizado" loading="lazy" /></div>
+              <p class="pf-caption">Sesión de soporte finalizada</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════
+         15. APLICACIÓN MÓVIL ANDROID — PRUEBAS GENERALES
+    ════════════════════════════════════════════════════════ -->
+    <div class="pf-section">
+      <div class="pf-section-header">
+        <span class="pf-badge mobile">Móvil Android</span>
+        <h4>Pruebas Generales — Aplicación Android (Ionic + Capacitor 8)</h4>
+      </div>
+      <div class="pf-items">
+
+        <div class="pf-item">
+          <p class="pf-item-title">Registro y verificación de cuenta en app móvil</p>
+          <p class="pf-item-desc">Se valida el flujo completo de registro en la versión móvil Android: formulario de registro (dos páginas de datos), verificación OTP por email, y wizard de onboarding (identidad personal, configuración de seguridad y selección de estilo). La experiencia es idéntica a la web pero adaptada a pantalla móvil con los componentes de Ionic 8.</p>
+          <div class="pf-mobile-grid">
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-mobile/registro-normal-1.png" alt="Registro móvil paso 1" loading="lazy" /></div>
+              <p class="pf-caption">Registro (1)</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-mobile/registro-normal-2.png" alt="Registro móvil paso 2" loading="lazy" /></div>
+              <p class="pf-caption">Registro (2)</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-mobile/verificacion-registro.png" alt="Verificación OTP móvil" loading="lazy" /></div>
+              <p class="pf-caption">Verificación OTP</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-mobile/registro-eleccion-identidad-personal.png" alt="Onboarding: identidad personal en móvil" loading="lazy" /></div>
+              <p class="pf-caption">Identidad personal</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-mobile/registro-eleccion-seguridad.png" alt="Onboarding: seguridad en móvil" loading="lazy" /></div>
+              <p class="pf-caption">Seguridad</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-mobile/registro-estilo-predeterminado.png" alt="Onboarding: estilo en móvil" loading="lazy" /></div>
+              <p class="pf-caption">Estilo</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="pf-item">
+          <p class="pf-item-title">Inicio de sesión normal y con Google en app móvil</p>
+          <p class="pf-item-desc">Se prueba el inicio de sesión con email/contraseña (incluyendo el paso de 2FA si está activado) y con Google OAuth en la versión móvil. El flujo de recuperación de contraseña también se valida en dispositivo móvil.</p>
+          <div class="pf-mobile-grid">
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-mobile/inicio-sesion-normal.png" alt="Login normal en móvil" loading="lazy" /></div>
+              <p class="pf-caption">Login normal</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-mobile/inicio-sesion-normal-2.png" alt="Login normal móvil - validación 2FA" loading="lazy" /></div>
+              <p class="pf-caption">2FA móvil</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-mobile/inicio-sesion-google.png" alt="Login con Google en móvil" loading="lazy" /></div>
+              <p class="pf-caption">Login Google</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-mobile/inicio-sesion-google-2.png" alt="Selección cuenta Google en móvil" loading="lazy" /></div>
+              <p class="pf-caption">Cuenta Google</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-mobile/recuperar-contrasena.png" alt="Recuperar contraseña en móvil" loading="lazy" /></div>
+              <p class="pf-caption">Recuperar contraseña</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-mobile/recuperar-contrasena-2.png" alt="Nueva contraseña en móvil" loading="lazy" /></div>
+              <p class="pf-caption">Nueva contraseña</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="pf-item">
+          <p class="pf-item-title">Navegación principal, categorías y notificaciones en app móvil</p>
+          <p class="pf-item-desc">Se valida la navegación principal de la app móvil: pantalla de inicio en modo visitante, menú lateral de categorías (sidebar desplegable), acceso a la categoría de coches, sección de favoritos y centro de notificaciones. Los componentes de Ionic 8 adaptan la navegación a los patrones nativos de Android.</p>
+          <div class="pf-mobile-grid">
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-mobile/pantalla-inicio-invitado.png" alt="Inicio móvil visitante" loading="lazy" /></div>
+              <p class="pf-caption">Inicio (visitante)</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-mobile/desplegable-izquierda-categorias.png" alt="Menú categorías en móvil" loading="lazy" /></div>
+              <p class="pf-caption">Categorías</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-mobile/pantalla-categoria-coches.png" alt="Categoría coches en móvil" loading="lazy" /></div>
+              <p class="pf-caption">Cat. coches</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-mobile/pantalla-favoritos.png" alt="Favoritos en móvil" loading="lazy" /></div>
+              <p class="pf-caption">Favoritos</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-mobile/menu-notificaciones.png" alt="Notificaciones en móvil" loading="lazy" /></div>
+              <p class="pf-caption">Notificaciones</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="pf-item">
+          <p class="pf-item-title">Detalle de vehículo en app móvil</p>
+          <p class="pf-item-desc">El detalle de vehículo en la app móvil muestra la galería de imágenes con swipe horizontal, la ficha técnica completa en un layout adaptado a pantalla pequeña, y los botones de acción de contactar con el vendedor o añadir a favoritos.</p>
+          <div class="pf-mobile-grid">
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-mobile/coche-detail.png" alt="Detalle coche en móvil" loading="lazy" /></div>
+              <p class="pf-caption">Detalle coche</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-mobile/coche-detail-2.png" alt="Detalle coche móvil - ficha técnica" loading="lazy" /></div>
+              <p class="pf-caption">Ficha técnica</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="pf-item">
+          <p class="pf-item-title">Publicación de productos, vehículos y ofertas en app móvil</p>
+          <p class="pf-item-desc">Se valida el flujo multistep de publicación en la versión móvil para los tres tipos de anuncio: artículo de segunda mano (con subida de fotos desde la cámara o galería mediante la API de Capacitor), vehículo (con todos los campos técnicos) y oferta/chollo. Se documentan todos los pasos de cada formulario hasta la confirmación de publicación exitosa.</p>
+          <div class="pf-mobile-grid">
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-mobile/publicar.png" alt="Selección tipo publicación en móvil" loading="lazy" /></div>
+              <p class="pf-caption">Publicar</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-mobile/publicar-subir-articulo.png" alt="Publicar artículo en móvil" loading="lazy" /></div>
+              <p class="pf-caption">Artículo</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-mobile/publicar-subir-articulo-fotos-ydescripcion-1.png" alt="Fotos y descripción artículo móvil (1)" loading="lazy" /></div>
+              <p class="pf-caption">Fotos/desc. (1)</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-mobile/publicar-subir-articulo-fotos-y-descripcion-2.png" alt="Fotos y descripción artículo móvil (2)" loading="lazy" /></div>
+              <p class="pf-caption">Fotos/desc. (2)</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-mobile/publicar-subir-anuncio-Precio-y-ubicacion-1.png" alt="Precio y ubicación anuncio móvil (1)" loading="lazy" /></div>
+              <p class="pf-caption">Precio/ubic. (1)</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-mobile/publicar-subir-anuncio-Precio-y-ubicacion-2.png" alt="Precio y ubicación anuncio móvil (2)" loading="lazy" /></div>
+              <p class="pf-caption">Precio/ubic. (2)</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-mobile/publicar-subir-anuncio-Revision-final.png" alt="Revisión final anuncio móvil" loading="lazy" /></div>
+              <p class="pf-caption">Revisión final</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-mobile/publicar-subir-anuncio-Revision-final-2.png" alt="Revisión final anuncio móvil (2)" loading="lazy" /></div>
+              <p class="pf-caption">Revisión (2)</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-mobile/publicar-producto-coche-revisar.png" alt="Publicar coche: revisar en móvil" loading="lazy" /></div>
+              <p class="pf-caption">Revisar coche</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-mobile/producto-publicado.png" alt="Producto publicado en móvil" loading="lazy" /></div>
+              <p class="pf-caption">Publicado</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-mobile/publicar-vehiculo.png" alt="Publicar vehículo en móvil" loading="lazy" /></div>
+              <p class="pf-caption">Vehículo</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-mobile/publicar-vehiculo-coche-1.png" alt="Publicar vehículo móvil paso 1" loading="lazy" /></div>
+              <p class="pf-caption">Vehículo (1)</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-mobile/publicar-vehiculo-coche-2.png" alt="Publicar vehículo móvil paso 2" loading="lazy" /></div>
+              <p class="pf-caption">Vehículo (2)</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-mobile/publicar-vehiculo-coche-Fotos-y-descripcion.png" alt="Fotos vehículo móvil" loading="lazy" /></div>
+              <p class="pf-caption">Fotos vehículo</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-mobile/publicar-vehiculo-coche-estado-y-precio.png" alt="Estado y precio vehículo móvil" loading="lazy" /></div>
+              <p class="pf-caption">Estado/precio</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-mobile/publicar-oferta-1.png" alt="Publicar oferta móvil paso 1" loading="lazy" /></div>
+              <p class="pf-caption">Oferta (1)</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-mobile/publicar-oferta-2.png" alt="Publicar oferta móvil paso 2" loading="lazy" /></div>
+              <p class="pf-caption">Oferta (2)</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-mobile/publicar-oferta-3.png" alt="Publicar oferta móvil paso 3" loading="lazy" /></div>
+              <p class="pf-caption">Oferta (3)</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-mobile/publicar-oferta-ublicada.png" alt="Oferta publicada en móvil" loading="lazy" /></div>
+              <p class="pf-caption">Oferta publicada</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="pf-item">
+          <p class="pf-item-title">Perfil de usuario y secciones de gestión en app móvil</p>
+          <p class="pf-item-desc">Se validan todas las secciones del perfil en la versión móvil: información del perfil, edición de datos personales, "Mis cosas" (productos, vehículos y ofertas propias con y sin anuncios), historial de compras, envíos, valoraciones recibidas y acceso a los ajustes de cuenta (datos y privacidad, tipo de cuenta, cookies, notificaciones, privacidad y seguridad).</p>
+          <div class="pf-mobile-grid">
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-mobile/perfil.png" alt="Perfil en móvil" loading="lazy" /></div>
+              <p class="pf-caption">Perfil</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-mobile/perfil-info.png" alt="Información del perfil en móvil" loading="lazy" /></div>
+              <p class="pf-caption">Info perfil</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-mobile/perfil-edicion.png" alt="Edición del perfil en móvil" loading="lazy" /></div>
+              <p class="pf-caption">Editar perfil</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-mobile/perfil-mis-cosas.png" alt="Mis cosas en móvil" loading="lazy" /></div>
+              <p class="pf-caption">Mis cosas</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-mobile/perfil-Mis-cosas-con-producto.png" alt="Mis cosas con producto en móvil" loading="lazy" /></div>
+              <p class="pf-caption">Mis cosas (con producto)</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-mobile/perfil-mis-productos-con-productos.png" alt="Mis productos móvil" loading="lazy" /></div>
+              <p class="pf-caption">Mis productos</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-mobile/perfil-vehiculos-con-vehiculos.png" alt="Mis vehículos en móvil" loading="lazy" /></div>
+              <p class="pf-caption">Mis vehículos</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-mobile/perfil-mis-ofertas-con-ofertas.png" alt="Mis ofertas en móvil" loading="lazy" /></div>
+              <p class="pf-caption">Mis ofertas</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-mobile/perfil-mis-compras.png" alt="Mis compras en móvil" loading="lazy" /></div>
+              <p class="pf-caption">Mis compras</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-mobile/perfil-mis-envios.png" alt="Mis envíos en móvil" loading="lazy" /></div>
+              <p class="pf-caption">Mis envíos</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-mobile/perfil-valoraciones.png" alt="Valoraciones en móvil" loading="lazy" /></div>
+              <p class="pf-caption">Valoraciones</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-mobile/perfil-ajustes-Datos-y-privacidad.png" alt="Ajustes: datos y privacidad en móvil" loading="lazy" /></div>
+              <p class="pf-caption">Datos y privacidad</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-mobile/perfil-ajustes-Tipo-de-cuenta.png" alt="Ajustes: tipo de cuenta en móvil" loading="lazy" /></div>
+              <p class="pf-caption">Tipo de cuenta</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-mobile/perfil-ajustes-cookies.png" alt="Ajustes: cookies en móvil" loading="lazy" /></div>
+              <p class="pf-caption">Cookies</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-mobile/perfil-ajustes-notificaciones.png" alt="Ajustes: notificaciones en móvil" loading="lazy" /></div>
+              <p class="pf-caption">Notificaciones</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-mobile/perfil-ajustes-privacidad.png" alt="Ajustes: privacidad en móvil" loading="lazy" /></div>
+              <p class="pf-caption">Privacidad</p>
+            </div>
+            <div class="pf-mobile-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-mobile/perfil-ajustes-seguridad.png" alt="Ajustes: seguridad en móvil" loading="lazy" /></div>
+              <p class="pf-caption">Seguridad</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════
+         16. PANEL DE ADMINISTRACIÓN — AUTENTICACIÓN Y SEGURIDAD
+    ════════════════════════════════════════════════════════ -->
+    <div class="pf-section">
+      <div class="pf-section-header">
+        <span class="pf-badge admin">Admin</span>
+        <h4>Panel de Administración — Autenticación y Configuración de Seguridad 2FA</h4>
+      </div>
+      <div class="pf-items">
+
+        <div class="pf-item">
+          <p class="pf-item-title">Login del panel de administración con 2FA</p>
+          <p class="pf-item-desc">El administrador accede al panel de administración en su dominio separado mediante un formulario de login exclusivo. Al introducir las credenciales correctas, si el administrador tiene 2FA activado, el sistema solicita el código TOTP antes de emitir el JWT con <code>ROLE_ADMIN</code>. El backend rechaza cualquier token sin este rol en todos los endpoints bajo <code>/api/admin/**</code>.</p>
+          <div class="pf-grid-2">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-admin/login.png" alt="Login del panel de administración" loading="lazy" /></div>
+              <p class="pf-caption">Formulario de login admin</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-admin/login-2fa-activado.png" alt="Login admin con 2FA activado" loading="lazy" /></div>
+              <p class="pf-caption">Login con 2FA TOTP</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="pf-item">
+          <p class="pf-item-title">Configuración del 2FA en el panel de administración</p>
+          <p class="pf-item-desc">El administrador puede activar o desactivar la autenticación de dos factores TOTP desde la configuración de seguridad de su cuenta. Al activarlo, el backend genera un secreto TOTP, crea el código QR con ZXing en base64 y lo muestra para escanearlo con una app autenticadora (Google Authenticator, Authy). Una vez escaneado y verificado el primer código, el 2FA queda activado y se requiere en cada login.</p>
+          <div class="pf-grid-3">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-admin/2fa-qr.png" alt="Código QR para configurar 2FA admin" loading="lazy" /></div>
+              <p class="pf-caption">QR para app autenticadora</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-admin/2fa-activado.png" alt="2FA activado en admin" loading="lazy" /></div>
+              <p class="pf-caption">2FA activado</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-admin/2fa-desactivado.png" alt="2FA desactivado en admin" loading="lazy" /></div>
+              <p class="pf-caption">2FA desactivado</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════
+         17. PANEL DE ADMINISTRACIÓN — DASHBOARD Y ESTADÍSTICAS
+    ════════════════════════════════════════════════════════ -->
+    <div class="pf-section">
+      <div class="pf-section-header">
+        <span class="pf-badge admin">Admin</span>
+        <h4>Panel de Administración — Dashboard y Estadísticas en Tiempo Real</h4>
+      </div>
+      <div class="pf-items">
+
+        <div class="pf-item">
+          <p class="pf-item-title">Dashboard principal del panel de administración</p>
+          <p class="pf-item-desc">El dashboard del panel muestra un resumen en tiempo real del estado de la plataforma: número de usuarios registrados, productos activos, transacciones del día, reportes pendientes de revisión, patrocinios en revisión y últimas actividades. Los datos se actualizan automáticamente y permiten al administrador detectar incidencias rápidamente sin tener que navegar por cada módulo.</p>
+          <div class="pf-screenshot"><img src="/assets/img-pruebas-admin/dashboard.png" alt="Dashboard del panel de administración" loading="lazy" /></div>
+        </div>
+
+        <div class="pf-item">
+          <p class="pf-item-title">Estadísticas en tiempo real — Tres vistas de métricas</p>
+          <p class="pf-item-desc">El módulo de estadísticas del panel de administración proporciona métricas detalladas en tiempo real sobre el uso de la plataforma: usuarios activos, transacciones por período, evolución de publicaciones, distribución por categorías, métricas de la comunidad (votos Spark/Drip) y rendimiento del sistema. Las tres vistas documentan diferentes aspectos del dashboard de estadísticas.</p>
+          <div class="pf-grid-3">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-admin/estadisticas-live-1.png" alt="Estadísticas en tiempo real - vista 1" loading="lazy" /></div>
+              <p class="pf-caption">Estadísticas (1)</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-admin/estadisticas-live-2.png" alt="Estadísticas en tiempo real - vista 2" loading="lazy" /></div>
+              <p class="pf-caption">Estadísticas (2)</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-admin/estadisticas-live-3.png" alt="Estadísticas en tiempo real - vista 3" loading="lazy" /></div>
+              <p class="pf-caption">Estadísticas (3)</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════
+         18. PANEL DE ADMINISTRACIÓN — GESTIÓN DE USUARIOS
+    ════════════════════════════════════════════════════════ -->
+    <div class="pf-section">
+      <div class="pf-section-header">
+        <span class="pf-badge admin">Admin</span>
+        <h4>Panel de Administración — Gestión de Usuarios, Sanciones y Fraude</h4>
+      </div>
+      <div class="pf-items">
+
+        <div class="pf-item">
+          <p class="pf-item-title">Listado y detalle de usuarios registrados</p>
+          <p class="pf-item-desc">El módulo de usuarios muestra todos los actores registrados en el sistema con sus datos principales: username, email, rol, estado de la cuenta (activo, baneado, suspendido, eliminado), fecha de registro y reputación. El administrador puede buscar y filtrar usuarios, acceder al detalle completo de cada uno y ver su historial de actividad, anuncios publicados, compras y reportes asociados.</p>
+          <div class="pf-grid-2">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-admin/usuarios-lista.png" alt="Lista de usuarios en el panel admin" loading="lazy" /></div>
+              <p class="pf-caption">Listado de usuarios</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-admin/usuario-detail.png" alt="Detalle de usuario en el panel admin" loading="lazy" /></div>
+              <p class="pf-caption">Detalle de usuario</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="pf-item">
+          <p class="pf-item-title">Sistema de sanciones, exportación a CSV y gestión de fraude</p>
+          <p class="pf-item-desc">El módulo de sanciones permite aplicar bans permanentes (<code>baneado = true</code>), suspensiones temporales (<code>suspendidoHasta</code>) o marcado de fraude (<code>flagFraude</code>) a usuarios que infrinjan las normas. Cada sanción incrementa el campo <code>jwtVersion</code> del actor, invalidando todos sus tokens activos de forma inmediata. El historial de sanciones es exportable a CSV, compatible con Google Sheets para análisis externo. El módulo de fraude permite gestionar las alertas de fraude detectadas.</p>
+          <div class="pf-grid-3">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-admin/sanciones.png" alt="Módulo de sanciones" loading="lazy" /></div>
+              <p class="pf-caption">Sanciones</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-admin/sanciones-csv-importado-sheets.png" alt="CSV de sanciones importado en Google Sheets" loading="lazy" /></div>
+              <p class="pf-caption">CSV exportado a Sheets</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-admin/fraude.png" alt="Módulo de fraude" loading="lazy" /></div>
+              <p class="pf-caption">Fraude</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════
+         19. PANEL DE ADMINISTRACIÓN — MODERACIÓN DE CONTENIDO
+    ════════════════════════════════════════════════════════ -->
+    <div class="pf-section">
+      <div class="pf-section-header">
+        <span class="pf-badge admin">Admin</span>
+        <h4>Panel de Administración — Moderación de Productos, Vehículos, Ofertas y Reportes</h4>
+      </div>
+      <div class="pf-items">
+
+        <div class="pf-item">
+          <p class="pf-item-title">Gestión de productos en el panel de administración</p>
+          <p class="pf-item-desc">El módulo de productos del panel muestra todos los productos publicados en la plataforma con filtros por estado, categoría, precio y usuario. El administrador puede acceder al detalle completo de cada producto (incluyendo las imágenes de Cloudinary), cambiar su estado, eliminar contenido inapropiado y filtrar por estados específicos como RESERVADO para gestionar el inventario activo.</p>
+          <div class="pf-grid-2">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-admin/productos.png" alt="Listado de productos en admin" loading="lazy" /></div>
+              <p class="pf-caption">Listado de productos</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-admin/productos-filtro-reservado.png" alt="Productos filtrados por estado reservado" loading="lazy" /></div>
+              <p class="pf-caption">Filtro: estado RESERVADO</p>
+            </div>
+          </div>
+          <div class="pf-grid-2" style="margin-top:12px">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-admin/producto-detalle-1.png" alt="Detalle de producto en admin (1)" loading="lazy" /></div>
+              <p class="pf-caption">Detalle del producto (1)</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-admin/producto-detalle-2.png" alt="Detalle de producto en admin (2)" loading="lazy" /></div>
+              <p class="pf-caption">Detalle del producto (2)</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="pf-item">
+          <p class="pf-item-title">Gestión de ofertas y creación directa desde el panel</p>
+          <p class="pf-item-desc">El módulo de ofertas permite al administrador revisar todas las ofertas publicadas, acceder a su detalle con los contadores Spark/Drip y el historial de votos, y crear nuevas ofertas directamente desde el panel mediante el modal de creación de oferta, sin necesidad de acceder a la app de usuario.</p>
+          <div class="pf-grid-3">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-admin/ofertas.png" alt="Listado de ofertas en admin" loading="lazy" /></div>
+              <p class="pf-caption">Listado de ofertas</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-admin/oferta-detail.png" alt="Detalle de oferta en admin" loading="lazy" /></div>
+              <p class="pf-caption">Detalle de oferta</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-admin/modal-crear-oferta-desde-admin.png" alt="Modal para crear oferta desde admin" loading="lazy" /></div>
+              <p class="pf-caption">Modal crear oferta</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="pf-item">
+          <p class="pf-item-title">Gestión de vehículos con filtros</p>
+          <p class="pf-item-desc">El módulo de vehículos del panel de administración lista todos los vehículos publicados con sus datos básicos y permite filtrar por tipo de vehículo (coches, motos, furgonetas, etc.), estado del anuncio y otros parámetros. El detalle de cada vehículo muestra la ficha técnica completa y permite al administrador gestionar el estado del anuncio.</p>
+          <div class="pf-grid-3">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-admin/vehiculos.png" alt="Listado de vehículos en admin" loading="lazy" /></div>
+              <p class="pf-caption">Listado de vehículos</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-admin/vehiculos-filtro-coches.png" alt="Vehículos filtrados por coches" loading="lazy" /></div>
+              <p class="pf-caption">Filtro: coches</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-admin/vehiculo-detail.png" alt="Detalle de vehículo en admin" loading="lazy" /></div>
+              <p class="pf-caption">Detalle del vehículo</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="pf-item">
+          <p class="pf-item-title">Gestión de reportes — Listado y detalle de incidencias</p>
+          <p class="pf-item-desc">El módulo de reportes centraliza todas las denuncias realizadas por usuarios sobre productos, ofertas, vehículos, mensajes y otros usuarios. Cada reporte incluye el motivo seleccionado, una descripción, el elemento denunciado y el usuario denunciante. El administrador puede revisar el detalle completo, consultar el histórico de reportes del mismo usuario y decidir la acción a tomar (sanción, eliminación de contenido, desestimación).</p>
+          <div class="pf-grid-2">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-admin/reportes-lista.png" alt="Lista de reportes en admin" loading="lazy" /></div>
+              <p class="pf-caption">Listado de reportes</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-admin/reporte-detail.png" alt="Detalle de reporte en admin" loading="lazy" /></div>
+              <p class="pf-caption">Detalle del reporte</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════
+         20. PANEL DE ADMINISTRACIÓN — GESTIÓN COMERCIAL
+    ════════════════════════════════════════════════════════ -->
+    <div class="pf-section">
+      <div class="pf-section-header">
+        <span class="pf-badge admin">Admin</span>
+        <h4>Panel de Administración — Compras, Devoluciones, Contratos y Cupones</h4>
+      </div>
+      <div class="pf-items">
+
+        <div class="pf-item">
+          <p class="pf-item-title">Gestión de compras y procesado de reembolsos</p>
+          <p class="pf-item-desc">El módulo de compras del panel permite al administrador supervisar todas las transacciones del sistema, filtrar por estado y gestionar incidencias. Desde el modal de reembolso, el administrador puede procesar directamente la devolución del importe al comprador en Stripe, registrar el motivo y actualizar el estado de la compra a REEMBOLSADA. Toda acción queda registrada en el AuditLog.</p>
+          <div class="pf-grid-2">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-admin/compras.png" alt="Módulo de compras en admin" loading="lazy" /></div>
+              <p class="pf-caption">Gestión de compras</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-admin/compras-modal-reembolsar.png" alt="Modal de reembolso en admin" loading="lazy" /></div>
+              <p class="pf-caption">Modal de reembolso</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="pf-item">
+          <p class="pf-item-title">Gestión de devoluciones y contratos publicitarios</p>
+          <p class="pf-item-desc">El módulo de devoluciones muestra todas las solicitudes de devolución activas con su estado (SOLICITADA/ACEPTADA/RECHAZADA/COMPLETADA), las fotos de evidencia adjuntas y la nota del vendedor. El módulo de contratos gestiona los contratos publicitarios de las empresas con estados DRAFT, ACTIVE y EXPIRED.</p>
+          <div class="pf-grid-2">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-admin/devoluciones.png" alt="Módulo de devoluciones en admin" loading="lazy" /></div>
+              <p class="pf-caption">Devoluciones</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-admin/contratos.png" alt="Módulo de contratos en admin" loading="lazy" /></div>
+              <p class="pf-caption">Contratos publicitarios</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="pf-item">
+          <p class="pf-item-title">Creación y gestión de cupones de descuento</p>
+          <p class="pf-item-desc">El administrador puede crear cupones de descuento mediante el modal de creación, configurando el código único (máximo 20 caracteres), el tipo de descuento (PORCENTAJE o FIJO), el valor, el importe mínimo de compra, el alcance (global o por categorías específicas), el límite total de usos y la vigencia del cupón. El listado de cupones muestra el estado de uso de cada uno.</p>
+          <div class="pf-grid-3">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-admin/cupones.png" alt="Listado de cupones en admin" loading="lazy" /></div>
+              <p class="pf-caption">Cupones</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-admin/modal-crear-cupon-1.png" alt="Modal crear cupón - paso 1" loading="lazy" /></div>
+              <p class="pf-caption">Crear cupón (1)</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-admin/modal-crear-cupon-2.png" alt="Modal crear cupón - paso 2" loading="lazy" /></div>
+              <p class="pf-caption">Crear cupón (2)</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════
+         21. PANEL DE ADMINISTRACIÓN — PUBLICIDAD Y PATROCINIOS
+    ════════════════════════════════════════════════════════ -->
+    <div class="pf-section">
+      <div class="pf-section-header">
+        <span class="pf-badge admin">Admin</span>
+        <h4>Panel de Administración — Gestión de Publicidad y Patrocinios</h4>
+      </div>
+      <div class="pf-items">
+
+        <div class="pf-item">
+          <p class="pf-item-title">Revisión, aprobación y rechazo de solicitudes de patrocinio</p>
+          <p class="pf-item-desc">El administrador gestiona el ciclo de vida completo de los patrocinios: revisa las solicitudes en estado DRAFT enviadas por las empresas, las mueve a "en revisión", establece el precio del patrocinio y aprueba o rechaza la solicitud. Las tres pestañas documentan los patrocinios en cada estado: en revisión, aprobados (pendientes de pago por la empresa) y cancelados.</p>
+          <div class="pf-grid-3">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-admin/patrocionos-en-revision.png" alt="Patrocinios en revisión" loading="lazy" /></div>
+              <p class="pf-caption">En revisión</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-admin/patrocionos-aprobados.png" alt="Patrocinios aprobados" loading="lazy" /></div>
+              <p class="pf-caption">Aprobados</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-admin/patrocionios-cancelados.png" alt="Patrocinios cancelados" loading="lazy" /></div>
+              <p class="pf-caption">Cancelados</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="pf-item">
+          <p class="pf-item-title">Modal de propuesta de publicidad al establecer el precio</p>
+          <p class="pf-item-desc">Al revisar una solicitud de patrocinio, el administrador completa el modal de propuesta publicitaria especificando el precio final del contrato y las condiciones. El modal muestra los detalles de la solicitud de la empresa (tipo de contrato, ítem a patrocinar, duración solicitada) y permite al administrador establecer el importe antes de aprobarla.</p>
+          <div class="pf-grid-2">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-admin/modal-propuesta-publicidad-1.png" alt="Modal propuesta publicidad - paso 1" loading="lazy" /></div>
+              <p class="pf-caption">Propuesta publicidad (1)</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-admin/modal-propuesta-publicidad-2.png" alt="Modal propuesta publicidad - paso 2" loading="lazy" /></div>
+              <p class="pf-caption">Propuesta publicidad (2)</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════
+         22. PANEL DE ADMINISTRACIÓN — NEWSLETTER Y NOTIFICACIONES
+    ════════════════════════════════════════════════════════ -->
+    <div class="pf-section">
+      <div class="pf-section-header">
+        <span class="pf-badge admin">Admin</span>
+        <h4>Panel de Administración — Newsletter, Notificaciones y Correo Automático</h4>
+      </div>
+      <div class="pf-items">
+
+        <div class="pf-item">
+          <p class="pf-item-title">Gestión del newsletter y correo de automatización semanal</p>
+          <p class="pf-item-desc">El módulo de newsletter permite al administrador gestionar la lista de suscriptores (con filtros por estado de opt-in), configurar el envío automático semanal mediante el <code>NewsletterScheduler</code>, y lanzar emisiones manuales con contenido personalizado. Se valida el recibo del correo automático generado por el scheduler en una cuenta de Gmail real, confirmando la entrega correcta del newsletter vía Gmail SMTP con Spring Mail.</p>
+          <div class="pf-grid-3">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-admin/newsletter-automatizacion-semanal.png" alt="Configuración automatización newsletter" loading="lazy" /></div>
+              <p class="pf-caption">Automatización semanal</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-admin/newsletter-emision-manual.png" alt="Emisión manual de newsletter" loading="lazy" /></div>
+              <p class="pf-caption">Emisión manual</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-admin/correo-automatizacion-semanal-enviado-desde-gmail.png" alt="Correo semanal recibido en Gmail" loading="lazy" /></div>
+              <p class="pf-caption">Email recibido en Gmail</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="pf-item">
+          <p class="pf-item-title">Gestión de notificaciones masivas con plantillas</p>
+          <p class="pf-item-desc">El módulo de notificaciones del panel permite al administrador enviar notificaciones in-app masivas a todos los usuarios o a segmentos específicos. Las plantillas de notificación se pueden activar y desactivar según la temporada o campaña, permitiendo envíos programados de notificaciones con contenido personalizable.</p>
+          <div class="pf-grid-2">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-admin/notificaciones.png" alt="Módulo de notificaciones en admin" loading="lazy" /></div>
+              <p class="pf-caption">Notificaciones masivas</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-admin/notificaciones-plantilla-general-activada.png" alt="Plantilla de notificación activada" loading="lazy" /></div>
+              <p class="pf-caption">Plantilla activada</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════
+         23. PANEL DE ADMINISTRACIÓN — SOPORTE Y CONFIGURACIÓN
+    ════════════════════════════════════════════════════════ -->
+    <div class="pf-section">
+      <div class="pf-section-header">
+        <span class="pf-badge admin">Admin</span>
+        <h4>Panel de Administración — Soporte al Usuario y Configuración Global</h4>
+      </div>
+      <div class="pf-items">
+
+        <div class="pf-item">
+          <p class="pf-item-title">Panel de soporte — Gestión de conversaciones y encuesta de satisfacción</p>
+          <p class="pf-item-desc">Cuando el chatbot de IA no puede resolver una consulta, la sesión de soporte se escala a un agente humano. El administrador accede al panel de soporte del panel de administración, donde visualiza todas las sesiones activas y escaladas, puede responder a los usuarios en tiempo real, y solicitar al usuario una encuesta de satisfacción al finalizar la atención, con el objetivo de medir la calidad del soporte.</p>
+          <div class="pf-grid-2">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-admin/soporte-chat-panel.png" alt="Panel de soporte en admin" loading="lazy" /></div>
+              <p class="pf-caption">Panel de soporte</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-admin/soporte-chat-pedir-encuesta.png" alt="Solicitar encuesta de satisfacción al usuario" loading="lazy" /></div>
+              <p class="pf-caption">Solicitar encuesta</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="pf-item">
+          <p class="pf-item-title">Configuración global del sistema desde el panel de administración</p>
+          <p class="pf-item-desc">El módulo de configuración del panel permite al administrador gestionar parámetros globales del sistema: activación/desactivación de funcionalidades, configuración de límites operativos, gestión de categorías activas, ajuste de los parámetros del sistema de votación Spark/Drip (intervalo de recalculo), y otras opciones de configuración que afectan al comportamiento global de la plataforma sin requerir un redespliegue del backend.</p>
+          <div class="pf-grid-3">
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-admin/configuracion-1.png" alt="Configuración global admin - parte 1" loading="lazy" /></div>
+              <p class="pf-caption">Configuración (1)</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-admin/configuracion-2.png" alt="Configuración global admin - parte 2" loading="lazy" /></div>
+              <p class="pf-caption">Configuración (2)</p>
+            </div>
+            <div class="pf-grid-item">
+              <div class="pf-screenshot"><img src="/assets/img-pruebas-admin/configuracion-3.png" alt="Configuración global admin - parte 3" loading="lazy" /></div>
+              <p class="pf-caption">Configuración (3)</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
 
     <h3 class="subsection-title">Pruebas unitarias</h3>
-    <p>El backend incluye la clase <code>PopulateDB.java</code> que genera datos de prueba consistentes para validar el comportamiento de la API en desarrollo. Las pruebas de los servicios críticos (validación de JWT, cálculo de comisiones, generación de QR) se verificaron mediante llamadas directas a los endpoints documentados en Swagger UI. La configuración de Stripe CLI (<code>stripe listen --forward-to localhost:8080/stripe/webhook</code>) se usó durante el desarrollo para validar el flujo de webhooks en local antes del despliegue.</p>
+    <p>Contenido pendiente de redactar</p>
   </section>
 
   <section id="despliegue">
